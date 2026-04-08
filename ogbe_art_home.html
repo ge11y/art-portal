@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OG BE — Art</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Landing overlay */
+    /* ============================================================
+       LANDING OVERLAY
+       ============================================================ */
+    /* ============================================
+       LANDING — FIERY OGBE WORDMARK
+       Intensity variables (easy to tune)
+       ============================================ */
+    #landing {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+      overflow: hidden;
+    }
+
+    /* ============================================
+       LANDING — RADIANT OGBE WORDMARK
+       ============================================ */
+
+    /* ---- FIRE CONTAINER ---- */
+    #landing-fire-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Layer 1: wide ember bloom — atmospheric depth */
+    #fire-base {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% 55%,
+          rgba(200,40,5,0.22) 0%,
+          rgba(160,25,0,0.10) 40%,
+          transparent 65%),
+        radial-gradient(ellipse 50% 30% at 30% 60%,
+          rgba(255,90,10,0.10) 0%,
+          transparent 55%),
+        radial-gradient(ellipse 50% 30% at 70% 58%,
+          rgba(220,50,5,0.08) 0%,
+          transparent 55%);
+      animation: fireBase 6s ease-in-out infinite;
+    }
+
+    /* Layer 2: orange mid bloom — active energy */
+    #fire-mid {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 38% at 50% 53%,
+          rgba(255,100,15,0.18) 0%,
+          rgba(220,50,5,0.08) 40%,
+          transparent 62%);
+      animation: fireMid 4.5s ease-in-out infinite 1s;
+      mix-blend-mode: screen;
+    }
+
+    /* Layer 3: core bright flare — the heartbeat */
+    #fire-core {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 28% 18% at 50% 57%,
+          rgba(255,160,40,0.25) 0%,
+          rgba(255,90,10,0.12) 45%,
+          transparent 70%);
+      animation: fireCore 2.3s ease-in-out infinite 0.3s;
+      mix-blend-mode: screen;
+    }
+
+    /* Layer 4: tight ember rim — hugging the letter edges */
+    #fire-rim {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 35% 22% at 50% 56%,
+          rgba(255,200,80,0.12) 0%,
+          rgba(255,80,10,0.06) 50%,
+          transparent 70%);
+      animation: fireCore 1.8s ease-in-out infinite 0.7s;
+      mix-blend-mode: screen;
+    }
+
+    /* Layer 5: SVG heat distortion — rises ABOVE wordmark */
+    #fire-shimmer {
+      position: absolute;
+      inset: -20% -10% -30% -10%;
+      width: 120%;
+      height: 160%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='500'%3E%3Cdefs%3E%3Cfilter id='heat'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.04' numOctaves='4' seed='12' stitchTiles='stitch'%3E%3C/feTurbulence%3E%3CfeDisplacementMap in='SourceGraphic' scale='32' xChannelSelector='R' yChannelSelector='G'%3E%3C/feDisplacementMap%3E%3C/filter%3E%3C/defs%3E%3Crect width='200' height='500' filter='url(%23heat)' opacity='0.22'/%3E%3C/svg%3E");
+      background-size: 200px 500px;
+      animation: shimmerRise 3s linear infinite;
+      opacity: 0.9;
+    }
+
+    /* Layer 6: grain texture */
+
+    /* Layer 7: ember canvas */
+
+    /* Layer 8: upward heat veil — a subtle haze above the word */
+    #fire-veil {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top,
+          rgba(200,40,5,0.0) 0%,
+          rgba(200,40,5,0.0) 40%,
+          rgba(255,100,15,0.04) 55%,
+          rgba(220,50,5,0.08) 65%,
+          rgba(180,30,0,0.05) 75%,
+          transparent 90%);
+      animation: veilPulse 5s ease-in-out infinite;
+    }
+
+    /* ---- WORDMARK WRAPPER ---- */
+    #ogbe-wordmark {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .ogbe-letter {
+      font-family: var(--font2);
+      font-size: clamp(48px, 10vw, 120px);
+      letter-spacing: 0.3em;
+      color: #fff;
+      text-transform: uppercase;
+      user-select: none;
+      position: relative;
+      line-height: 1;
+      padding: 0 0.15em;
+    }
+
+    /* Per-letter ember glow — ::before fills the letter bg */
+    .ogbe-letter::before {
+      content: attr(data-letter);
+      position: absolute;
+      inset: 0;
+      color: transparent;
+      background: radial-gradient(ellipse 80% 60% at 50% 55%,
+        rgba(255,100,20,0.30) 0%,
+        rgba(220,50,5,0.15) 40%,
+        rgba(180,20,0,0.06) 70%,
+        transparent 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: letterGlow var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+      filter: blur(4px);
+    }
+
+    /* Per-letter micro sparks — satellite dots */
+    .ogbe-letter::after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,180,60,1);
+      top: 25%;
+      left: 50%;
+      box-shadow:
+        -12px 3px 0 rgba(255,100,10,0.7),
+        12px -6px 0 rgba(220,60,5,0.6),
+        -6px 12px 0 rgba(255,200,80,0.5),
+        18px 4px 0 rgba(200,50,5,0.4);
+      animation: sparkPulse var(--dur, 2.5s) ease-in-out infinite var(--delay2, 0s);
+      opacity: 0;
+    }
+
+    /* Stagger each letter — O G B E all different */
+    .ogbe-letter:nth-child(1) { --dur: 2.6s; --delay: 0.0s; --delay2: 0.4s; }
+    .ogbe-letter:nth-child(2) { --dur: 3.3s; --delay: 0.7s; --delay2: 1.2s; }
+    .ogbe-letter:nth-child(3) { --dur: 2.1s; --delay: 0.3s; --delay2: 0.8s; }
+    .ogbe-letter:nth-child(4) { --dur: 3.7s; --delay: 1.1s; --delay2: 1.6s; }
+
+    @keyframes letterGlow {
+      0%, 100% { opacity: 0.55; filter: blur(3px); transform: scale(1); }
+      25%       { opacity: 0.90; filter: blur(5px); transform: scale(1.02); }
+      55%       { opacity: 0.70; filter: blur(2px); transform: scale(0.99); }
+      80%       { opacity: 1.00; filter: blur(6px); transform: scale(1.04); }
+    }
+
+    @keyframes sparkPulse {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      20%       { opacity: 0.9; transform: scale(1.4); }
+      45%       { opacity: 0.3; transform: scale(0.8); }
+      65%       { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    /* OGBE title — kept for fallback/structure */
+    #landing-title {
+      display: none;
+    }
+
+    #landing.animating #ogbe-wordmark {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* ---- GIF container ---- */
+    #landing-gif-wrap {
+      width: min(480px, 90vw);
+      aspect-ratio: 1/1;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      border: 2px solid rgba(255,255,255,0.6);
+      outline: 3px solid rgba(255,255,255,0.3);
+      outline-offset: 4px;
+      transition: border-color 0.3s, outline-color 0.3s;
+    }
+    #landing-gif-wrap:hover {
+      border-color: rgba(255,140,40,0.8);
+      outline-color: rgba(255,100,20,0.5);
+    }
+    #landing-gif-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Zoom-to-center overlay */
+    #landing-zoom {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 10000;
+      background: #000;
+      transform: scale(0);
+      transform-origin: center center;
+      pointer-events: none;
+    }
+
+    /* "press" hint */
+    #landing-hint {
+      margin-top: 28px;
+      font-family: var(--font2);
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      user-select: none;
+      position: relative;
+      z-index: 2;
+      transition: opacity 0.3s;
+      animation: hintPulse 3s ease-in-out infinite;
+    }
+    #landing.animating #landing-hint {
+      opacity: 0;
+    }
+
+    /* ---- KEYFRAMES ---- */
+    @keyframes fireBase {
+      0%, 100% {
+        opacity: 0.65;
+        transform: scale(1) translateY(0px);
+        filter: brightness(0.9);
+      }
+      25% {
+        opacity: 0.85;
+        transform: scale(1.03) translateY(-4px);
+        filter: brightness(1.1);
+      }
+      55% {
+        opacity: 0.95;
+        transform: scale(0.98) translateY(3px);
+        filter: brightness(1.2);
+      }
+      80% {
+        opacity: 0.70;
+        transform: scale(1.06) translateY(-5px);
+        filter: brightness(0.95);
+      }
+    }
+
+    @keyframes fireMid {
+      0%, 100% {
+        opacity: 0.40;
+        transform: scale(1) translateY(0px);
+      }
+      35% {
+        opacity: 0.85;
+        transform: scale(1.08) translateY(-6px);
+      }
+      70% {
+        opacity: 0.55;
+        transform: scale(0.94) translateY(4px);
+      }
+    }
+
+    @keyframes fireCore {
+      0%, 100% {
+        opacity: 0.30;
+        transform: scale(0.95);
+      }
+      15% {
+        opacity: 1.00;
+        transform: scale(1.20);
+      }
+      40% {
+        opacity: 0.50;
+        transform: scale(0.88);
+      }
+      70% {
+        opacity: 0.85;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes shimmerRise {
+      0%   { background-position: 0px 0px; }
+      100% { background-position: 0px -500px; }
+    }
+
+    @keyframes grainDrift {
+      0%   { background-position: 0 0; }
+      25%  { background-position: 75px 0; }
+      50%  { background-position: 150px 0; }
+      75%  { background-position: 225px 0; }
+      100% { background-position: 300px 0; }
+    }
+
+    @keyframes veilPulse {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1.0; }
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.35; }
+      50%       { opacity: 0.60; }
+    }
+
+    /* ---- Hover: intensify ---- */
+    #landing:hover #fire-base { opacity: 1.0; filter: brightness(1.3); }
+    #landing:hover #fire-mid   { opacity: 0.9; }
+    #landing:hover #fire-core  { opacity: 1.0; }
+    #landing:hover #fire-rim   { opacity: 1.0; }
+
+    /* ---- Reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+      #fire-base, #fire-mid, #fire-core, #fire-rim,
+      #fire-shimmer, #fire-grain, #landing-hint,
+      .ogbe-letter::before, .ogbe-letter::after {
+        animation: none;
+      }
+      #fire-base  { opacity: 0.85; }
+      #fire-mid   { opacity: 0.60; }
+      #fire-core  { opacity: 0.50; }
+    }
+
+    /* Prevent body scroll while landing shown */
+    body.landing-open { overflow: hidden; }
+
+    /* Gallery wrapper */
+    #main-wrapper { display: none; }
+  </style>
+</head>
+<body class="landing-open">
+
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bg-music" src="audio/OGBE-Be-free.mp3" loop preload="auto"></audio>
+  <script>
+    var bgMusic = document.getElementById('bg-music');
+
+    function fadeVolume(targetVol, duration) {
+      if (!bgMusic) return;
+      var startVol = bgMusic.volume || 0;
+      var diff = targetVol - startVol;
+      var stepTime = duration / 20;
+      var stepVol = diff / 20;
+      var current = 0;
+      var volFade = setInterval(function() {
+        current++;
+        bgMusic.volume = Math.max(0, Math.min(startVol + stepVol * current, targetVol));
+        if (current >= 20) clearInterval(volFade);
+      }, stepTime);
+    }
+
+    function fadeInMusic(targetVol, duration) {
+      if (!bgMusic) return;
+      if (bgMusic.paused) bgMusic.play().catch(function() {});
+      // Start from near-silence so the song's own intro is softened
+      bgMusic.volume = 0.001;
+      var startVol = 0.001;
+      var diff = targetVol - startVol;
+      var steps = 60;
+      var stepTime = duration / steps;
+      var current = 0;
+      var fade = setInterval(function() {
+        current++;
+        var t = current / steps;
+        // Soft S-curve: gentle at start and end
+        var curve = t < 0.5
+          ? 2 * t * t
+          : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        bgMusic.volume = Math.max(0, Math.min(startVol + diff * curve, targetVol));
+        if (current >= steps) clearInterval(fade);
+      }, stepTime);
+    }
+
+    // Music starts on user enter — not on landing page
+    // Auto-enter after 3.5s on landing
+    function startLandingTimer() {
+      console.log('startLandingTimer called, entered:', entered);
+      if (entered) return;
+      if (landingTimer) clearTimeout(landingTimer);
+      landingTimer = setTimeout(function() {
+        console.log('setTimeout fired! entered:', entered);
+        if (!entered) {
+          entered = true;
+          // Pre-enter pulse: briefly intensify the fire effect
+          var landing = document.getElementById('landing');
+          if (landing) {
+            landing.classList.add('intense');
+            setTimeout(function() { landing.classList.remove('intense'); }, 400);
+          }
+          enterSite();
+        }
+      }, 8000);
+    }
+  </script>
+
+  <!-- EMBER CANVAS SCRIPT -->
+  <script>
+    (function() {
+      var canvas = document.getElementById('emberCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var embers = [];
+      var W, H;
+      var running = false;
+
+      // ---- Tuning variables ----
+      var CFG = {
+        maxEmbers: 45,        // more particles — visible at a glance
+        spawnRate: 0.55,     // higher spawn rate
+        baseSize: 1.0,        // tiny ember pixels
+        maxSize: 3.8,         // some bigger sparks
+        baseSpeed: 0.5,       // px per frame upward
+        maxSpeed: 1.8,        // some faster sparks
+        driftAmp: 1.2,        // wider horizontal sway
+        fadeInDur: 50,        // frames to appear
+        fadeOutDur: 120,      // frames to fade
+        totalLife: 220,       // ~3.5s at 60fps
+        // Palette: warm amber/orange/red — no yellow
+        colors: [
+          'rgba(255,140,20,',  // amber
+          'rgba(255,90,5,',    // deep orange
+          'rgba(220,70,5,',    // ember red
+          'rgba(255,200,60,',  // gold spark
+          'rgba(200,50,5,',    // dark ember
+          'rgba(255,120,30,',  // mid orange
+        ]
+      };
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function spawnEmber() {
+        var w = document.getElementById('ogbe-wordmark');
+        if (!w) return;
+        var rect = w.getBoundingClientRect();
+        var cx = rect.left + rect.width  * 0.5;
+        var cy = rect.top  + rect.height * 0.5;
+        // Spawn from a wide zone — letters AND around them
+        var size   = CFG.baseSize + Math.random() * (CFG.maxSize - CFG.baseSize);
+        var speed  = CFG.baseSpeed + Math.random() * (CFG.maxSpeed - CFG.baseSpeed);
+        var life   = CFG.totalLife + (Math.random() - 0.5) * 100;
+        var color  = CFG.colors[Math.floor(Math.random() * CFG.colors.length)];
+
+        // Random angle — full 360° for outward radiation
+        var angle  = Math.random() * Math.PI * 2;
+        // Distance from center determines starting zone
+        var dist   = (Math.random() * 0.6 + 0.2) * (rect.width * 0.6);
+        var startX = cx + Math.cos(angle) * dist * (Math.random() * 0.8 + 0.2);
+        var startY = cy + Math.sin(angle) * dist * 0.3 + (Math.random() - 0.3) * rect.height * 0.2;
+
+        // Velocity: mostly upward with outward component
+        var outSpeed = speed * (0.3 + Math.random() * 0.7);
+        var vx = (Math.random() - 0.5) * outSpeed * 0.8;
+        var vy = -outSpeed * (0.6 + Math.random() * 0.4); // always upward
+
+        embers.push({
+          x: startX,
+          y: startY,
+          vx: vx,
+          vy: vy,
+          size: size,
+          alpha: 0,
+          color: color,
+          age: 0,
+          fadeIn: CFG.fadeInDur + Math.random() * 40,
+          fadeOut: CFG.fadeOutDur,
+          life: life,
+          maxLife: life,
+          driftFreq: 0.2 + Math.random() * 0.5,
+          driftPhase: Math.random() * Math.PI * 2
+        });
+      }
+
+      function updateEmbers() {
+        for (var i = embers.length - 1; i >= 0; i--) {
+          var e = embers[i];
+          e.age++;
+          var t = e.age / e.life;
+          // Vertical: constant rise with slight deceleration
+          e.y += e.vy * (1 - t * 0.3);
+          // Horizontal: gentle sine sway
+          e.x += Math.sin(e.age * e.driftFreq + e.driftPhase) * 0.25;
+          // Alpha: ease in, hold, ease out
+          var fadeInEnd  = e.fadeIn / e.life;
+          var fadeOutStart = (e.life - e.fadeOut) / e.life;
+          if (t < fadeInEnd) {
+            e.alpha = t / fadeInEnd;
+          } else if (t > fadeOutStart) {
+            e.alpha = 1 - (t - fadeOutStart) / (1 - fadeOutStart);
+          } else {
+            e.alpha = 1;
+          }
+          e.alpha = Math.max(0, Math.min(1, e.alpha));
+          if (e.age >= e.life) { embers.splice(i, 1); }
+        }
+      }
+
+      function drawEmbers() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < embers.length; i++) {
+          var e = embers[i];
+          var a = e.alpha;
+          if (a <= 0) continue;
+          var grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.size * 2);
+          grad.addColorStop(0, e.color + (a * 0.9).toFixed(2) + ')');
+          grad.addColorStop(0.5, e.color + (a * 0.4).toFixed(2) + ')');
+          grad.addColorStop(1, e.color + '0)');
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+      }
+
+      function loop() {
+        if (!running) return;
+        updateEmbers();
+        drawEmbers();
+        // Sparse spawn — not every frame
+        if (embers.length < CFG.maxEmbers && Math.random() < CFG.spawnRate) {
+          spawnEmber();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      function start() {
+        if (running) return;
+        running = true;
+        // Seed a few embers immediately
+        for (var i = 0; i < 8; i++) spawnEmber();
+        loop();
+      }
+
+      function stop() {
+        running = false;
+        embers = [];
+        ctx.clearRect(0, 0, W, H);
+      }
+
+      // ---- Expose to window so landing script can call ----
+      window.emberStart = start;
+      window.emberStop  = stop;
+    })();
+  </script>
+
+  <!-- LANDING -->
+  <div id="landing">
+    <div id="landing-fire-layer">
+      <div id="fire-base"></div>
+      <div id="fire-mid"></div>
+      <div id="fire-core"></div>
+      <div id="fire-rim"></div>
+      <div id="fire-shimmer"></div>
+      <div id="fire-grain"></div>
+      <div id="fire-veil"></div>
+      <canvas id="emberCanvas"></canvas>
+    </div>
+    <div id="ogbe-wordmark">
+      <span class="ogbe-letter" data-letter="O">O</span>
+      <span class="ogbe-letter" data-letter="G">G</span>
+      <span class="ogbe-letter" data-letter="B">B</span>
+      <span class="ogbe-letter" data-letter="E">E</span>
+    </div>
+    <div id="landing-gif-wrap">
+      <img src="assets/ogbe-entrance.gif" alt="Enter" />
+    </div>
+    <div id="landing-hint">press to enter</div>
+  </div>
+
+  <!-- ZOOM OVERLAY -->
+  <div id="landing-zoom"></div>
+
+  <!-- MAIN SITE — always in DOM, revealed after landing -->
+  <div id="main-wrapper">
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="container">
+        <a href="#" class="site-logo" onclick="showHome(); return false;">OG BE</a>
+        <nav class="site-nav" id="siteNav">
+          <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
+          <a href="#" id="navOgbe" onclick="showOgbe(); return false;">OG BE</a>
+          <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
+          <a href="#" id="navDegen" onclick="showDegen(); return false;">Degen</a>
+          <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
+        </nav>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main id="mainContent"></main>
+
+    <!-- PIECE MODAL -->
+    <div id="pieceModal" class="modal" onclick="if(event.target===this)closeModal()">
+      <div class="modal-inner">
+        <div class="modal-nav">
+          <button class="modal-back" onclick="closeModal()">&#x2190;</button>
+          <button class="modal-close-btn" onclick="closeModal()">&#x2715;</button>
+        </div>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+var COLLECTIONS = [
+  {
+    id: "eegun",
+    name: "EEGUN",
+    count: 111,
+    desc: "The \"Eegun\" collection by OgBe, created by multidisciplinary artist OgBe Meji, is a visionary art project inscribed on a rare Satoshi (Bitcoin), comprising 111 unique, hand-drawn artworks. Each piece blends historical, natural, spiritual, and cultural elements, drawing from Caribbean, American, and African influences, with characters expressing resilience through deliberate use or absence of color. The collection, set in a futuristic post-fiat, pre-revolution world, showcases artistic maturity and lays the groundwork for an upcoming ordinal series. @_0gbe @eegunordinal",
+    descShort: "",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+          pieces: [
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i0", name: "EEGUN #1" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i1", name: "EEGUN #2" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i2", name: "EEGUN #3" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i3", name: "EEGUN #4" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i4", name: "EEGUN #5" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i5", name: "EEGUN #6" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i6", name: "EEGUN #7" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i7", name: "EEGUN #8" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i8", name: "EEGUN #9" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i9", name: "EEGUN #10" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i10", name: "EEGUN #11" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i11", name: "EEGUN #12" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i12", name: "EEGUN #13" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i13", name: "EEGUN #14" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i14", name: "EEGUN #15" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i15", name: "EEGUN #16" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i16", name: "EEGUN #17" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci0", name: "EEGUN #18" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci1", name: "EEGUN #19" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci2", name: "EEGUN #20" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci3", name: "EEGUN #21" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci4", name: "EEGUN #22" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci5", name: "EEGUN #23" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci6", name: "EEGUN #24" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci7", name: "EEGUN #25" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci8", name: "EEGUN #26" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci9", name: "EEGUN #27" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci10", name: "EEGUN #28" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci11", name: "EEGUN #29" },
+      { id: "072eaf0699bf3b44ab493772ddd99acf71213fb529cae2e20ecca95137199e3ci12", name: "EEGUN #30" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i0", name: "EEGUN #31" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i1", name: "EEGUN #32" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i2", name: "EEGUN #33" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i3", name: "EEGUN #34" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i4", name: "EEGUN #35" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i5", name: "EEGUN #36" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i6", name: "EEGUN #37" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i7", name: "EEGUN #38" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i8", name: "EEGUN #39" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i9", name: "EEGUN #40" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i10", name: "EEGUN #41" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i11", name: "EEGUN #42" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i12", name: "EEGUN #43" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i13", name: "EEGUN #44" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i14", name: "EEGUN #45" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i15", name: "EEGUN #46" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i16", name: "EEGUN #47" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i17", name: "EEGUN #48" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i18", name: "EEGUN #49" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i19", name: "EEGUN #50" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i20", name: "EEGUN #51" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i21", name: "EEGUN #52" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i22", name: "EEGUN #53" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i23", name: "EEGUN #54" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i24", name: "EEGUN #55" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i25", name: "EEGUN #56" },
+      { id: "36e0409dac753f24341b394f9090816d1c84ccfe49be0a01ebb5e815beb36311i26", name: "EEGUN #57" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci0", name: "EEGUN #58" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci1", name: "EEGUN #59" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci2", name: "EEGUN #60" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci3", name: "EEGUN #61" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci4", name: "EEGUN #62" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci5", name: "EEGUN #63" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci6", name: "EEGUN #64" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci7", name: "EEGUN #65" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci8", name: "EEGUN #66" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci9", name: "EEGUN #67" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci10", name: "EEGUN #68" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci11", name: "EEGUN #69" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci12", name: "EEGUN #70" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci13", name: "EEGUN #71" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci14", name: "EEGUN #72" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci15", name: "EEGUN #73" },
+      { id: "587b8a7bea400812fa782626e9acfa66376eae208de96cda648e24fed31219aci16", name: "EEGUN #74" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci0", name: "EEGUN #75" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci1", name: "EEGUN #76" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci2", name: "EEGUN #77" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci3", name: "EEGUN #78" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci4", name: "EEGUN #79" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci5", name: "EEGUN #80" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci6", name: "EEGUN #81" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci7", name: "EEGUN #82" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci8", name: "EEGUN #83" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci9", name: "EEGUN #84" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci10", name: "EEGUN #85" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci11", name: "EEGUN #86" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci12", name: "EEGUN #87" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci13", name: "EEGUN #88" },
+      { id: "a7719516235bf07fb2d9523eb813ec143b8ca26a489b570c680cec7c0407285ci14", name: "EEGUN #89" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i0", name: "EEGUN #90" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i1", name: "EEGUN #91" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i2", name: "EEGUN #92" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i3", name: "EEGUN #93" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i4", name: "EEGUN #94" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i5", name: "EEGUN #95" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i6", name: "EEGUN #96" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i7", name: "EEGUN #97" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i8", name: "EEGUN #98" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i9", name: "EEGUN #99" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i10", name: "EEGUN #100" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i11", name: "EEGUN #101" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i12", name: "EEGUN #102" },
+      { id: "e64f8b4a9632d31573fef0dddf49e482aacf06176c6123db5ae05a901209aa91i13", name: "EEGUN #103" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i0", name: "EEGUN #104" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i1", name: "EEGUN #105" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i2", name: "EEGUN #106" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i3", name: "EEGUN #107" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i4", name: "EEGUN #108" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i5", name: "EEGUN #109" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i6", name: "EEGUN #110" },
+      { id: "e860a90712718b70dcbe02194a5dbf888ed1c18ae14edea4a491a00e91245369i7", name: "EEGUN #111" },
+      ],
+  },
+  {
+    id: "iro",
+    name: "IRO",
+    count: 11,
+    desc: "IRO is an innovative Ordinals collection on Bitcoin, created by visionary artist Ogbe. Drawing inspiration from the Japanese word \"iro,\" which evokes vibrant colors while carrying deeper nuances of appearance, variety, and even sensuality, this collection transforms rare satoshis into digital masterpieces. Each inscription bursts with a kaleidoscope of hues, blending modern blockchain artistry with timeless ancient wisdom—symbols of enlightenment, harmony, and cultural depth etched eternally on the Bitcoin blockchain. IRO isn't just art; it's a portal to multifaceted beauty, inviting collectors to explore layers of meaning in every pixel. Inscribed on the rarest sats, IRO celebrates scarcity, creativity, and the infinite spectrum of human expression. Join the IRO movement and own a piece of colorful, wise eternity. @_0gbe @eegunordinal",
+    descShort: "",
+    tags: ["Ordinal", "On-Chain"],
+    art: [],
+          pieces: [
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci0", name: "IRO 1 BY OGBE" },
+      { id: "4535836a28a8bd00b0475a7cc3af1ef02d546c6b8895b763f060bdb1d76887d3i0", name: "IRO 2 BY OGBE" },
+      { id: "aca5211dc94692e39dc99171fce15e39adfafcdac0966476ed56a9d379928099i0", name: "IRO 3 BY OGBE" },
+      { id: "dfbcd953cf8dc01afc56cb6b89fcf512ec6fc6d764375dd23ff52cfb481f5d99i0", name: "IRO 4 BY OGBE" },
+      { id: "5b30590394e4e7e9b49fb0e52aabb70b2b3dd75b875fa89c2203bc7c01eac465i0", name: "IRO 5 BY OGBE" },
+      { id: "19177c987852ee11eaf92a7c78ff0249d77ed484e66866a46e7b4f46432e60c6i0", name: "IRO 6 BY OGBE" },
+      { id: "e8f84df8ee27eb620047468994464eebe6183aac86cedfacd18c07e75f8cfbdai0", name: "IRO 7 BY OGBE" },
+      { id: "a151abef7b045b92550c674ef48cc11b1d6421e83332908b925bd0f5e10a3ff7i0", name: "IRO 8 BY OGBE" },
+      { id: "4c4fd5af1152268db6c369374ccf0a3f2e76d7ee4deae3bf3f46c48338f3211fi0", name: "IRO 9 BY OGBE" },
+      { id: "6f01663fe21827d1504610b9e17525ca39ceb0ad072a55d782ee5b33587fee18i0", name: "IRO 10 BY OGBE" },
+      { id: "34e01dad1e869e5fc77216757260bae626ccb1baca3afb0ac17c3cc7afffede1i0", name: "IRO 11 BY OGBE" },
+      ],
+  },
+  {
+    id: "titwifnip",
+    name: "TitWifNip",
+    count: 13,
+    desc: "TitWifNip by Ogbe is an ode to the most important things in life. This collection comes from The Secret Society Of The Lettuce Goat. We are advocates of free the nipple. Always choose TitWifNip, never two without. Enjoy.",
+    descShort: "We are advocates of free the nipple. Always choose TitWifNip, never two without. Enjoy.",
+    tags: ["Ordinal", "PFP"],
+    art: [],
+          pieces: [
+      { id: "e794538b78f7c21bb8bcf11d20df83b03a8a2718bc618aafab95ac1a05984db8i0", name: "TitWifNip 1 BY OGBE" },
+      { id: "90c749a3baf56474de18d304d91b6a4c1cdcf391cb63111cbe18bec95ca6be1di0", name: "TitWifNip 2 BY OGBE" },
+      { id: "5b645b4738dfc03477584f524d968412374b832a613e5937fdca706277b75c80i0", name: "TitWifNip 3 BY OGBE" },
+      { id: "af0a84585f2d05b1f87e7a49c2cfd757c702c8cc1624883b8b3f572160a2e6dai0", name: "TitWifNip 4 BY OGBE" },
+      { id: "34ff9de5e4b835a1b7abca64592c819866995e9a0f5e79bc200064627eef24adi0", name: "TitWifNip 5 BY OGBE" },
+      { id: "6e052a4a3defc58823aa4fc4b750b85953334d3d4fd4624559c2aceed51b0945i0", name: "TitWifNip 6 BY OGBE" },
+      { id: "a4029dc51901ae85048e410b618261e76e9eb9310598c3aba4ddbac5542475cfi0", name: "TitWifNip 7 BY OGBE" },
+      { id: "4363a0999fcc855f8fec869091cd9139616c4b99fc1538f23c9c4fe311afaeb1i0", name: "TitWifNip 8 BY OGBE" },
+      { id: "7f54abac9870c67bb1d50c07f5117e8906ce2399dd42fc699525728719706bb0i0", name: "TitWifNip 9 BY OGBE" },
+      { id: "7c81bc70b212b8f4148cef1b5d9b7732be5826dc2af48c49f630eff82e1b3a5ai0", name: "TitWifNip 10 BY OGBE" },
+      { id: "36e552a67f4f32af49571118be48b263ce128726a550dda5c8e973e56509d14di0", name: "TitWifNip 11 BY OGBE" },
+      { id: "0ee6a324dcebf21e89f6d1c79d8bf82721cac2ac77297b0f1bdafd8a90af75a3i0", name: "TitWifNip 12 BY OGBE" },
+      { id: "900f1b83381d9e216b30fb4864076ebd8830f110f61b62fe3f7fbb359293ab64i0", name: "TitWifNip 13 BY OGBE" },
+      ],
+  },
+  {
+    id: "flux",
+    name: "FLUX",
+    count: 11,
+    desc: "Flux, a Bitcoin Ordinal collection by visionary artist OgBe, embodies a chaotic yet profound exploration of internal reflections, inscribed on rare Bitcoin satoshis. Each of the unique digital artifacts captures the turbulent beauty of the human psyche, blending raw, expressive visuals with intricate, algorithm-driven patterns. Inscribed on coveted Block 9 and 450x sats—among the rarest in Bitcoin's history—these pieces fuse numismatic value with artistic depth. OgBe's chaotic approach channels existential musings into vibrant, unpredictable designs, each satoshi serving as a permanent canvas on Bitcoin's immutable blockchain. Flux redefines digital art, merging Bitcoin's decentralized security with introspective creativity. Collectors gain not just art, but a stake in Bitcoin's historic ledger, where each inscription tells a story of chaos, reflection, and rarity. Join the Flux movement and own a piece of this revolutionary fusion.",
+    descShort: "",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+          pieces: [
+      { id: "f5d7c84a791d88452d9155392db42def2637fc2aef404c04757ce750669905c4i0", name: "FLUX 1 BY OGBE" },
+      { id: "cc50ac7f476d8f28c643d6731ef27fd4959b96555c13d5fb2f3c54dfef64193ei0", name: "FLUX 2 BY OGBE" },
+      { id: "c581008729568e1a5e9d47ea80f70601f6245196b79e925bf0a36015a385bd12i0", name: "FLUX 3 BY OGBE" },
+      { id: "a4814804a208fbc893d44a76bff6458d264761d461b3c2dcac9940a0c3a0a6aci0", name: "FLUX 4 BY OGBE" },
+      { id: "8613f09a77bd3f0fdb6538100afc0d036e480d497248cf63b30f953f859abedfi0", name: "FLUX 5 BY OGBE" },
+      { id: "6ef6249236fcb70fb88c83806623cdd453e5f52165fb2ec533817f94830f22f7i0", name: "FLUX 6 BY OGBE" },
+      { id: "69d4b3055cc6c497e1f8dfd6a24b30915ac2cd50cf0bc858ac21fe4fae86b1cci0", name: "FLUX 7 BY OGBE" },
+      { id: "50db9c5b5436975c9516f129481612225d253db57f7571cc5ff79b76ffd8954di0", name: "FLUX 8 BY OGBE" },
+      { id: "1964393a2eee7afcdc9ed7691fd85e514a733a3f539f32cbd06bed9e7df08a98i0", name: "FLUX 9 BY OGBE" },
+      { id: "07454c434cdbc06bcd718c7f34283b2209ae75058f10cf26a3a4e242507fdb2ei0", name: "FLUX 10 BY OGBE" },
+      { id: "0513fedc561379b6ccd771e3541ecccf8478d1c1d13fade85f62c36be96d7249i0", name: "FLUX 11 BY OGBE" },
+      ],
+  },
+  {
+    id: "forthebirds",
+    name: "ForTheBirds",
+    count: 9,
+    desc: "Multidisciplinary artist Ogbe does it again. A 9 piece 1 of 1 collection inscribed on rare sats, on the most secure blockchain in the world, on the most pristine canvas known to man. Inspired by a family of birds who made a home on my porch, this collection is an ode to creation and perseverance. They brought joy to the family, but also taught important lessons on patience and nurturing. May these birds in your wallets remind you of the good in life and help you bypass the noise. It's For The Birds.",
+    descShort: "",
+    tags: ["Ordinal", "Genesis"],
+    art: [],
+          pieces: [
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i0", name: "For The Birds 1 by Ogbe" },
+      { id: "18c2ffc20b84b56fd7c5143538c571b5974b045900b3403876c7489ef9be3fcdi0", name: "For The Birds 2 by Ogbe" },
+      { id: "b88dd2a093f55122b42fbf21f31ca8c69f29b52025ed02d8d880366e38d39219i0", name: "For The Birds 3 by Ogbe" },
+      { id: "d020dca8ce2e513d749c552a7b9a23f8f922a38fc8cdc4df86f055cab9013136i0", name: "For The Birds 4 by Ogbe" },
+      { id: "50b3adc42d00eb45b633867ec92160abb5a90a744750f33c97f285a0bfa18136i0", name: "For The Birds 5 by Ogbe" },
+      { id: "8e266e449c7384d99a2bfa1c84dfb67a5600c444bc499de8482f3a9e0a195adci0", name: "For The Birds 6 by Ogbe" },
+      { id: "ce0a8e75e8a9ab35448c99a07ba360a8a79c45361a6e21f019e72d05e428234ei0", name: "For The Birds 7 by Ogbe" },
+      { id: "e90e91bc43603585f3df728c5d2cc246ac04f33cd689c8453000aaf260328c76i0", name: "For The Birds 8 by Ogbe" },
+      { id: "a22f9dd936ac56ceb0279cb4235163fce9423cf9902f20c07d938e21d46f9c09i0", name: "For The Birds 9 by Ogbe" },
+      ],
+  },
+  {
+    id: "indicolite",
+    name: "INDICOLITE",
+    count: 11,
+    desc: "Indicolite draws from the rare blue tourmaline crystal, revered for synergy that fosters clarity, communication, and inner vision. This collection celebrates digital fusion, merging my traditional paintings with digital art into timeless masterpieces inscribed on Bitcoin's blockchain. Each piece is inscribed on rare satoshis, Bitcoin's smallest units, creating unique ordinal artifacts with scarcity and permanence. Vibrant, hand-crafted paintings exploring color, emotion, and form interweave with digital layers of depth, motion, and interactivity. Mirroring the crystal's piezoelectric energy from friction, analog-digital collision sparks artistic potential. Indicolite offers collectors a synergy of worlds: physical art's authenticity boosted by blockchain. It's a portal to fused creativity in art and technology.",
+    descShort: "",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+          pieces: [
+      { id: "3a0b90e0a438798a955d5384965a373f734ada3f2f34e58b760e55e79863c40ei0", name: "UNO BY OGBE" },
+      { id: "7495e5921419a43ee53a6fcada4843a7fb4d37cd82b9f44afa602f604f9d0cd9i0", name: "DOS BY OGBE" },
+      { id: "ac31b765b0cad71f3220d1fdc905230a139a67461e0d961832e50cebe23256f0i0", name: "TRES BY OGBE" },
+      { id: "a311e9775838ebf5e9be99ed35e3898d4b8559a216a70a4b75e4c8c35f96f3c7i0", name: "CUATRO BY OGBE" },
+      { id: "d4c95e9c7c5d4544de0212f6615473b95b249f4be65e7e781b948b65f0622304i0", name: "CINCO BY OGBE" },
+      { id: "7057edce79b3950b204b5b6cd3cbcf0b41d7fc635ce0aaa159bd082bcc59ac47i0", name: "SEIS BY OGBE" },
+      { id: "aae422eddccc1f95d0d2f23dc084453dc0683f1f00ac8d91d28ed54dc0119ff6i0", name: "SIETE BY OGBE" },
+      { id: "434a83704a48ae75fa65ebd4974172b65c2441e2bb3eb01da23a1a24acf47888i0", name: "OCHO BY OGBE" },
+      { id: "791ed3425a5565767c298603030055e0260e3fe895031604ab955e7bf014e55di0", name: "NUEVE BY OGBE" },
+      { id: "8627099707dcbbe0d7a3ee9568cfc634bfc23279b79e33f00817eeee531778d7i0", name: "DIEZ BY OGBE" },
+      { id: "856dfbf2c1aa33a1bdc68c3159dfae63d4307b68eb0d58a4ce26c5a82c58fbabi0", name: "ONCE BY OGBE" },
+      ],
+  },
+  {
+    id: "randomz",
+    name: "RANDOMZ",
+    count: 27,
+    desc: "Random art pieces by OgBe. OgBe Meji.",
+    descShort: "",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+    hidden: true,
+          pieces: [
+      { id: "bcf001a1569d0dc80570e09fc01b986485743b879ef432e754b2a88679aa61eai0", name: "SEED2FLOWER BY OGBE" },
+      { id: "3ea20a7e60f04aa509d1f8fd88f9168f68fa57447814e1f4ccf107103997c3fdi0", name: "LA RESIDENCIA BY BAD BUNNY" },
+      { id: "7f2b1adb8c688ae2dd8205645a07dc0c8765d69ed2556abd97d99f0badcaedd3i0", name: "BTC MATRIX BANNER BY OGBE" },
+      { id: "16b6597ac73fea3488643400a0da2e72dfd6b45e343448958fe5c3f89a9060bai0", name: "BAD BUNNY'Z BY OGBE" },
+      { id: "240799f828022dff7f6b7ebb4510d02ea673ade3b95c9e1c47814667e7697279i0", name: "DRUM'Z BY OGBE" },
+      { id: "577a38b04175a557d7f39c94bcd805d24e3fb1eb94dc05afab11c67feac77d2di0", name: "Possibly Smallest Gif Ever on Btc BY OGBE" },
+      { id: "09b90587184720423987fb6e3ff58a210c2f847aed741c9d8d68a55dfc65ac64i0", name: "STYLE'zzz BY OGBE" },
+      { id: "b148c4d813013923f98865610a5150bbb8acaafc6d1c1ddcf16060bb2e8a34b0i0", name: "FUCK FIAT'Z BY OGBE" },
+      { id: "f59b99589427e48e9a538eadd898e43588cb5c92e78200b8a26176ee782d3539i0", name: "THE QUEEN'Z BY OGBE" },
+      { id: "e1fc78893d3108fce7d2822f4e9e44fd8943cd190f65347143636e347908569di0", name: "AGED'Z BY OGBE" },
+      { id: "3c11fe6d8de4f8bbdd853da870e9272bbb278f38d0db2085b41d7c43fdbfb543i0", name: "NO EVIL BY OGBE" },
+      { id: "67d300a06db29f42c9a6c7aca11b60d210ebcce550cf82601ff86710233e4cefi0", name: "EYE'Z BY OGBE" },
+      { id: "781b5965b2450222886fe8cec3c3d8d762e6539649670820233b20f11f087178i0", name: "WU TANG'Z BY OGBE" },
+      { id: "92430ed8513c45180ead4f46a9f6d9345d90733c0dd3f018362401582e3f7a58i0", name: "INSTALLATIONZ BY OGBE" },
+      { id: "932b0ac52faac787f33e5e5f0c9a549a0b2711e73c55e7b92b3feb54e9fd0c50i0", name: "EMPTY'Z BY OGBE" },
+      { id: "26535f3a72b27855895e004f692a3746ba0fe81736fab0bf20ff321e4477ffb6i0", name: "OGBE'Z BY OGBE & SA" },
+      { id: "aa814fe6caf43e345b43eb9bc7c2b30bbbef65838e3f51a88933306c587b0310i0", name: "MPC'Z BY OGBE" },
+      { id: "71e635ad7ca910d7a33ef5a8eded717e3feebe38db1ef6c2bbfaa48f94aaa18di0", name: "IBA SANGO BY OGBE" },
+      { id: "aeeffa941d54f840e4173f743dd28375f47eb8ed0e5353a48379773b9fe2d4f4i0", name: "SHAPEZ BY OGBE" },
+      { id: "a0fccea3368ad70ebe26ae10f2be675d9d25f7b65edf788c29a58f5d5ca0d21ci0", name: "SANGO IRUNMOLE BY OGBE" },
+      { id: "8da4fec8d7e5e0220d4059df21022b246ea88e56225d5356c5dc9051ecb30fc8i0", name: "SKETCHZ BY OGBE" },
+      { id: "103c9a2200c8c67f48966fdce9bce91bd646345180aee0dd5a2b66e38c6bb3d8i0", name: "ASTROVEJIGANTE BY OGBE" },
+      { id: "8ef29ac7521ab358d8e31bd06ca887d4a92fe92d7e2e5a4c8856ed5f1c2ce1d1i0", name: "BLUE CHIP PARENT BY OGBE" },
+      { id: "4cd0786d44c53834cf9198626c47106549d8b0833d62ba88c1092002bbc41d6ci0", name: "NINJAZ BY OGBE" },
+      { id: "cef6f81e1ff6a0eda3fd82706778ab9ba77412898ac8a8a2b7af25add9e3088bi0", name: "SKULLZ BY OGBE" },
+      { id: "e06ef16c9050b5a06c1e03fbab6e65d67cf162fc9314220d153d713ebcb41ef6i0", name: "VIBEZ BY OGBE" },
+      { id: "92fc91fcd26d5a6966e5d0fe7896297f60c55aa5229d6e1387e831c913561d3ai0", name: "SOUNDZ BY OGBE" },
+      ],
+  },
+  {
+    id: "lettucegoatgenesis",
+    name: "LETTUCE GOAT GENESIS",
+    count: 30,
+    desc: "The Secret Society Of The Lettuce Goat. A positive message within web3. Let us all be the greatest of all time.",
+    descShort: "A positive message within web3. Let us all be the greatest of all time.",
+    tags: ["Ordinal", "Genesis"],
+    art: [],
+    hidden: true,
+          pieces: [
+      { id: "3df0a420f7f8b6d131a2afc27e98578f134c1f3a0a8ae6c00f71b060b2613f05i0", name: "NEKOAT BY BRICK X OGBE" },
+      { id: "8a0f2703e4ffcb8ed68960e40c5958233025308e7d0460a5a38f699de1c63b2ei0", name: "MEMPOOL GOAT" },
+      { id: "31782d0e62977c03364732f26a1dd0959db84ea2fd858ad4546a1638121fe62ci0", name: "LETTUCE MOO" },
+      { id: "312077c5f9178977d9a6a787cca9314bf07363e70061341c6cb942acef7ec713i0", name: "STEALTH MODE GOAT" },
+      { id: "1552a007049e8d13e7c72222db99b9571f60371ec9785555a9efa40e19014ed1i0", name: "COUNCIL GOAT" },
+      { id: "da05ac1ac256b25850b2d320f937f4871c3b8529c34f154abf68c1c1cd42dee0i0", name: "BLACK DIAMOND GOAT" },
+      { id: "2e06903e98eb15554b6c5055aae80f35f5546eeab03a7a9721d507fa4752a09bi0", name: "DIAMOND GOAT" },
+      { id: "95aa562a83d1d1f39c1ba5d7684d9b591a42e480f1749edc43ead1a686a09b63i0", name: "GALAXY GOAT" },
+      { id: "2ec572ac010743397dbd78a598ed2491676a40155c97174f90986c8894d4845di0", name: "LOLLI GOAT" },
+      { id: "eea3ab1a804aa262ada2984b7e6dad7e7411f48a06a961ea1ca9800732662423i0", name: "BABY GOAT" },
+      { id: "0bc5a9999985e3a0ff3332091e6854a6868660123ec961f8fed3f61176c5ed0ei0", name: "MERCH GOAT" },
+      { id: "dc1c74238ef765572a061dac1ead781f9756329040ecce602ad7dd56b0dc08f3i0", name: "STICK GOAT" },
+      { id: "c3af9bb9ca0aa5d2d6187a0c0d3844cd705104f1e665619e101e6d8bdf8185b8i0", name: "SATOSHI GOAT" },
+      { id: "98f959b49c57b5378e74b4d65c90de341ab44efcbd2b8d82debddf6938bf6057i0", name: "NEON GOAT" },
+      { id: "d4fc7dfb83fbb478c786210d1d08bec8163d61855973103cecd933e83d919c17i0", name: "3D GOAT" },
+      { id: "2130e6ac7c4f4ea6f515a7301feb058d535c09b3b7b3f28a996de1448540595ei0", name: "PIXEL GOAT" },
+      { id: "f3f50dbd7bb72bcd7bfaffce1e888d3e566eed1f7bbae36516a8ac96c1d83b1ai0", name: "FULL TRANSPARENCY GOAT" },
+      { id: "b977f54d1e4348292c65a99642d1a256efacc22d99337bcd776e02fa794a825ei0", name: "GANJA GOAT" },
+      { id: "e5ba19ef2f10d0b71b2b3a6e20996c0ef4aaa306a682a11889b84f4ce2fb07bai0", name: "HILLBILLY GOAT" },
+      { id: "d0fe62d6142a95bc92a183565689a8cc2e166f3eb50d020ae5c5edaf7a8bceefi0", name: "WATER WORLD GOAT" },
+      { id: "b22f7dedff7baa94f6f23bdaa0ec3f3d912bebfc9a3a3b2794731263580a7114i0", name: "PIZZA GOAT" },
+      { id: "564b68647b52d73bb941e101b625b22cfff23914603b1ad1adc3b5bd65df2808i0", name: "AIR GOAT" },
+      { id: "6f3e9788caffb5a0f2226c28e6558d10b0e38eb61422d95957411100885ab2dai0", name: "CONSPIRACY GOAT" },
+      { id: "700039dfbde60ba2c6af73546bf02e1043d976531c2e089e9e0a8b16aa7ab385i0", name: "BITCOIN GOAT" },
+      { id: "3a13c572cc7e38447419ffc00b8249236b3be312caea0eba615813d564777117i0", name: "MILK GOAT" },
+      { id: "7806ae11d468fe4d58057c248eb2a1e50ae566cf41d2077fdceb131c12be46a9i0", name: "HITMAN GOAT" },
+      { id: "e4ef142b3a122dcc109c3aef42ee6b20df259cfff3249ddba3ac5cced77f751ei0", name: "LETTUCE GOAT" },
+      { id: "b436fe480e84ff49b24c97ce571c0ccca5577b0cf69a40a777287a244f86247ei0", name: "EEGOAT" },
+      { id: "9983ddb94eb4bb1a0aacf250aa6d1ae0069fd084b5ff5b820be200ffd0e74e82i0", name: "MAGMA GOAT" },
+      { id: "21d6e6cf06a82fc65597472e26775a1dcfff9b3418ee101ce5d2ca6e904c3df9i0", name: "ATM GOAT" },
+      ],
+  },
+  {
+    id: "seed2flower",
+    name: "SEED 2 FLOWER",
+    count: 11,
+    desc: "The second Banner by multidisciplinary artist OGBE. Identify by your banner, not your pfp. Be the greatest you can be. Plant the seed that you want to see grow.",
+    descShort: "",
+    tags: ["Ordinal", "Banners"],
+    art: ["https://ordinals.com/content/bcf001a1569d0dc80570e09fc01b986485743b879ef432e754b2a88679aa61eai0"],
+    type: "banner",
+    hidden: true,
+          pieces: [
+      { id: "eb302a02224272a9b83e0015708b9590eebb0915b4f59beec5532c683d1a7babi0", name: "Banner: SEED 2 FLOWER #1" },
+      { id: "fec2228b977c78be89a2a481389a8543e6935feb5571b82981c372f9eac2b3e2i0", name: "Banner: SEED 2 FLOWER #2" },
+      { id: "f84b7539934de543a757a980ea15ad019ea9dd932ec195a27138d34f32b67faci0", name: "Banner: SEED 2 FLOWER #3" },
+      { id: "7bd7b898ec760de24f8ec7f30bfcee33c5b0d2d7ba644ce948878be90a20b7cbi0", name: "Banner: SEED 2 FLOWER #4" },
+      { id: "a24fe5cd469cb33dda6171daaf42a6ddeb57fde17e60f78cc5ffa8386b3767d8i0", name: "Banner: SEED 2 FLOWER #5" },
+      { id: "d1c7efb398610f8b290d51c7897cd958108ab00c43b9dafdba2acce98d6bcc71i0", name: "Banner: SEED 2 FLOWER #6" },
+      { id: "1fc7d98e6b36bf33987ebe5419c611c7481ad1059bdd38f8805e85bb4c3b321ei0", name: "Banner: SEED 2 FLOWER #7" },
+      { id: "0dd59f16339fd2b6ffc0a484982ffb6e7af73cb57f16702a0bee6c564d7cd691i0", name: "Banner: SEED 2 FLOWER #8" },
+      { id: "9a87aaa658b9306a0ede4e9b9d4d4f420affd9afacb2e827c5f536e1eee841fbi0", name: "Banner: SEED 2 FLOWER #9" },
+      { id: "5b54ae478812cf336e0f2d8aa95ecf9f90ccc4bb41e1f1acf37003ed1760cd2bi0", name: "Banner: SEED 2 FLOWER #10" },
+      { id: "95d8106aa688ac64b74b37574b0e4eb4ed4a8400c3bb08052683db85cc1b4c0ei0", name: "Banner: SEED 2 FLOWER #11" },
+      ],
+  },
+  {
+    id: "ftw",
+    name: "FTW",
+    count: 18,
+    desc: "This was a free mint celebrating the 31 shows Bad Bunny completed in Puerto Rico. It was called La Residencia. This image is from the final show. The show was broadcast on Amazon and set a record for most people watching an event. Felicidades Benito. Gracias por lo que haces.",
+    descShort: "",
+    tags: ["Ordinal", "Collaboration", "Free Mint"],
+    art: ["https://ordinals.com/content/16b6597ac73fea3488643400a0da2e72dfd6b45e343448958fe5c3f89a9060bai0"],
+    type: "banner",
+    hidden: true,
+          pieces: [
+      { id: "f7125a9c484446b456081934aef0a3924c49100a56659a4347fcf00b297e27bfi0", name: "FTW by Ogbe #1" },
+      { id: "09399f88ba76e56d64923894ac364b450b4f56cb694b88a4622c3dec8a9e00c0i0", name: "FTW by Ogbe #2" },
+      { id: "2378a1a8a17529b9412c640ece4f698750da95098c8447e5fc418510b300c0d3i0", name: "FTW by Ogbe #3" },
+      { id: "130fad80cb6ff649e84196491747b66aa43b1931c5cdde2e6d9bd322f293220bi0", name: "FTW by Ogbe #4" },
+      { id: "44854b0f235ac59faaf297383259c5a339b78b44ec762160ebaa668e55dfe386i0", name: "FTW by Ogbe #5" },
+      { id: "09241c3819aba04cc5db542db06f3ca89cf91da7b9a6522500c3524a2ede06a7i0", name: "FTW by Ogbe #6" },
+      { id: "e3be5070dd0485d9997cbe45b3336462e5f2550fd5f88a8fd1a2844bab5a8a90i0", name: "FTW by Ogbe #7" },
+      { id: "835f52f8a1c8547a86ae4d7dc2aacbacf82ea22fa51795aba21afaf3e3fef53fi0", name: "FTW by Ogbe #8" },
+      { id: "304cdc09105b66f86069fd1492d375a8394ba639b793cccb271866dd07cd91f8i0", name: "FTW by Ogbe #9" },
+      { id: "b5f0fb82501116c3947aa5ca16c913af5f20d10654d0e07c1e7e812322aae0dci0", name: "FTW by Ogbe #10" },
+      { id: "db683f59b1890cc87807abde0a5c911d2fe672d709913a0cf64fff1924364c55i0", name: "FTW by Ogbe #11" },
+      { id: "98b61834c6f1b13ecb6e440e8073bf758cb7980215b3a9a2c6c74de3d7578423i0", name: "FTW by Ogbe #12" },
+      { id: "fa2f1aa02340e6f84df67669d6abcc9bc17622363d530838dbea5c802f215471i0", name: "FTW by Ogbe #13" },
+      { id: "115f64a5240bf3953455fed992df6b7c75120a698b50e2f4efd1b6d9af982ab1i0", name: "FTW by Ogbe #14" },
+      { id: "5ad1c90b60848563935787e4dcb77752f23eb7b736b272dee5dab11726fbc273i0", name: "FTW by Ogbe #15" },
+      { id: "d7a5d47d1954585a04f58096683c72c46edb61e61c91b2dd8994969ebfc03039i0", name: "FTW by Ogbe #16" },
+      { id: "7c82e3467c0dcbe6da87a74380ad28968fe6d268913d87347ee9f8596ae82689i0", name: "FTW by Ogbe #17" },
+      { id: "ae3cf590520c1eb47000e81329317bb228adb96cccabed215700c3e320fd9384i0", name: "FTW by Ogbe #18" },
+      ],
+  },
+  {
+    id: "bannerz",
+    name: "BANNERZ",
+    count: 15,
+    desc: "I have decided to do a collection of banners. I wanted to do something different. I noticed most people didn't want to change their pfp, but for their banner they wanted more options. This is why I created BANNERS. Enjoy 🙏",
+    descShort: "",
+    tags: ["Ordinal", "Banners", "Profile"],
+    art: ["https://ordinals.com/content/7f2b1adb8c688ae2dd8205645a07dc0c8765d69ed2556abd97d99f0badcaedd3i0"],
+    type: "banner",
+    hidden: true,
+          pieces: [
+      { id: "a44a5c82aa73a24b3de8eed896f1010f57cbe5291efeeccf8dcb973ad0c3f20bi0", name: "Btc Matrix Banner #1" },
+      { id: "f564a86f47a3749ede03e2f4490db543288a6a281516ffed3e5ca9aa43ae407ai0", name: "Btc Matrix Banner #2" },
+      { id: "42b176bc0eb9dfada6c1a520af381de982414afb095fb7a3e7d5ae98eb8e94a6i0", name: "Btc Matrix Banner #3" },
+      { id: "46bc7843877c8a2e2fc7891fa59f32e0c6c6275cf1001a54d8bfd06ade94c03bi0", name: "Btc Matrix Banner #4" },
+      { id: "39e0d0532c0962b973ce65bc402173b42115d30385a062b15e3c86e86899297fi0", name: "Btc Matrix Banner #5" },
+      { id: "2d0cc3f55da56e8e3f64bca15927c493be5ad6e928f1a107a260a06d106c4a84i0", name: "Btc Matrix Banner #6" },
+      { id: "2ee9c060b9811e8874dd11d55b1aaf11d8dd76aa0c6b4462f10d9310a2688defi0", name: "Btc Matrix Banner #7" },
+      { id: "2a6864735569cae6d49d1c9607392db4ec79404f22abd258779cbd746f5f24c1i0", name: "Btc Matrix Banner #8" },
+      { id: "0ad1bf5540764e8e61bdd2141355be387faf66a7ab2ab6904e53ca72cdb2634bi0", name: "Btc Matrix Banner #9" },
+      { id: "860b62531a2daa06059df3d1ea631b22bb90c9a83fe88261fd741f0ce4c058f2i0", name: "Btc Matrix Banner #10" },
+      { id: "9535ec6a94492a7f74491d4f660e8e1cce7dade85dc1a7f09f26fef3dec5092di0", name: "Btc Matrix Banner #11" },
+      { id: "37f4c3eb13201f68a4d6620b8e709a9e9a30b726803a0c5ade6e353e303e51dci0", name: "Btc Matrix Banner #12" },
+      { id: "fcca7547442d08731ab161b6f9504b3380a4e7e9859335da29f3cd906d698ff2i0", name: "Btc Matrix Banner #13" },
+      { id: "a160a817835fb291c85f2737ed336df1b6704fa491667b8b51236fd6716142d3i0", name: "Btc Matrix Banner #14" },
+      { id: "ba71236cb9ea5c6f73f35ecdda3d7d6fda551c37b0f40d401def62fd636f6746i0", name: "Btc Matrix Banner #15" },
+      ],
+  }
+];
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderArtThumbs(col) {
+  // Banner collections: show art array images (the actual banner) as a single full-width card
+  if (col.type === 'banner' && col.art && col.art.length > 0) {
+    return '<div class="art-thumb art-thumb-banner"><img src="' + col.art[0] + '" alt="" loading="lazy" /></div>';
+  }
+
+  // Non-banner collections: show first 4 pieces in a 2x2 grid
+  if (col.pieces && col.pieces.length > 0) {
+    var displayPieces = col.pieces.slice(0, 4);
+    return displayPieces.map(function(p) {
+      var imgUrl = 'https://ordinals.com/content/' + p.id;
+      return '<div class="art-thumb"><img src="' + imgUrl + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.parentElement.querySelector(\'.art-thumb-placeholder\')&&(this.parentElement.querySelector(\'.art-thumb-placeholder\').style.display=\'flex\')" /><div class="art-thumb-placeholder" style="display:none">OG BE</div></div>';
+    }).join('');
+  }
+
+  // Fallback: collection name
+  return '<div class="art-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--panel);"><span style="font-size:11px;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase;">' + col.name + '</span></div>';
+}
+
+function renderHome() {
+  var visibleCols = COLLECTIONS.filter(function(col) { return !col.hidden; });
+  var collectionsHtml = visibleCols.map(function(col) {
+    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return ''
+      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
+      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
+      + '<div class="collection-card-info">'
+      + '<div class="collection-card-name">' + col.name + '</div>'
+      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
+      + '<div class="collection-card-desc">' + col.descShort + '</div>'
+      + '</div>'
+      + '<div class="collection-card-arrow">&#x2192;</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Collections</h2>'
+    + '</div>'
+    + '<div class="collections-grid">'
+    + collectionsHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function renderCollection(colId) {
+  var col = COLLECTIONS.find(function(c) { return c.id === colId; });
+  if (!col) return '<p>Collection not found.</p>';
+
+  var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+  var artHtml = '';
+  if (col.art && col.art.length > 0) {
+    artHtml = '<div class="collection-art">' + col.art.map(function(url) {
+      return '<div class="art-piece-banner" onclick="openBannerViewer(\'' + col.id + '\')"><img src="' + url + '" alt="" loading="lazy" style="width:100%;height:auto;display:block;cursor:pointer;" /></div>';
+    }).join('') + '</div>';
+  }
+
+  var piecesHtml = col.pieces.map(function(p) {
+    var imgUrl = 'https://ordinals.com/content/' + p.id;
+    var satHtml = p.sat ? '<div class="piece-card-sat">Sat: ' + p.sat + '</div>' : '';
+    var tooltipHtml = '<div class="piece-tooltip" id="tip-' + p.id.replace(/[^a-z0-9]/gi, '') + '">'
+      + '<a href="https://www.satflow.com/ordinals/eegunbased" target="_blank" rel="noopener">SatFlow</a>'
+      + '<a href="https://ord-dropz.xyz/secondary/collections/eegun" target="_blank" rel="noopener">Ord Dropz</a>'
+      + '</div>';
+    return ''
+      + '<div class="piece-card">'
+      + '<div class="piece-card-img"><img src="' + imgUrl + '" alt="' + p.name + '" loading="lazy" onclick="openPieceViewer(\'' + col.id + '\', \'' + p.id + '\')" onerror="this.parentElement.innerHTML=\'<div class=piece-card-placeholder>OG BE</div>\'" /></div>'
+      + '<div class="piece-card-info">'
+      + '<div class="piece-card-name">' + p.name + '</div>'
+      + '<div class="piece-card-id' + (col.id === 'eegun' ? ' ins-glow' : '') + '" ' + (col.id === 'eegun' ? 'onclick="toggleTip(\'' + p.id.replace(/[^a-z0-9]/gi, '') + '\')"' : '') + '>' + p.id.substring(0, 12) + '...</div>'
+      + satHtml
+      + '</div>'
+      + tooltipHtml
+      + '</div>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="back-link"><a href="#" onclick="showHome(); return false;">&#x2190; Collections</a></div>'
+    + '<div class="collection-header">'
+    + '<div>'
+    + '<h1 class="collection-title">' + col.name + '</h1>'
+    + '<div class="collection-meta">' + col.count + ' pieces &middot; ' + tags + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<p class="collection-desc">' + col.desc + '</p>'
+    + artHtml
+    + '<div class="pieces-grid">'
+    + piecesHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function renderOgbeBio() {
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">OG BE</h2>'
+    + '</div>'
+    + '<div class="upcoming-layout">'
+    + '<div class="bio-col">'
+    + '<div class="ogbe-bio">'
+    + '<p>0g₿e is a visionary alchemist who weaves the unforgeable fire of life with profound artistic mastery. For over two decades, he has moved as a professional musician, transmuting rhythm, ancestral memory, and raw soul into something timeless—then extending that same creative force across sculpture, painting, digital realms, and NFTs.</p>'
+    + '<p>A deeply respected educator, he has taught master classes at the world\'s foremost universities, guiding emerging artists to expand their vision and challenge the boundaries of what art can become.</p>'
+    + '<p>As the founder and lead visionary behind several blockchain-native projects—including the soul-infused @EegunOrdinal collection—he does not simply mint art. He channels ancient resonance into living myths, inscribed forever on humanity\'s most immutable ledger. In the ordinal universe, he remains a quiet, elemental presence: deliberate, potent, and unbound.</p>'
+    + '<p style="margin-top:24px;font-weight:700;color:var(--accent);">Zero gravity. Bitcoin soul. Eternal legend.</p>'
+    + '</div>'
+    + '</div>'
+    + '</div></div></div>';
+}
+
+function renderContact() {
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Contact</h2>'
+    + '</div>'
+    + '<div class="contact-layout">'
+    + '<div class="contact-col">'
+    + '<h3 class="contact-sub">Get in Touch</h3>'
+    + '<p class="contact-desc">For inquiries, collaborations, or just to connect — reach out anytime.</p>'
+    + '<a href="mailto:Ogbe@pr1m0s.com" class="contact-link">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'
+    + 'Ogbe@pr1m0s.com</a>'
+    + '</div>'
+    + '<div class="contact-col">'
+    + '<h3 class="contact-sub">Follow</h3>'
+    + '<a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" class="contact-link">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+    + '@_0gbe</a>'
+    + '</div>'
+    + '<div class="contact-col notify-col">'
+    + '<h3 class="contact-sub">Stay Updated</h3>'
+    + '<p class="contact-desc">Get notified when new work drops.</p>'
+    + '<form class="notify-form" onsubmit="event.preventDefault(); this.querySelector(\'button\').textContent=\'You are in\'; this.querySelector(\'input\').disabled=true;">'
+    + '<input type="email" placeholder="your@email.com" required />'
+    + '<button type="submit">Notify Me</button>'
+    + '</form>'
+    + '</div>'
+    + '</div></div></div>';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showHome() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderHome();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navDegen = document.getElementById('navDegen');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.add('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.remove('active');
+    if (navDegen) navDegen.classList.remove('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function showOgbe() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderOgbeBio();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navDegen = document.getElementById('navDegen');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.add('active');
+    if (navCollab) navCollab.classList.remove('active');
+    if (navDegen) navDegen.classList.remove('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function renderDegen() {
+  var degenIds = ['ftw', 'randomz', 'bannerz'];
+  var degenCols = COLLECTIONS.filter(function(col) { return degenIds.indexOf(col.id) !== -1; });
+  var collectionsHtml = degenCols.map(function(col) {
+    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return ''
+      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
+      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
+      + '<div class="collection-card-info">'
+      + '<div class="collection-card-name">' + col.name + '</div>'
+      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
+      + '<div class="collection-card-desc">' + col.descShort + '</div>'
+      + '</div>'
+      + '<div class="collection-card-arrow">&#x2192;</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Degen</h2>'
+    + '<p class="section-desc">Collaborations, free mints, and wild experiments. Not for the faint of heart.</p>'
+    + '</div>'
+    + '<div class="collections-grid">'
+    + collectionsHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function showContact() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderContact();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navDegen = document.getElementById('navDegen');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.remove('active');
+    if (navDegen) navDegen.classList.remove('active');
+    if (navContact) navContact.classList.add('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function renderCollab() {
+  var collabIds = ['lettucegoatgenesis'];
+  var collabCols = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; });
+  var collectionsHtml = collabCols.map(function(col) {
+    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return ''
+      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
+      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
+      + '<div class="collection-card-info">'
+      + '<div class="collection-card-name">' + col.name + '</div>'
+      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
+      + '<div class="collection-card-desc">' + col.descShort + '</div>'
+      + '</div>'
+      + '<div class="collection-card-arrow">&#x2192;</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Collab</h2>'
+    + '<p class="section-desc">OG BE x other artists. Joint projects, co-created visions.</p>'
+    + '</div>'
+    + '<div class="collections-grid">'
+    + collectionsHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function showCollab() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderCollab();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navDegen = document.getElementById('navDegen');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.add('active');
+    if (navDegen) navDegen.classList.remove('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function showDegen() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderDegen();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navDegen = document.getElementById('navDegen');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.remove('active');
+    if (navDegen) navDegen.classList.add('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function showCollection(id) {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderCollection(id);
+    main.classList.remove('fade-out');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function toggleNav() {
+  document.getElementById('siteNav').classList.toggle('open');
+}
+
+function openBannerViewer(colId) {
+  var col = COLLECTIONS.find(function(c) { return c.id === colId; });
+  if (!col || !col.art || col.art.length === 0) return;
+  var imgUrl = col.art[0];
+  var artId = imgUrl.replace('https://ordinals.com/content/', '');
+  document.getElementById('modalContent').innerHTML =
+    '<img src="' + imgUrl + '" alt="Banner" />' +
+    '<div class="modal-piece-info">' +
+      '<div class="modal-piece-name">' + col.name + '</div>' +
+      '<div style="margin-top:8px;color:var(--text-muted);font-size:10px;">ID: ' + artId + '</div>' +
+    '</div>';
+  document.getElementById('pieceModal').classList.add('open');
+}
+
+function openPieceViewer(colId, pieceId) {
+  // Close any existing modal cleanly before reopening
+  document.getElementById('pieceModal').classList.remove('open');
+  document.getElementById('modalContent').innerHTML = '';
+  var col = COLLECTIONS.find(function(c) { return c.id === colId; });
+  var piece = col ? col.pieces.find(function(p) { return p.id === pieceId; }) : null;
+  if (!piece) return;
+  var imgUrl;
+  if (col && col.type === 'banner' && col.art && col.art.length > 0) {
+    var idx = col.pieces.findIndex(function(p) { return p.id === pieceId; });
+    imgUrl = col.art[idx] || col.art[0];
+  } else {
+    imgUrl = 'https://ordinals.com/content/' + piece.id;
+  }
+  var isEegun = colId === 'eegun';
+  var tooltipHtml = isEegun
+    ? '<div class="modal-tip" id="modal-tip">'
+        + '<a href="https://www.satflow.com/ordinals/eegunbased" target="_blank" rel="noopener">SatFlow</a>'
+        + '<a href="https://ord-dropz.xyz/secondary/collections/eegun" target="_blank" rel="noopener">Ord Dropz</a>'
+      + '</div>'
+    : '';
+  var idHtml = isEegun
+    ? '<div class="modal-id-wrap">'
+        + '<span class="modal-piece-id ins-glow" onclick="toggleModalTip()">' + piece.id + '</span>'
+        + tooltipHtml
+      + '</div>'
+    : '<div class="modal-piece-id">ID: ' + piece.id + '</div>';
+  document.getElementById('modalContent').innerHTML =
+    '<div class="modal-img-wrap">'
+    + '<button class="modal-img-back" onclick="closeModal()">&#x2190; Back</button>'
+    + '<img src="' + imgUrl + '" alt="' + piece.name + '" />'
+    + '</div>'
+    + '<div class="modal-piece-info">' +
+      '<div class="modal-piece-name">' + piece.name + '</div>' +
+      (piece.sat ? '<div>Sat: ' + piece.sat + '</div>' : '') +
+      idHtml +
+    '</div>';
+  document.getElementById('pieceModal').classList.add('open');
+  // Soften music to half volume while viewing piece
+  if (bgMusic) fadeVolume(0.5, 500);
+}
+
+function toggleModalTip() {
+  var tip = document.getElementById('modal-tip');
+  if (tip) tip.style.display = tip.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function toggleTip(id) {
+  var tip = document.getElementById('tip-' + id);
+  if (tip) tip.style.display = tip.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function closeModal() {
+  document.getElementById('pieceModal').classList.remove('open');
+  document.getElementById('modalContent').innerHTML = '';
+  // Restore music volume to full when piece viewer closes
+  if (bgMusic) fadeVolume(1.0, 500);
+}
+
+// ============================================================
+// LANDING TRANSITION
+// Click GIF → zoom fills screen → fade to black → gallery
+// ============================================================
+var entered = false;
+var landingTimer = null;
+
+function enterSite() {
+  if (entered) return;
+  entered = true;
+  if (landingTimer) clearTimeout(landingTimer);
+  if (window.emberStop) window.emberStop();
+  console.log('enterSite running');
+
+  var landing = document.getElementById('landing');
+  var mainWrapper = document.getElementById('main-wrapper');
+
+  // Fade out landing gently
+  if (landing) landing.style.transition = 'opacity 1.5s ease';
+  if (landing) landing.style.opacity = '0';
+
+  // Show gallery after landing fades — soft fade in
+  setTimeout(function() {
+    console.log('showing gallery now');
+    if (landing) landing.style.display = 'none';
+    if (mainWrapper) {
+      mainWrapper.style.display = 'block';
+      mainWrapper.style.transition = 'opacity 1.2s ease';
+      mainWrapper.style.opacity = '1';
+    }
+    document.body.classList.remove('landing-open');
+    showHome();
+    // Soft music fade in
+    if (bgMusic) fadeInMusic(1.0, 3000);
+    console.log('gallery shown, mainContent:', document.getElementById('mainContent').innerHTML.length, 'chars');
+  }, 1600);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!entered && (e.key === 'Enter' || e.key === ' ')) {
+    enterSite();
+  }
+});
+
+// Click handlers — attached after function is defined
+document.getElementById('landing').addEventListener('click', function() {
+  if (!entered) enterSite();
+});
+document.getElementById('landing-gif-wrap').addEventListener('click', function(e) {
+  e.stopPropagation();
+  if (!entered) enterSite();
+});
+
+// Force clean state for every fresh page load
+entered = false;
+landingTimer = null;
+startLandingTimer();
+if (window.emberStart) window.emberStart();
+
+// ============================================================
+// EEGUN INSCRIPTION TOOLTIPS
+// ============================================================
+function showTip(id) {
+  var tip = document.getElementById('tip-' + id);
+  if (tip) tip.style.display = 'flex';
+}
+
+function hideTip(id) {
+  var tip = document.getElementById('tip-' + id);
+  if (tip) tip.style.display = 'none';
+}
+</script>
+
+</body>
+</html>
