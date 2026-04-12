@@ -1150,6 +1150,25 @@ function renderContact() {
     + '</div></div></div>';
 }
 
+function showContact() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderContact();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCommunity = document.getElementById('navCommunity');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCommunity) navCommunity.classList.remove('active');
+    if (navContact) navContact.classList.add('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
 // ============================================================
 // NAVIGATION
 // ============================================================
@@ -1211,7 +1230,6 @@ function showCommunity() {
 function renderCommunity() {
   var members = [
     { name: "Tophs", handle: "@t0phs", url: "https://t0ph.art", desc: "Visual artist and collaborator", img: "" },
-    { name: "Mattat", handle: "@Mattat", url: "https://mattat.xyz", desc: "Creative coder & generative art", img: "" },
     { name: "OgBe", handle: "@_0gbe", url: "https://www.ogbe.art", desc: "Ordinals artist & musician", img: "" },
   ];
   var cards = members.map(function(m) {
