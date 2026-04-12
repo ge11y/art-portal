@@ -480,7 +480,6 @@
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
           <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
-          <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1003,22 +1002,140 @@ function renderCollection(colId) {
 }
 
 function renderOgbeBio() {
-  return ''
-    + '<div class="section"><div class="container">'
-    + '<div class="section-header">'
-    + '<h2 class="section-title">OG BE</h2>'
-    + '</div>'
-    + '<div class="upcoming-layout">'
-    + '<div class="bio-col">'
-    + '<div class="ogbe-bio">'
+  var collabIds = ['lettucegoatgenesis'];
+  var collabCol = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; })[0];
+  var pieces = collabCol && collabCol.pieces ? collabCol.pieces : [];
+  var bgImg = pieces[0] ? 'https://ordinals.com/content/' + pieces[0].id + 'i0' : '';
+
+  var aboutCards = ''
+    + '<div class="about-box">'
+    + '<div class="about-label">ABOUT</div>'
+    + '<div class="about-body">'
     + '<p>0g₿e is a visionary alchemist who weaves the unforgeable fire of life with profound artistic mastery. For over two decades, he has moved as a professional musician, transmuting rhythm, ancestral memory, and raw soul into something timeless—then extending that same creative force across sculpture, painting, digital realms, and NFTs.</p>'
     + '<p>A deeply respected educator, he has taught master classes at the world\'s foremost universities, guiding emerging artists to expand their vision and challenge the boundaries of what art can become.</p>'
     + '<p>As the founder and lead visionary behind several blockchain-native projects—including the soul-infused @EegunOrdinal collection—he does not simply mint art. He channels ancient resonance into living myths, inscribed forever on humanity\'s most immutable ledger. In the ordinal universe, he remains a quiet, elemental presence: deliberate, potent, and unbound.</p>'
-    + '<p style="margin-top:24px;font-weight:700;color:var(--accent);">Zero gravity. Bitcoin soul. Eternal legend.</p>'
+    + '<p class="about-statement">Zero gravity. Bitcoin soul. Eternal legend.</p>'
     + '</div>'
     + '</div>'
-    + '</div></div></div>';
+    + '<div class="about-box about-boxes-row">'
+    + '<a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" class="about-platform-card">'
+    + '<div class="about-label">PLATFORM</div>'
+    + '<div class="about-platform-inner">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+    + '<span>@_0gbe</span>'
+    + '</div>'
+    + '</a>'
+    + '<a href="https://foundation.app/@0gbe" target="_blank" rel="noopener" class="about-platform-card">'
+    + '<div class="about-label">PLATFORM</div>'
+    + '<div class="about-platform-inner">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>'
+    + '<span>Foundation</span>'
+    + '</div>'
+    + '</a>'
+    + '</div>';
+
+  var pieceCards = pieces.map(function(p, i) {
+    var imgSrc = 'https://ordinals.com/content/' + p.id + 'i0';
+    var tagsHtml = (collabCol.tags || []).slice(0, 2).map(function(t) {
+      return '<span class="collab-piece-tag">' + t + '</span>';
+    }).join('');
+    return ''
+      + '<a href="#" class="collab-piece-card" onclick="openPieceViewer(\\'lettucegoatgenesis\', ' + i + '); return false;">'
+      + '<div class="collab-piece-img-wrap">'
+      + '<img src="' + imgSrc + '" alt="' + p.name + '" loading="lazy" />'
+      + '<span class="collab-piece-badge">1/1</span>'
+      + '</div>'
+      + '<div class="collab-piece-footer">'
+      + '<div class="collab-piece-name">' + p.name + '</div>'
+      + '<div class="collab-piece-tags">' + tagsHtml + '</div>'
+      + '</div>'
+      + '</a>';
+  }).join('');
+
+  var relatedCols = COLLECTIONS.filter(function(c) {
+    return c.id !== 'lettucegoatgenesis' && !c.hidden;
+  }).slice(0, 3);
+  var relatedHtml = relatedCols.map(function(c) {
+    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id + 'i0' : '');
+    return ''
+      + '<a href="#" class="collab-related-card" onclick="showCollection(\'' + c.id + '\'); return false;">'
+      + '<div class="collab-related-img-wrap">'
+      + (thumb ? '<img src="' + thumb + '" alt="' + c.name + '" loading="lazy" />' : '')
+      + '</div>'
+      + '<div class="collab-related-info">'
+      + '<div class="collab-related-name">' + c.name + '</div>'
+      + '<div class="collab-related-meta">' + c.count + ' pieces</div>'
+      + '</div>'
+      + '</a>';
+  }).join('');
+
+  var collabHero = collabCol ? ''
+    + '<div class="collab-hero" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url(' + bgImg + ')">'
+    + '<div class="collab-hero-inner">'
+    + '<div class="collab-badges">'
+    + '<span class="collab-badge collab-badge-teal">COLLAB</span>'
+    + '<span class="collab-badge collab-badge-grey">ARCHIVED</span>'
+    + '</div>'
+    + '<h2 class="collab-title">' + collabCol.name + '</h2>'
+    + '<p class="collab-desc">' + collabCol.desc + '</p>'
+    + '<div class="collab-meta"><span>' + pieces.length + ' works</span><span class="collab-meta-sep">&#183;</span><span>2024</span></div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="collab-body">'
+    + '<div class="collab-toolbar">'
+    + '<span class="collab-count">' + pieces.length + ' pieces</span>'
+    + '<div class="collab-view-toggle">'
+    + '<button class="collab-view-btn active" id="collabGridBtn" onclick="switchCollabView(\'grid\')">'
+    + '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/><rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>'
+    + '</button>'
+    + '<button class="collab-view-btn" id="collabListBtn" onclick="switchCollabView(\'list\')">'
+    + '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="16" height="3" rx="1"/><rect x="0" y="6" width="16" height="3" rx="1"/><rect x="0" y="12" width="16" height="3" rx="1"/></svg>'
+    + '</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="collab-grid" id="collabGrid">' + pieceCards + '</div>'
+    + '<div class="collab-list" id="collabList" style="display:none">' + pieceCards + '</div>'
+    + '</div>'
+    + (relatedHtml ? ''
+    + '<div class="collab-related">'
+    + '<div class="collab-related-header">'
+    + '<span class="collab-related-label">RELATED</span>'
+    + '<h2 class="collab-related-title">More Collections</h2>'
+    + '</div>'
+    + '<div class="collab-related-grid">' + relatedHtml + '</div>'
+    + '</div>' : '') : '';
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">About</h2>'
+    + '</div>'
+    + '<div class="about-layout">'
+    + aboutCards
+    + '</div>'
+    + '</div></div>'
+    + collabHero;
 }
+
+function switchCollabView(view) {
+  var grid = document.getElementById('collabGrid');
+  var list = document.getElementById('collabList');
+  var gridBtn = document.getElementById('collabGridBtn');
+  var listBtn = document.getElementById('collabListBtn');
+  if (!grid || !list) return;
+  if (view === 'grid') {
+    grid.style.display = 'grid';
+    list.style.display = 'none';
+    if (gridBtn) gridBtn.classList.add('active');
+    if (listBtn) listBtn.classList.remove('active');
+  } else {
+    grid.style.display = 'none';
+    list.style.display = 'flex';
+    if (gridBtn) gridBtn.classList.remove('active');
+    if (listBtn) listBtn.classList.add('active');
+  }
+}
+
 
 function renderContact() {
   return ''
@@ -1063,11 +1180,9 @@ function showHome() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.add('active');
     if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1082,11 +1197,9 @@ function showOgbe() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.add('active');
-    if (navCollab) navCollab.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1121,91 +1234,6 @@ function renderDegen() {
     + '</div></div>';
 }
 
-
-function renderCollab() {
-  var collabIds = ['lettucegoatgenesis'];
-  var collabCols = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; });
-  var collectionsHtml = collabCols.map(function(col) {
-    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
-    return ''
-      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
-      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
-      + '<div class="collection-card-info">'
-      + '<div class="collection-card-name">' + col.name + '</div>'
-      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
-      + '<div class="collection-card-desc">' + col.descShort + '</div>'
-      + '</div>'
-      + '<div class="collection-card-arrow">&#x2192;</div>'
-      + '</a>';
-  }).join('');
-
-  return ''
-    + '<div class="section"><div class="container">'
-    + '<div class="section-header">'
-    + '<h2 class="section-title">Collab</h2>'
-    + '<p class="section-desc">OG BE x other artists. Joint projects, co-created visions.</p>'
-    + '</div>'
-    + '<div class="collections-grid">'
-    + collectionsHtml
-    + '</div>'
-    + '</div></div>';
-}
-
-function showContact() {
-  var main = document.getElementById('mainContent');
-  if (!main) return;
-  main.classList.add('fade-out');
-  setTimeout(function() {
-    main.innerHTML = renderContact();
-    main.classList.remove('fade-out');
-    var navCollections = document.getElementById('navCollections');
-    var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navContact = document.getElementById('navContact');
-    if (navCollections) navCollections.classList.remove('active');
-    if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.remove('active');
-    if (navContact) navContact.classList.add('active');
-    window.scrollTo(0, 0);
-  }, 250);
-}
-
-function showDegen() {
-  var main = document.getElementById('mainContent');
-  if (!main) return;
-  main.classList.add('fade-out');
-  setTimeout(function() {
-    main.innerHTML = renderDegen();
-    main.classList.remove('fade-out');
-    var navCollections = document.getElementById('navCollections');
-    var navOgbe = document.getElementById('navOgbe');
-    var navContact = document.getElementById('navContact');
-    if (navCollections) navCollections.classList.remove('active');
-    if (navOgbe) navOgbe.classList.remove('active');
-    if (navContact) navContact.classList.remove('active');
-    window.scrollTo(0, 0);
-  }, 250);
-}
-
-
-function showCollab() {
-  var main = document.getElementById('mainContent');
-  if (!main) return;
-  main.classList.add('fade-out');
-  setTimeout(function() {
-    main.innerHTML = renderCollab();
-    main.classList.remove('fade-out');
-    var navCollections = document.getElementById('navCollections');
-    var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navContact = document.getElementById('navContact');
-    if (navCollections) navCollections.classList.remove('active');
-    if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.add('active');
-    if (navContact) navContact.classList.remove('active');
-    window.scrollTo(0, 0);
-  }, 250);
-}
 
 function showCollection(id) {
   var main = document.getElementById('mainContent');
