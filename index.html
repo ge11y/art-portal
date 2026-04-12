@@ -480,6 +480,7 @@
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
           <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
+          <a href="#" id="navCommunity" onclick="showCommunity(); return false;">Community</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1130,21 +1131,18 @@ function renderContact() {
     + '<div class="contact-layout">'
     + '<div class="contact-col">'
     + '<h3 class="contact-sub">Get in Touch</h3>'
-    + '<p class="contact-desc">For inquiries, collaborations, or just to connect — reach out anytime.</p>'
+    + '<p class="contact-desc">For inquiries, collaborations, or just to connect.</p>'
     + '<a href="mailto:Ogbe@pr1m0s.com" class="contact-link">'
-    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'
     + 'Ogbe@pr1m0s.com</a>'
-    + '</div>'
-    + '<div class="contact-col">'
-    + '<h3 class="contact-sub">Follow</h3>'
-    + '<a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" class="contact-link">'
-    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+    + '<a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" class="contact-link" style="margin-top:8px">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
     + '@_0gbe</a>'
     + '</div>'
     + '<div class="contact-col notify-col">'
     + '<h3 class="contact-sub">Stay Updated</h3>'
     + '<p class="contact-desc">Get notified when new work drops.</p>'
-    + '<form class="notify-form" onsubmit="event.preventDefault(); this.querySelector(\'button\').textContent=\'You are in\'; this.querySelector(\'input\').disabled=true;">'
+    + '<form class="notify-form" onsubmit="event.preventDefault(); this.querySelector(\'button\').textContent=\'You are in!\'; this.querySelector(\'input\').disabled=true;">'
     + '<input type="email" placeholder="your@email.com" required />'
     + '<button type="submit">Notify Me</button>'
     + '</form>'
@@ -1181,12 +1179,63 @@ function showOgbe() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
+    var navCommunity = document.getElementById('navCommunity');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.add('active');
+    if (navCommunity) navCommunity.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
+}
+
+function showCommunity() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderCommunity();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCommunity = document.getElementById('navCommunity');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCommunity) navCommunity.classList.add('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+function renderCommunity() {
+  var members = [
+    { name: "Tophs", handle: "@t0phs", url: "https://t0ph.art", desc: "Visual artist and collaborator", img: "" },
+    { name: "Mattat", handle: "@Mattat", url: "https://mattat.xyz", desc: "Creative coder & generative art", img: "" },
+    { name: "OgBe", handle: "@_0gbe", url: "https://www.ogbe.art", desc: "Ordinals artist & musician", img: "" },
+  ];
+  var cards = members.map(function(m) {
+    return ''
+      + '<a href="' + m.url + '" target="_blank" rel="noopener" class="community-card">'
+      + '<div class="community-card-art">'
+      + (m.img ? '<img src="' + m.img + '" alt="' + m.name + '" loading="lazy" />' : '<span class="community-card-initials">' + m.name.slice(0,2).toUpperCase() + '</span>')
+      + '</div>'
+      + '<div class="community-card-info">'
+      + '<div class="community-card-name">' + m.name + '</div>'
+      + '<div class="community-card-handle">' + m.handle + '</div>'
+      + '<div class="community-card-desc">' + m.desc + '</div>'
+      + '</div>'
+      + '<svg class="community-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>'
+      + '</a>';
+  }).join('');
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Community</h2>'
+    + '</div>'
+    + '<div class="community-desc">Projects and artists from the circle.</div>'
+    + '<div class="community-grid">' + cards + '</div>'
+    + '</div></div>';
 }
 
 function renderDegen() {
