@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>URL Debug</title></head>
+<body>
+<script>
+// Test what the art portal generates
+var testId = "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i0";
+var imgUrl = '/proxy/' + testId;
+
+document.write('<p>Generated imgUrl: ' + imgUrl + '</p>');
+document.write('<p>Location origin: ' + window.location.origin + '</p>');
+document.write('<p>Full URL would be: ' + window.location.origin + imgUrl + '</p>');
+
+// Create an img and see what request it makes
+var img = document.createElement('img');
+img.src = imgUrl;
+img.onerror = function() {
+    document.write('<p style="color:red">ERROR: ' + img.src + ' failed</p>');
+};
+img.onload = function() {
+    document.write('<p style="color:green">LOADED: ' + img.src + '</p>');
+};
+document.body.appendChild(img);
+</script>
+</body>
+</html>

@@ -630,9 +630,8 @@
         <a href="#" class="site-logo" onclick="showHome(); return false;">OG BE</a>
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
-          <a href="#" id="navOgbe" onclick="showOgbe(); return false;">OG BE</a>
+          <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
           <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
-          <a href="#" id="navDegen" onclick="showDegen(); return false;">Degen</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1158,7 +1157,7 @@ function renderOgbeBio() {
   return ''
     + '<div class="section"><div class="container">'
     + '<div class="section-header">'
-    + '<h2 class="section-title">OG BE</h2>'
+    + '<h2 class="section-title">About</h2>'
     + '</div>'
     + '<div class="upcoming-layout">'
     + '<div class="bio-col">'
@@ -1520,10 +1519,28 @@ function pvNav(dir) {
   if (counterEl) counterEl.textContent = (newIdx + 1) + ' / ' + col.pieces.length;
   var prevBtn = document.querySelector('.modal-arrow-prev');
   var nextBtn = document.querySelector('.modal-arrow-next');
-  if (prevBtn) prevBtn.style.opacity = newIdx > 0 ? '1' : '0';
-  if (prevBtn) prevBtn.style.pointerEvents = newIdx > 0 ? 'auto' : 'none';
-  if (nextBtn) nextBtn.style.opacity = newIdx < col.pieces.length - 1 ? '1' : '0';
-  if (nextBtn) nextBtn.style.pointerEvents = newIdx < col.pieces.length - 1 ? 'auto' : 'none';
+  if (prevBtn) {
+    prevBtn.style.opacity = newIdx > 0 ? '1' : '0';
+    prevBtn.style.pointerEvents = newIdx > 0 ? 'auto' : 'none';
+    if (newIdx > 0) {
+      prevBtn.removeAttribute('disabled');
+      prevBtn.setAttribute('onclick', 'event.stopPropagation();pvNav(-1)');
+    } else {
+      prevBtn.setAttribute('disabled', 'true');
+      prevBtn.removeAttribute('onclick');
+    }
+  }
+  if (nextBtn) {
+    nextBtn.style.opacity = newIdx < col.pieces.length - 1 ? '1' : '0';
+    nextBtn.style.pointerEvents = newIdx < col.pieces.length - 1 ? 'auto' : 'none';
+    if (newIdx < col.pieces.length - 1) {
+      nextBtn.removeAttribute('disabled');
+      nextBtn.setAttribute('onclick', 'event.stopPropagation();pvNav(1)');
+    } else {
+      nextBtn.setAttribute('disabled', 'true');
+      nextBtn.removeAttribute('onclick');
+    }
+  }
   pvApplyTransform();
 }
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Test</title>
+  <style>
+    body { background: #000; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 30px; }
+    button { background: #fff; color: #000; border: none; padding: 20px 40px; font-size: 24px; cursor: pointer; }
+    img { width: 300px; height: 300px; object-fit: cover; border: 2px solid #fff; cursor: pointer; }
+    p { color: #fff; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <p>OGBE</p>
+  <img src="assets/ogbe-entrance.gif" alt="click me" id="testimg" />
+  <p id="status">waiting for click...</p>
+  <button onclick="alert('button works')">Button</button>
+
+  <script>
+    document.getElementById('testimg').addEventListener('click', function() {
+      document.getElementById('status').textContent = 'IMAGE CLICKED!';
+      document.getElementById('status').style.color = '#0f0';
+    });
+  </script>
+</body>
+</html>

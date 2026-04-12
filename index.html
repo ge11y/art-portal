@@ -480,7 +480,6 @@
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
           <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
-          <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1063,13 +1062,9 @@ function showHome() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navDegen = document.getElementById('navDegen');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.add('active');
     if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.remove('active');
-    if (navDegen) navDegen.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1084,13 +1079,9 @@ function showOgbe() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navDegen = document.getElementById('navDegen');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.add('active');
-    if (navCollab) navCollab.classList.remove('active');
-    if (navDegen) navDegen.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1134,133 +1125,10 @@ function showContact() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navDegen = document.getElementById('navDegen');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.remove('active');
-    if (navDegen) navDegen.classList.remove('active');
     if (navContact) navContact.classList.add('active');
-    window.scrollTo(0, 0);
-  }, 250);
-}
-
-function renderCollab() {
-  var projects = [
-    {
-      name: 'ge11yz.com',
-      tagline: 'Bitcoin Ordinals Portfolio',
-      url: 'https://ge11yz.com',
-      accent: '#a8c8e8',
-      desc: 'A curated portfolio showcasing Ordinal inscriptions across multiple collections. Uses a WebGL fluid simulation background with a minimalist card layout.',
-      notes: [
-        'Link fonts enlarged — collection names at 18px',
-        'White text default + gold glow on hover',
-        'Contrast improvements across all project links',
-      ],
-    },
-    {
-      name: 'rea1yze.com',
-      tagline: 'AI Thought Mapping',
-      url: 'https://rea1yze.com',
-      accent: '#a8e8c8',
-      desc: 'A 3D thought-mapping app where users type realizations and watch them form a neural network. AI surfaces patterns, values, and turning points over time.',
-      notes: [
-        'WebGL fallback added — graceful 2D fallback on failure',
-        'Demo content labeled &quot;&#8212; Sample content &#8212;&quot; with dashed border',
-        'Save button shows &quot;Saved &#10003;&quot; for 3s after account creation',
-        'Clear canvas button added to header with confirm dialog',
-        '&quot;Skip&quot; &amp; &quot;Sign in&quot; button contrast fixed',
-        '&quot;How it works&quot; card text overlap fixed',
-      ],
-    },
-    {
-      name: 'aisess.xyz',
-      tagline: 'URL Valuation Tool',
-      url: 'https://aisess.xyz',
-      accent: '#e8c8a8',
-      desc: 'A URL analysis and valuation tool that extracts domain age, traffic signals, and keyword data to generate an estimated domain value.',
-      notes: [
-        'Assess button confirmed working (client-side mock)',
-        'Pricing section added: &quot;Free during early access&quot;',
-        'Email waitlist / invite auth flow added',
-        'Low-contrast placeholder text fixed',
-      ],
-    },
-  ];
-
-  var html = '<div class="flip-grid">';
-  projects.forEach(function(p, i) {
-    html += ''
-      + '<div class="flip-card" id="flipCard' + i + '" onclick="flipCard(' + i + ')">'
-      + '  <div class="flip-card-inner">'
-      // Front
-      + '    <div class="flip-card-front">'
-      + '      <div class="flip-glow" style="background:radial-gradient(ellipse at 30% 20%, ' + p.accent + ' 0%, transparent 60%)"></div>'
-      + '      <div class="flip-front-content">'
-      + '        <div class="flip-site-name">' + p.name + '</div>'
-      + '        <div class="flip-tagline">' + p.tagline + '</div>'
-      + '        <div class="flip-front-desc">' + p.desc + '</div>'
-      + '        <div class="flip-front-hint">tap to see details &#8594;</div>'
-      + '      </div>'
-      + '    </div>'
-      // Back
-      + '    <div class="flip-card-back" style="border-color:' + p.accent + '44">'
-      + '      <div class="flip-back-content">'
-      + '        <div class="flip-back-header">'
-      + '          <div class="flip-back-title" style="color:' + p.accent + '">Summary</div>'
-      + '          <button class="flip-back-btn" onclick="event.stopPropagation(); flipCard(' + i + ')">&#8592; Back</button>'
-      + '        </div>'
-      + '        <div class="flip-notes">';
-    p.notes.forEach(function(note) {
-      html += '          <div class="flip-note"><span class="flip-note-dot" style="color:' + p.accent + '">&#8226;</span><span>' + note + '</span></div>';
-    });
-    html += '        </div>'
-      + '        <div class="flip-back-footer">'
-      + '          <div class="flip-card-label">ge11yz ecosystem</div>'
-      + '          <a href="' + p.url + '" class="flip-visit-btn" style="background:' + p.accent + '" onclick="event.stopPropagation()">Visit &#8594;</a>'
-      + '        </div>'
-      + '      </div>'
-      + '    </div>'
-      + '  </div>'
-      + '</div>';
-  });
-  html += '</div>';
-
-  return ''
-    + '<div class="section"><div class="container">'
-    + '<div class="section-header">'
-    + '<h2 class="section-title">Projects</h2>'
-    + '<p class="section-desc">What we\'re building. Click any card to see what\'s under the hood.</p>'
-    + '</div>'
-    + html
-    + '</div></div>';
-}
-
-function flipCard(i) {
-  var card = document.getElementById('flipCard' + i);
-  if (!card) return;
-  card.classList.toggle('flipped');
-}
-
-function showCollab() {
-  var main = document.getElementById('mainContent');
-  if (!main) return;
-  main.classList.add('fade-out');
-  setTimeout(function() {
-    main.innerHTML = renderCollab();
-    main.classList.remove('fade-out');
-    var navCollections = document.getElementById('navCollections');
-    var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navDegen = document.getElementById('navDegen');
-    var navContact = document.getElementById('navContact');
-    if (navCollections) navCollections.classList.remove('active');
-    if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.add('active');
-    if (navDegen) navDegen.classList.remove('active');
-    if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
 }
@@ -1274,13 +1142,9 @@ function showDegen() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
-    var navCollab = document.getElementById('navCollab');
-    var navDegen = document.getElementById('navDegen');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.remove('active');
-    if (navCollab) navCollab.classList.remove('active');
-    if (navDegen) navDegen.classList.add('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);

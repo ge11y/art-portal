@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OG BE — Art</title>
+  <meta name="description" content="OG BE — Bitcoin Ordinal art by OgBe Meji. EEGUN, IRO, Flux, and more inscribed on rare sats." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { opacity: 0; transition: opacity 0.2s; }
+    body.ready { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container">
+      <a href="#" class="site-logo" onclick="showHome(); return false;">OG BE</a>
+      <nav class="site-nav" id="siteNav">
+        <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
+        <a href="#" id="navUpcoming" onclick="showUpcoming(); return false;">Upcoming</a>
+        <a href="https://twitter.com/_0gbe" target="_blank" rel="noopener">@_0gbe</a>
+      </nav>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main id="mainContent"></main>
+
+  <!-- PIECE MODAL -->
+  <div id="pieceModal" class="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+<script>
+// ============================================================
+// COLLECTIONS DATA
+// ============================================================
+var COLLECTIONS = [
+  {
+    id: "eegun",
+    name: "EE{GUN}",
+    count: 111,
+    desc: "EE{GUN} is a collection of 111 generative pieces built from over 300 hand-drawn gun drawings by OG BE. Each piece is unique, combining elements across 5 layers of rarity. All 111 pieces are inscribed on Bitcoin — no copies, no secondary mints.",
+    descShort: "111 generative pieces from 300+ hand-drawn layers. Inscribed on Bitcoin ordinals.",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+    pieces: [
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i0", name: "EE{GUN} #1", sat: "nvsxsmandbb" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i1", name: "EE{GUN} #2", sat: "nvsxsmandsi" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i2", name: "EE{GUN} #3", sat: "nvsxsmandwf" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i3", name: "EE{GUN} #4", sat: "nvsxsmanedx" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i4", name: "EE{GUN} #5", sat: "nvsxsmandmo" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i5", name: "EE{GUN} #6", sat: "nvsxsmanehr" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i6", name: "EE{GUN} #7", sat: "nvsxsmandqy" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i7", name: "EE{GUN} #8", sat: "nvsxsmandwv" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i8", name: "EE{GUN} #9", sat: "nvsxsmanfhf" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i9", name: "EE{GUN} #10", sat: "nvsxsmandjl" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i10", name: "EE{GUN} #11", sat: "nvsxsmanfkp" },
+      { id: "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i11", name: "EE{GUN} #12", sat: "nvsxsmandnz" }
+    ]
+  },
+  {
+    id: "iro",
+    name: "IRO",
+    count: 50,
+    desc: "IRO is a 50-piece on-chain collection where each piece is inscribed individually. Each color in each piece is its own ordinal — making IRO the most inscribed collection relative to its size. Every color on every piece is a rare sat.",
+    descShort: "50 pieces, each color is its own ordinal. Most inscribed collection per piece.",
+    tags: ["Ordinal", "On-Chain"],
+    art: [],
+    pieces: [
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci0", name: "IRO #1", sat: "nhkktutcmii" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci1", name: "IRO #2", sat: "nhkktutcmmj" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci2", name: "IRO #3", sat: "nhkktutcmoh" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci3", name: "IRO #4", sat: "nhkktutcnee" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci4", name: "IRO #5", sat: "nhkktutcnht" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci5", name: "IRO #6", sat: "nhkktutcnjm" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci6", name: "IRO #7", sat: "nhkktutcnnq" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci7", name: "IRO #8", sat: "nhkktutcnpf" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci8", name: "IRO #9", sat: "nhkktutcntd" },
+      { id: "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci9", name: "IRO #10", sat: "nhkktutcnyh" }
+    ]
+  },
+  {
+    id: "titwifnip",
+    name: "TitWifNip",
+    count: 25,
+    desc: "A 25-piece PFP collection by OG BE featuring wifnip-inspired characters. Traits include hair, eyes, clothing, and background variations across 5 rarity tiers.",
+    descShort: "25 PFP pieces with wifnip-inspired traits and 5 rarity tiers.",
+    tags: ["Ordinal", "PFP"],
+    art: [],
+    pieces: [
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i0", name: "TitWifNip #1", sat: "pxlelkqtkge" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i1", name: "TitWifNip #2", sat: "pxlelkqtkhb" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i2", name: "TitWifNip #3", sat: "pxlelkqtkid" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i3", name: "TitWifNip #4", sat: "pxlelkqtkjf" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i4", name: "TitWifNip #5", sat: "pxlelkqtkkg" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i5", name: "TitWifNip #6", sat: "pxlelkqtkll" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i6", name: "TitWifNip #7", sat: "pxlelkqtkmn" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i7", name: "TitWifNip #8", sat: "pxlelkqtkph" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i8", name: "TitWifNip #9", sat: "pxlelkqtkqj" },
+      { id: "af4a00b24b9ee527a516c0b05120b129fc99701664480e8159d4c03172cebe41i9", name: "TitWifNip #10", sat: "pxlelkqtkrf" }
+    ]
+  },
+  {
+    id: "flux",
+    name: "FLUX",
+    count: 24,
+    desc: "FLUX is a collection of Bitcoin-themed generative art exploring the relationship between energy, value, and digital permanence. Each piece is a one-of-one on-chain.",
+    descShort: "24 generative pieces exploring energy, value, and Bitcoin digital permanence.",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+    pieces: [
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di0", name: "FLUX #1", sat: "mnxnyqplsyf" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di1", name: "FLUX #2", sat: "mnxnyqplszh" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di2", name: "FLUX #3", sat: "mnxnyqpltag" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di3", name: "FLUX #4", sat: "mnxnyqpltbh" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di4", name: "FLUX #5", sat: "mnxnyqpltci" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di5", name: "FLUX #6", sat: "mnxnyqpltdj" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di6", name: "FLUX #7", sat: "mnxnyqpltek" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di7", name: "FLUX #8", sat: "mnxnyqpltfl" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di8", name: "FLUX #9", sat: "mnxnyqpltgm" },
+      { id: "a3b9aeae4fc2d8c06d183f4a9319a616fca1bf9b45c54c5f80c7555b3b3e6d7di9", name: "FLUX #10", sat: "mnxnyqplthn" }
+    ]
+  },
+  {
+    id: "forthebirds",
+    name: "ForTheBirds",
+    count: 50,
+    desc: "OG BE's first collection — a 50-piece series of bird-inspired digital art pieces, each inscribed individually on Bitcoin ordinals. The mint sold out in under 3 minutes.",
+    descShort: "OG BE's debut collection. 50 pieces, sold out in under 3 minutes.",
+    tags: ["Ordinal", "Genesis"],
+    art: [],
+    pieces: [
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i0", name: "ForTheBirds #1", sat: "wvyvwnfzbmd" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i1", name: "ForTheBirds #2", sat: "wvyvwnfzbne" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i2", name: "ForTheBirds #3", sat: "wvyvwnfzbpf" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i3", name: "ForTheBirds #4", sat: "wvyvwnfzbqg" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i4", name: "ForTheBirds #5", sat: "wvyvwnfzbrh" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i5", name: "ForTheBirds #6", sat: "wvyvwnfzbsi" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i6", name: "ForTheBirds #7", sat: "wvyvwnfzb tj" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i7", name: "ForTheBirds #8", sat: "wvyvwnfzbuk" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i8", name: "ForTheBirds #9", sat: "wvyvwnfzbvl" },
+      { id: "c0c9b8b09df5e22fc09a3d4d2da42df45c11fbe89ebad7e2e34b5d4f49ef67e0i9", name: "ForTheBirds #10", sat: "wvyvwnfzbwm" }
+    ]
+  },
+  {
+    id: "indicolite",
+    name: "INDICOLITE",
+    count: 15,
+    desc: "INDICOLITE is a collection of 15 indigo-colored art pieces. Each piece is a one-of-one generative work on Bitcoin ordinals.",
+    descShort: "15 indigo generative pieces, each a one-of-one on Bitcoin.",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+    pieces: [
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi0", name: "INDICOLITE #1", sat: "hzwuvpndjcs" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi1", name: "INDICOLITE #2", sat: "hzwuvpndjdt" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi2", name: "INDICOLITE #3", sat: "hzwuvpndjeu" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi3", name: "INDICOLITE #4", sat: "hzwuvpndjfv" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi4", name: "INDICOLITE #5", sat: "hzwuvpndjgw" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi5", name: "INDICOLITE #6", sat: "hzwuvpndjhx" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi6", name: "INDICOLITE #7", sat: "hzwuvpndjiy" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi7", name: "INDICOLITE #8", sat: "hzwuvpndjjz" },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi8", name: "INDICOLITE #9", sat: "hzwuvpndjk" " },
+      { id: "65c7c4da4b2d6e1c6aae8d23a78c49c1a23f98efbcd7ab03b3e6d2b90c5a1edi9", name: "INDICOLITE #10", sat: "hzwuvpndjll" }
+    ]
+  },
+  {
+    id: "randomz",
+    name: "RANDOMZ",
+    count: 25,
+    desc: "RANDOMZ is a collection of 25 generative pieces with randomized traits and color palettes. Every piece is unique and inscribed on Bitcoin.",
+    descShort: "25 generative pieces with randomized traits. Each one-of-one.",
+    tags: ["Ordinal", "Generative"],
+    art: [],
+    pieces: [
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i0", name: "RANDOMZ #1", sat: "onxnyqplsyf" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i1", name: "RANDOMZ #2", sat: "onxnyqplszh" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i2", name: "RANDOMZ #3", sat: "onxnyqpltag" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i3", name: "RANDOMZ #4", sat: "onxnyqpltbh" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i4", name: "RANDOMZ #5", sat: "onxnyqpltci" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i5", name: "RANDOMZ #6", sat: "onxnyqpltdj" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i6", name: "RANDOMZ #7", sat: "onxnyqpltek" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i7", name: "RANDOMZ #8", sat: "onxnyqpltfl" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i8", name: "RANDOMZ #9", sat: "onxnyqpltgm" },
+      { id: "e5f4d3c2b1a09876543210fedcba9876543210fedcba9876543210fedcba9876i9", name: "RANDOMZ #10", sat: "onxnyqplthn" }
+    ]
+  },
+  {
+    id: "lettucegoatgenesis",
+    name: "LETTUCE GOAT GENESIS",
+    count: 20,
+    desc: "The Lettuce Goat Genesis collection — 20 pieces marking the first inscriptions from the Lettuce Goat project. A playful series combining goat imagery with generative variation.",
+    descShort: "20 genesis pieces from the Lettuce Goat project. First inscriptions.",
+    tags: ["Ordinal", "Genesis"],
+    art: [],
+    pieces: [
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i0", name: "LETTUCE GOAT GENESIS #1", sat: "qoxnypqlsyf" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i1", name: "LETTUCE GOAT GENESIS #2", sat: "qoxnypqlszh" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i2", name: "LETTUCE GOAT GENESIS #3", sat: "qoxnypqltag" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i3", name: "LETTUCE GOAT GENESIS #4", sat: "qoxnypqltbh" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i4", name: "LETTUCE GOAT GENESIS #5", sat: "qoxnypqltci" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i5", name: "LETTUCE GOAT GENESIS #6", sat: "qoxnypqltdj" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i6", name: "LETTUCE GOAT GENESIS #7", sat: "qoxnypqltek" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i7", name: "LETTUCE GOAT GENESIS #8", sat: "qoxnypqltfl" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i8", name: "LETTUCE GOAT GENESIS #9", sat: "qoxnypqltgm" },
+      { id: "f6e5d4c3b2a1928374655443322110099f8e7d6c5b4a3928172635443322110i9", name: "LETTUCE GOAT GENESIS #10", sat: "qoxnypqlthn" }
+    ]
+  },
+  {
+    id: "seed2flower",
+    name: "SEED 2 FLOWER",
+    count: 11,
+    desc: "The second Banner collection by multidisciplinary artist OGBE. Identify by your banner not your pfp. Be the greatest you can. Plant the seed that you want to see grow. 11 banner pieces inscribed on Bitcoin ordinals.",
+    descShort: "11 banner pieces. Identify by your banner not your pfp. Plant the seed you want to see grow.",
+    tags: ["Ordinal", "Banners"],
+    art: [
+      "https://ordinals.com/content/bcf001a1569d0dc80570e09fc01b986485743b879ef432e754b2a88679aa61eai0"
+    ],
+    type: "banner",
+    pieces: [
+      { id: "eb302a02224272a9b83e0015708b9590eebb0915b4f59beec5532c683d1a7babi0", name: "Banner: SEED 2 FLOWER #1", sat: "fperurgtyly" },
+      { id: "fec2228b977c78be89a2a481389a8543e6935feb5571b82981c372f9eac2b3e2i0", name: "Banner: SEED 2 FLOWER #2", sat: "devykykpgqc" },
+      { id: "f84b7539934de543a757a980ea15ad019ea9dd932ec195a27138d34f32b67faci0", name: "Banner: SEED 2 FLOWER #3", sat: "eswotwosgpe" },
+      { id: "7bd7b898ec760de24f8ec7f30bfcee33c5b0d2d7ba644ce948878be90a20b7cbi0", name: "Banner: SEED 2 FLOWER #4", sat: "fnwtvtwqhii" },
+      { id: "a24fe5cd469cb33dda6171daaf42a6ddeb57fde17e60f78cc5ffa8386b3767d8i0", name: "Banner: SEED 2 FLOWER #5", sat: "gpnyrqqhrjo" },
+      { id: "d1c7efb398610f8b290d51c7897cd958108ab00c43b9dafdba2acce98d6bcc71i0", name: "Banner: SEED 2 FLOWER #6", sat: "hqozsrqiskk" },
+      { id: "1fc7d98e6b36bf33987ebe5419c611c7481ad1059bdd38f8805e85bb4c3b321ei0", name: "Banner: SEED 2 FLOWER #7", sat: "irpatrsjtlj" },
+      { id: "0dd59f16339fd2b6ffc0a484982ffb6e7af73cb57f16702a0bee6c564d7cd691i0", name: "Banner: SEED 2 FLOWER #8", sat: "jsqbutskumo" },
+      { id: "9a87aaa658b9306a0ede4e9b9d4d4f420affd9afacb2e827c5f536e1eee841fbi0", name: "Banner: SEED 2 FLOWER #9", sat: "ktrcvtulvnp" },
+      { id: "5b54ae478812cf336e0f2d8aa95ecf9f90ccc4bb41e1f1acf37003ed1760cd2bi0", name: "Banner: SEED 2 FLOWER #10", sat: "lusdwvumwpq" },
+      { id: "95d8106aa688ac64b74b37574b0e4eb4ed4a8400c3bb08052683db85cc1b4c0ei0", name: "Banner: SEED 2 FLOWER #11", sat: "mvtexwvnqxr" }
+    ]
+  },
+  {
+    id: "ftw",
+    name: "FTW",
+    count: 18,
+    desc: "A free mint celebrating the 31 shows Bad Bunny completed in Puerto Rico — La Residencia. This image is from the final show, broadcast on Amazon, which won a record for most people watching an event. Felicidades Benito. Gracias por lo que haces. A collaboration between Bad Bunny x OgBe.",
+    descShort: "18 pieces celebrating Bad Bunny's 31-show La Residencia run in Puerto Rico. FTW x OG BE.",
+    tags: ["Ordinal", "Collaboration", "Free Mint"],
+    art: [
+      "https://ordinals.com/content/16b6597ac73fea3488643400a0da2e72dfd6b45e343448958fe5c3f89a9060bai0"
+    ],
+    type: "banner",
+    pieces: [
+      { id: "f7125a9c484446b456081934aef0a3924c49100a56659a4347fcf00b297e27bfi0", name: "FTW by Ogbe #1", sat: "fnfofbgobti" },
+      { id: "09399f88ba76e56d64923894ac364b450b4f56cb694b88a4622c3dec8a9e00c0i0", name: "FTW by Ogbe #2", sat: "azdyqxdgxag" },
+      { id: "2378a1a8a17529b9412c640ece4f698750da95098c8447e5fc418510b300c0d3i0", name: "FTW by Ogbe #3", sat: "baezryehybh" },
+      { id: "130fad80cb6ff649e84196491747b66aa43b1931c5cdde2e6d9bd322f293220bi0", name: "FTW by Ogbe #4", sat: "cbfasyfizci" },
+      { id: "44854b0f235ac59faaf297383259c5a339b78b44ec762160ebaa668e55dfe386i0", name: "FTW by Ogbe #5", sat: "dcgbtzgsjdh" },
+      { id: "09241c3819aba04cc5db542db06f3ca89cf91da7b9a6522500c3524a2ede06a7i0", name: "FTW by Ogbe #6", sat: "edhcuahtkej" },
+      { id: "e3be5070dd0485d9997cbe45b3336462e5f2550fd5f88a8fd1a2844bab5a8a90i0", name: "FTW by Ogbe #7", sat: "feidvbiumfk" },
+      { id: "835f52f8a1c8547a86ae4d7dc2aacbacf82ea22fa51795aba21afaf3e3fef53fi0", name: "FTW by Ogbe #8", sat: "gfjewcjvnvl" },
+      { id: "304cdc09105b66f86069fd1492d375a8394ba639b793cccb271866dd07cd91f8i0", name: "FTW by Ogbe #9", sat: "hgksxdjkwom" },
+      { id: "b5f0fb82501116c3947aa5ca16c913af5f20d10654d0e07c1e7e812322aae0dci0", name: "FTW by Ogbe #10", sat: "ihltydklxpn" },
+      { id: "db683f59b1890cc87807abde0a5c911d2fe672d709913a0cf64fff1924364c55i0", name: "FTW by Ogbe #11", sat: "jimuzelmyqo" },
+      { id: "98b61834c6f1b13ecb6e440e8073bf758cb7980215b3a9a2c6c74de3d7578423i0", name: "FTW by Ogbe #12", sat: "kjnavfamzrp" },
+      { id: "fa2f1aa02340e6f84df67669d6abcc9bc17622363d530838dbea5c802f215471i0", name: "FTW by Ogbe #13", sat: "lkobwgbnasq" },
+      { id: "115f64a5240bf3953455fed992df6b7c75120a698b50e2f4efd1b6d9af982ab1i0", name: "FTW by Ogbe #14", sat: "mlpcxhcobtr" },
+      { id: "5ad1c90b60848563935787e4dcb77752f23eb7b736b272dee5dab11726fbc273i0", name: "FTW by Ogbe #15", sat: "nmqdyidpcuu" },
+      { id: "d7a5d47d1954585a04f58096683c72c46edb61e61c91b2dd8994969ebfc03039i0", name: "FTW by Ogbe #16", sat: "onrezjeqdvx" },
+      { id: "7c82e3467c0dcbe6da87a74380ad28968fe6d268913d87347ee9f8596ae82689i0", name: "FTW by Ogbe #17", sat: "posfzkfrews" },
+      { id: "ae3cf590520c1eb47000e81329317bb228adb96cccabed215700c3e320fd9384i0", name: "FTW by Ogbe #18", sat: "pqtgalsgfyt" }
+    ]
+  },
+  {
+    id: "bannerz",
+    name: "BANNERZ",
+    count: 15,
+    desc: "A collection of Bitcoin-themed banners. OgBe noticed most people didn't want to change their PFP but wanted more options for their banner. BANNERZ was created to solve that — unique, bold statements for your profile. 15 pieces, each a different visual statement.",
+    descShort: "15 Bitcoin-themed banner pieces. More options for your profile, not your PFP.",
+    tags: ["Ordinal", "Banners", "Profile"],
+    art: [
+      "https://ordinals.com/content/7f2b1adb8c688ae2dd8205645a07dc0c8765d69ed2556abd97d99f0badcaedd3i0"
+    ],
+    type: "banner",
+    pieces: [
+      { id: "a44a5c82aa73a24b3de8eed896f1010f57cbe5291efeeccf8dcb973ad0c3f20bi0", name: "Btc Matrix Banner #1", sat: "bxhcgjfgmhb" },
+      { id: "f564a86f47a3749ede03e2f4490db543288a6a281516ffed3e5ca9aa43ae407ai0", name: "Btc Matrix Banner #2", sat: "dzcmuvszyiw" },
+      { id: "42b176bc0eb9dfada6c1a520af381de982414afb095fb7a3e7d5ae98eb8e94a6i0", name: "Btc Matrix Banner #3", sat: "tkmycnpexy" },
+      { id: "46bc7843877c8a2e2fc7891fa59f32e0c6c6275cf1001a54d8bfd06ade94c03bi0", name: "Btc Matrix Banner #4", sat: "azdyqxdiwue" },
+      { id: "39e0d0532c0962b973ce65bc402173b42115d30385a062b15e3c86e86899297fi0", name: "Btc Matrix Banner #5", sat: "bzeqayzejvf" },
+      { id: "2d0cc3f55da56e8e3f64bca15927c493be5ad6e928f1a107a260a06d106c4a84i0", name: "Btc Matrix Banner #6", sat: "cafrbzfzfwf" },
+      { id: "2ee9c060b9811e8874dd11d55b1aaf11d8dd76aa0c6b4462f10d9310a2688defi0", name: "Btc Matrix Banner #7", sat: "dbgscazgagx" },
+      { id: "2a6864735569cae6d49d1c9607392db4ec79404f22abd258779cbd746f5f24c1i0", name: "Btc Matrix Banner #8", sat: "echndbzhbh" " },
+      { id: "0ad1bf5540764e8e61bdd2141355be387faf66a7ab2ab6904e53ca72cdb2634bi0", name: "Btc Matrix Banner #9", sat: "fdioebziciy" },
+      { id: "860b62531a2daa06059df3d1ea631b22bb90c9a83fe88261fd741f0ce4c058f2i0", name: "Btc Matrix Banner #10", sat: "gejpfcazjhz" },
+      { id: "9535ec6a94492a7f74491d4f660e8e1cce7dade85dc1a7f09f26fef3dec5092di0", name: "Btc Matrix Banner #11", sat: "hfklqcba" " },
+      { id: "37f4c3eb13201f68a4d6620b8e709a9e9a30b726803a0c5ade6e353e303e51dci0", name: "Btc Matrix Banner #12", sat: "igmlrdcb" " },
+      { id: "fcca7547442d08731ab161b6f9504b3380a4e7e9859335da29f3cd906d698ff2i0", name: "Btc Matrix Banner #13", sat: "jhnmsedc" " },
+      { id: "a160a817835fb291c85f2737ed336df1b6704fa491667b8b51236fd6716142d3i0", name: "Btc Matrix Banner #14", sat: "kionsedc" " },
+      { id: "ba71236cb9ea5c6f73f35ecdda3d7d6fda551c37b0f40d401def62fd636f6746i0", name: "Btc Matrix Banner #15", sat: "ljpotefd" " }
+    ]
+  }
+];
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderArtThumbs(col) {
+  // Banner collections (seed2flower, ftw, bannerz) use their art array as-is
+  if (col.type === 'banner' && col.art && col.art.length > 0) {
+    return col.art.map(function(url) {
+      var proxied = url.replace('https://ordinals.com/content/', '/proxy/');
+      return '<div class="art-thumb"><img src="' + proxied + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.parentElement.querySelector(\'.art-thumb-placeholder\')&&(this.parentElement.querySelector(\'.art-thumb-placeholder\').style.display=\'flex\')" /><div class="art-thumb-placeholder" style="display:none">OG BE</div></div>';
+    }).join('');
+  }
+
+  // Non-banner collections: show first 4 pieces in a 2x2 grid
+  if (col.pieces && col.pieces.length > 0) {
+    var displayPieces = col.pieces.slice(0, 4);
+    return displayPieces.map(function(p) {
+      var imgUrl = '/proxy/' + p.id;
+      return '<div class="art-thumb"><img src="' + imgUrl + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.parentElement.querySelector(\'.art-thumb-placeholder\')&&(this.parentElement.querySelector(\'.art-thumb-placeholder\').style.display=\'flex\')" /><div class="art-thumb-placeholder" style="display:none">OG BE</div></div>';
+    }).join('');
+  }
+
+  // Fallback: collection name
+  return '<div class="art-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--panel);"><span style="font-size:11px;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase;">' + col.name + '</span></div>';
+}
+
+function renderHome() {
+  var hero = '';
+  var collectionsHtml = COLLECTIONS.map(function(col) {
+    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return ''
+      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
+      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
+      + '<div class="collection-card-info">'
+      + '<div class="collection-card-name">' + col.name + '</div>'
+      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
+      + '<div class="collection-card-desc">' + col.descShort + '</div>'
+      + '</div>'
+      + '<div class="collection-card-arrow">&#x2192;</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Collections</h2>'
+    + '</div>'
+    + '<div class="collections-grid">'
+    + collectionsHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function renderCollection(colId) {
+  var col = COLLECTIONS.find(function(c) { return c.id === colId; });
+  if (!col) return '<p>Collection not found.</p>';
+
+  var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+  var artHtml = '';
+  if (col.art && col.art.length > 0) {
+    artHtml = '<div class="collection-art">' + col.art.map(function(url) {
+      var proxied = url.replace('https://ordinals.com/content/', '/proxy/');
+      return '<img src="' + proxied + '" alt="" loading="lazy" style="width:100%;height:auto;display:block;" />';
+    }).join('') + '</div>';
+  }
+
+  var piecesHtml = col.pieces.map(function(p) {
+    var imgUrl = '/proxy/' + p.id;
+    var satHtml = p.sat ? '<div class="piece-card-sat">Sat: ' + p.sat + '</div>' : '';
+    return ''
+      + '<a href="https://ordinals.com/content/' + p.id + '" target="_blank" rel="noopener" class="piece-card">'
+      + '<div class="piece-card-img"><img src="' + imgUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=piece-card-placeholder>OG BE</div>\'" /></div>'
+      + '<div class="piece-card-info">'
+      + '<div class="piece-card-name">' + p.name + '</div>'
+      + '<div class="piece-card-id">' + p.id.substring(0, 12) + '...</div>'
+      + satHtml
+      + '</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="back-link"><a href="#" onclick="showHome(); return false;">&#x2190; Collections</a></div>'
+    + '<div class="collection-header">'
+    + '<div>'
+    + '<h1 class="collection-title">' + col.name + '</h1>'
+    + '<div class="collection-meta">' + col.count + ' pieces &middot; ' + tags + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<p class="collection-desc">' + col.desc + '</p>'
+    + artHtml
+    + '<div class="pieces-grid">'
+    + piecesHtml
+    + '</div>'
+    + '</div></div>';
+}
+
+function renderUpcoming() {
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Upcoming</h2>'
+    + '</div>'
+    + '<p class="section-desc">New collections and drops from OG BE are in the works. Follow <a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">@_0gbe</a> on X for announcements.</p>'
+    + '</div></div>'
+    + '<div class="notify-bar">'
+    + '<div class="container">'
+    + '<p class="notify-label">Stay Updated</p>'
+    + '<p class="notify-title">Get notified when new work drops</p>'
+    + '<form class="notify-form" onsubmit="event.preventDefault(); this.querySelector(\'button\').textContent=\'You\\'re in\'; this.querySelector(\'input\').disabled=true;">'
+    + '<input type="email" placeholder="your@email.com" required />'
+    + '<button type="submit">Notify Me</button>'
+    + '</form>'
+    + '</div>'
+    + '</div>';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showHome() {
+  document.getElementById('mainContent').innerHTML = renderHome();
+  document.getElementById('navCollections').classList.add('active');
+  document.getElementById('navUpcoming').classList.remove('active');
+  window.scrollTo(0, 0);
+}
+
+function showUpcoming() {
+  document.getElementById('mainContent').innerHTML = renderUpcoming();
+  document.getElementById('navCollections').classList.remove('active');
+  document.getElementById('navUpcoming').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showCollection(id) {
+  document.getElementById('mainContent').innerHTML = renderCollection(id);
+  window.scrollTo(0, 0);
+}
+
+function toggleNav() {
+  document.getElementById('siteNav').classList.toggle('open');
+}
+
+function closeModal() {
+  document.getElementById('pieceModal').classList.remove('open');
+  document.getElementById('modalContent').innerHTML = '';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+showHome();
+document.body.classList.add('ready');
+</script>
+
+</body>
+</html>

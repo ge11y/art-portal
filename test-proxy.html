@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Proxy Test</title></head>
+<body>
+<h1>Testing proxy URL generation</h1>
+<script>
+var testIds = [
+  "b2dac941a4709b593c7133c8c13665eeaf00c9d06a915fa23bad8aa314658cf1i0",
+  "92f1f119124f1793e7e4f3d8a6dbf4f214d08d3118637eaec29feb03a9be2f4ci0"
+];
+
+var col = { pieces: testIds.map(function(id, i) { return { id: id, name: "Test " + i }; }) };
+
+var piecesHtml = col.pieces.map(function(p) {
+  var imgUrl = '/proxy/' + p.id;
+  return '<div><img src="' + imgUrl + '" alt="" onerror="console.error(' + "'IMG ERROR:', this.src)" + '" />' + imgUrl + '</div>';
+}).join('');
+
+document.body.innerHTML = piecesHtml;
+</script>
+</body>
+</html>

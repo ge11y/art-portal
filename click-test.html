@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Click Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      font-family: sans-serif;
+      color: #fff;
+    }
+    h1 { font-size: 72px; letter-spacing: 0.2em; }
+
+    /* This is the exact element from your landing page */
+    #landing-gif-wrap {
+      width: min(480px, 90vw);
+      aspect-ratio: 1/1;
+      cursor: pointer;
+      border: 3px solid #fff;
+      position: relative;
+    }
+    #landing-gif-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #log {
+      padding: 20px;
+      background: #111;
+      border: 1px solid #333;
+      width: min(480px, 90vw);
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: #0f0;
+      font-family: monospace;
+    }
+    #log p { margin: 4px 0; }
+  </style>
+</head>
+<body>
+
+  <h1>OGBE</h1>
+
+  <div id="landing-gif-wrap">
+    <img src="assets/ogbe-entrance.gif" alt="Enter" id="testgif" />
+  </div>
+
+  <p>click the gif or the white box</p>
+
+  <div id="log">
+    <p>waiting for events...</p>
+  </div>
+
+  <script>
+    var log = document.getElementById('log');
+
+    function logMsg(msg) {
+      var p = document.createElement('p');
+      p.textContent = Date.now() + ' — ' + msg;
+      log.appendChild(p);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    // Test: is the element found?
+    var gifWrap = document.getElementById('landing-gif-wrap');
+    var img = document.getElementById('testgif');
+
+    if (!gifWrap) logMsg('ERROR: #landing-gif-wrap not found');
+    else logMsg('OK: #landing-gif-wrap found');
+
+    if (!img) logMsg('ERROR: #testgif not found');
+    else logMsg('OK: #testgif found');
+
+    // Attach click to the GIF wrap
+    gifWrap.addEventListener('click', function(e) {
+      logMsg('CLICK on #landing-gif-wrap! target: ' + e.target.id);
+    });
+
+    // Also try the img directly
+    img.addEventListener('click', function(e) {
+      logMsg('CLICK on IMG! target: ' + e.target.id);
+    });
+
+    logMsg('Script loaded OK');
+  </script>
+
+</body>
+</html>
