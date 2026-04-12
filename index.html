@@ -1021,35 +1021,10 @@ function renderOgbeBio() {
     + '</div>';
   var pieceCards = pieces.map(function(p, i) {
     var imgSrc = 'https://ordinals.com/content/' + p.id;
-    var tagsHtml = (collabCol.tags || []).slice(0, 2).map(function(t) {
-      return '<span class="collab-piece-tag">' + t + '</span>';
-    }).join('');
     var onclickStr = "openPieceViewer('lettucegoatgenesis', " + i + "); return false;";
     return '<a href="#" class="collab-piece-card" onclick="' + onclickStr + '">'
       + '<div class="collab-piece-img-wrap">'
       + '<img src="' + imgSrc + '" alt="' + p.name + '" loading="lazy" />'
-      + '<span class="collab-piece-badge">1/1</span>'
-      + '</div>'
-      + '<div class="collab-piece-footer">'
-      + '<div class="collab-piece-name">' + p.name + '</div>'
-      + '<div class="collab-piece-tags">' + tagsHtml + '</div>'
-      + '</div>'
-      + '</a>';
-  }).join('');
-
-  var relatedCols = COLLECTIONS.filter(function(c) {
-    return c.id !== 'lettucegoatgenesis' && !c.hidden;
-  }).slice(0, 3);
-  var relatedHtml = relatedCols.map(function(c) {
-    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id : '');
-    return ''
-      + '<a href="#" class="collab-related-card" onclick="showCollection(\'' + c.id + '\'); return false;">'
-      + '<div class="collab-related-img-wrap">'
-      + (thumb ? '<img src="' + thumb + '" alt="' + c.name + '" loading="lazy" />' : '')
-      + '</div>'
-      + '<div class="collab-related-info">'
-      + '<div class="collab-related-name">' + c.name + '</div>'
-      + '<div class="collab-related-meta">' + c.count + ' pieces</div>'
       + '</div>'
       + '</a>';
   }).join('');
@@ -1057,38 +1032,15 @@ function renderOgbeBio() {
   var collabHero = collabCol ? ''
     + '<div class="collab-hero" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url(' + bgImg + ')">'
     + '<div class="collab-hero-inner">'
-    + '<div class="collab-badges">'
-    + '<span class="collab-badge collab-badge-teal">COLLAB</span>'
-    + '<span class="collab-badge collab-badge-grey">ARCHIVED</span>'
-    + '</div>'
+    + '<div class="collab-attribution">A collaboration with <span>BRICK</span></div>'
     + '<h2 class="collab-title">' + collabCol.name + '</h2>'
     + '<p class="collab-desc">' + collabCol.desc + '</p>'
     + '<div class="collab-meta"><span>' + pieces.length + ' works</span><span class="collab-meta-sep">&#183;</span><span>2024</span></div>'
     + '</div>'
     + '</div>'
     + '<div class="collab-body">'
-    + '<div class="collab-toolbar">'
-    + '<span class="collab-count">' + pieces.length + ' pieces</span>'
-    + '<div class="collab-view-toggle">'
-    + '<button class="collab-view-btn active" id="collabGridBtn" onclick="switchCollabView(\'grid\')">'
-    + '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/><rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>'
-    + '</button>'
-    + '<button class="collab-view-btn" id="collabListBtn" onclick="switchCollabView(\'list\')">'
-    + '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="16" height="3" rx="1"/><rect x="0" y="6" width="16" height="3" rx="1"/><rect x="0" y="12" width="16" height="3" rx="1"/></svg>'
-    + '</button>'
-    + '</div>'
-    + '</div>'
     + '<div class="collab-grid" id="collabGrid">' + pieceCards + '</div>'
-    + '<div class="collab-list" id="collabList" style="display:none">' + pieceCards + '</div>'
-    + '</div>'
-    + (relatedHtml ? ''
-    + '<div class="collab-related">'
-    + '<div class="collab-related-header">'
-    + '<span class="collab-related-label">RELATED</span>'
-    + '<h2 class="collab-related-title">More Collections</h2>'
-    + '</div>'
-    + '<div class="collab-related-grid">' + relatedHtml + '</div>'
-    + '</div>' : '') : '';
+    + '</div>' : '';
 
   return ''
     + '<div class="section"><div class="container">'

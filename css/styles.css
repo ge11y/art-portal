@@ -1267,30 +1267,17 @@ body {
   transition: color 0.2s;
 }
 .collab-back:hover { color: #999; }
-.collab-badges { margin-bottom: 16px; }
-.collab-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  margin-right: 8px;
-}
-.collab-badge-teal {
-  background: rgba(79, 209, 197, 0.15);
-  color: #4fd1c5;
-  border: 1px solid rgba(79, 209, 197, 0.3);
-}
-.collab-badge-grey {
-  background: rgba(255,255,255,0.06);
+.collab-attribution {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
   color: #888;
-  border: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
 }
+.collab-attribution span { color: #c9a96e; font-weight: 600; }
 .collab-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: clamp(40px, 7vw, 80px);
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(36px, 6vw, 72px);
   font-weight: 700;
   color: #f5f5f5;
   line-height: 1;
@@ -1333,44 +1320,6 @@ body {
   margin: 0 auto;
   padding: 32px 40px;
 }
-.collab-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.collab-count {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: #666;
-}
-.collab-view-toggle {
-  display: flex;
-  background: rgba(255,255,255,0.04);
-  border-radius: 8px;
-  padding: 3px;
-  gap: 2px;
-}
-.collab-view-btn {
-  background: none;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #555;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.collab-view-btn:hover { color: #999; }
-.collab-view-btn.active {
-  background: rgba(255,255,255,0.1);
-  color: #f5f5f5;
-}
-
 /* Grid */
 .collab-grid {
   display: grid;
@@ -1409,45 +1358,6 @@ body {
 }
 .collab-piece-card:hover .collab-piece-img-wrap img {
   transform: scale(1.04);
-}
-.collab-piece-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.65);
-  color: #ccc;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  padding: 3px 7px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-}
-.collab-piece-footer {
-  padding: 14px 16px;
-  background: #111;
-}
-.collab-piece-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: #ddd;
-  margin-bottom: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.collab-piece-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.collab-piece-tag {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  padding: 2px 7px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #888;
 }
 
 /* List View */
