@@ -1005,7 +1005,7 @@ function renderOgbeBio() {
   var collabIds = ['lettucegoatgenesis'];
   var collabCol = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; })[0];
   var pieces = collabCol && collabCol.pieces ? collabCol.pieces : [];
-  var bgImg = pieces[0] ? 'https://ordinals.com/content/' + pieces[0].id + 'i0' : '';
+  var bgImg = pieces[0] ? 'https://ordinals.com/content/' + pieces[0].id : '';
 
   var aboutCards = ''
     + '<div class="about-box">'
@@ -1017,25 +1017,9 @@ function renderOgbeBio() {
     + '<p class="about-statement">Zero gravity. Bitcoin soul. Eternal legend.</p>'
     + '</div>'
     + '</div>'
-    + '<div class="about-box about-boxes-row">'
-    + '<a href="https://twitter.com/_0gbe" target="_blank" rel="noopener" class="about-platform-card">'
-    + '<div class="about-label">PLATFORM</div>'
-    + '<div class="about-platform-inner">'
-    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
-    + '<span>@_0gbe</span>'
-    + '</div>'
-    + '</a>'
-    + '<a href="https://foundation.app/@0gbe" target="_blank" rel="noopener" class="about-platform-card">'
-    + '<div class="about-label">PLATFORM</div>'
-    + '<div class="about-platform-inner">'
-    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>'
-    + '<span>Foundation</span>'
-    + '</div>'
-    + '</a>'
-    + '</div>';
-
+</div>;
   var pieceCards = pieces.map(function(p, i) {
-    var imgSrc = 'https://ordinals.com/content/' + p.id + 'i0';
+    var imgSrc = 'https://ordinals.com/content/' + p.id;
     var tagsHtml = (collabCol.tags || []).slice(0, 2).map(function(t) {
       return '<span class="collab-piece-tag">' + t + '</span>';
     }).join('');
@@ -1056,7 +1040,7 @@ function renderOgbeBio() {
     return c.id !== 'lettucegoatgenesis' && !c.hidden;
   }).slice(0, 3);
   var relatedHtml = relatedCols.map(function(c) {
-    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id + 'i0' : '');
+    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id : '');
     return ''
       + '<a href="#" class="collab-related-card" onclick="showCollection(\'' + c.id + '\'); return false;">'
       + '<div class="collab-related-img-wrap">'

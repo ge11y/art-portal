@@ -1156,7 +1156,7 @@ function renderOgbeBio() {
   var collabIds = ['lettucegoatgenesis'];
   var collabCol = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; })[0];
   var pieces = collabCol && collabCol.pieces ? collabCol.pieces : [];
-  var bgImg = pieces[0] ? 'https://ordinals.com/content/' + pieces[0].id + 'i0' : '';
+  var bgImg = pieces[0] ? 'https://ordinals.com/content/' + pieces[0].id : '';
 
   var aboutCards = ''
     + '<div class="about-box">'
@@ -1186,7 +1186,7 @@ function renderOgbeBio() {
     + '</div>';
 
   var pieceCards = pieces.map(function(p, i) {
-    var imgSrc = 'https://ordinals.com/content/' + p.id + 'i0';
+    var imgSrc = 'https://ordinals.com/content/' + p.id;
     var tagsHtml = (collabCol.tags || []).slice(0, 2).map(function(t) {
       return '<span class="collab-piece-tag">' + t + '</span>';
     }).join('');
@@ -1207,7 +1207,7 @@ function renderOgbeBio() {
     return c.id !== 'lettucegoatgenesis' && !c.hidden;
   }).slice(0, 3);
   var relatedHtml = relatedCols.map(function(c) {
-    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id + 'i0' : '');
+    var thumb = c.art && c.art[0] ? c.art[0] : (c.pieces && c.pieces[0] ? 'https://ordinals.com/content/' + c.pieces[0].id : '');
     return ''
       + '<a href="#" class="collab-related-card" onclick="showCollection(\\'' + c.id + '\\'); return false;">'
       + '<div class="collab-related-img-wrap">'
