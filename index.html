@@ -1039,8 +1039,8 @@ function renderOgbeBio() {
     var tagsHtml = (collabCol.tags || []).slice(0, 2).map(function(t) {
       return '<span class="collab-piece-tag">' + t + '</span>';
     }).join('');
-    return ''
-      + '<a href="#" class="collab-piece-card" onclick="openPieceViewer(\\'lettucegoatgenesis\', ' + i + '); return false;">'
+    var onclickStr = "openPieceViewer('lettucegoatgenesis', " + i + "); return false;";
+    return '<a href="#" class="collab-piece-card" onclick="' + onclickStr + '">'
       + '<div class="collab-piece-img-wrap">'
       + '<img src="' + imgSrc + '" alt="' + p.name + '" loading="lazy" />'
       + '<span class="collab-piece-badge">1/1</span>'
