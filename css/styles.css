@@ -567,12 +567,21 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: grayscale(100%);
+  filter: grayscale(0%);
   transition: filter 0.3s, transform 0.3s;
 }
-.collection-card:hover .art-thumb img {
-  filter: grayscale(0%);
-  transform: scale(1.05);
+/* Desktop hover: colored + scale */
+@media (hover: hover) {
+  .collection-card:hover .art-thumb img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+}
+/* Mobile scroll: out-of-view = grayscale */
+@media (hover: none) {
+  .art-thumb img { filter: grayscale(100%); transition: filter 0.3s, transform 0.3s; }
+  .art-thumb.in-view img { filter: grayscale(0%); }
+  .collection-card:hover .art-thumb img { transform: scale(1.05); }
 }
 .art-thumb-placeholder {
   width: 100%;

@@ -1624,6 +1624,61 @@ function hideTip(id) {
   var tip = document.getElementById('tip-' + id);
   if (tip) tip.style.display = 'none';
 }
+
+// Mobile scroll: color art thumbnails when in viewport
+function initScrollObserver() {
+  if (window.__scrollObserver) window.__scrollObserver.disconnect();
+  var thumbs = document.querySelectorAll('.art-thumb');
+  if (!thumbs.length) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.target._thumbObserved) return;
+      e.target._thumbObserved = true;
+      obs.observe(e.target);
+    });
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+      } else {
+        e.target.classList.remove('in-view');
+      }
+    });
+  }, { rootMargin: '0px 0px -80px 0px', threshold: 0 });
+  thumbs.forEach(function(t) { obs.observe(t); });
+  window.__scrollObserver = obs;
+}
+
+function watchForNewContent() {
+  if (window.__contentMutationObs) return;
+  var mut = new MutationObserver(function() {
+    clearTimeout(window.__contentWatchTimer);
+    window.__contentWatchTimer = setTimeout(initScrollObserver, 300);
+  });
+  mut.observe(document.getElementById('mainContent') || document.body, { childList: true, subtree: true });
+  window.__contentMutationObs = mut;
+}
+
+// Wire into showHome / renderHome flow
+var _origRenderHome = renderHome;
+window.renderHome = function() {
+  var html = _origRenderHome.apply(this, arguments);
+  setTimeout(initScrollObserver, 100);
+  setTimeout(watchForNewContent, 200);
+  return html;
+};
+var _origShowHome = showHome;
+window.showHome = function() {
+  _origShowHome.apply(this, arguments);
+  setTimeout(initScrollObserver, 350);
+};
+var _origShowCommunity = window.showCommunity;
+window.showCommunity = function() {
+  if (_origShowCommunity) _origShowCommunity.apply(this, arguments);
+  setTimeout(initScrollObserver, 350);
+};
+
+// Boot
+setTimeout(initScrollObserver, 500);
 </script>
 
 </body>
