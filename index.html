@@ -480,6 +480,7 @@
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
           <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
+          <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1062,9 +1063,11 @@ function showHome() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.add('active');
     if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1079,9 +1082,11 @@ function showOgbe() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.add('active');
+    if (navCollab) navCollab.classList.remove('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1116,6 +1121,36 @@ function renderDegen() {
     + '</div></div>';
 }
 
+
+function renderCollab() {
+  var collabIds = ['lettucegoatgenesis'];
+  var collabCols = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; });
+  var collectionsHtml = collabCols.map(function(col) {
+    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return ''
+      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
+      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
+      + '<div class="collection-card-info">'
+      + '<div class="collection-card-name">' + col.name + '</div>'
+      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
+      + '<div class="collection-card-desc">' + col.descShort + '</div>'
+      + '</div>'
+      + '<div class="collection-card-arrow">&#x2192;</div>'
+      + '</a>';
+  }).join('');
+
+  return ''
+    + '<div class="section"><div class="container">'
+    + '<div class="section-header">'
+    + '<h2 class="section-title">Collab</h2>'
+    + '<p class="section-desc">OG BE x other artists. Joint projects, co-created visions.</p>'
+    + '</div>'
+    + '<div class="collections-grid">'
+    + collectionsHtml
+    + '</div>'
+    + '</div></div>';
+}
+
 function showContact() {
   var main = document.getElementById('mainContent');
   if (!main) return;
@@ -1125,9 +1160,11 @@ function showContact() {
     main.classList.remove('fade-out');
     var navCollections = document.getElementById('navCollections');
     var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.remove('active');
     if (navContact) navContact.classList.add('active');
     window.scrollTo(0, 0);
   }, 250);
@@ -1145,6 +1182,26 @@ function showDegen() {
     var navContact = document.getElementById('navContact');
     if (navCollections) navCollections.classList.remove('active');
     if (navOgbe) navOgbe.classList.remove('active');
+    if (navContact) navContact.classList.remove('active');
+    window.scrollTo(0, 0);
+  }, 250);
+}
+
+
+function showCollab() {
+  var main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.add('fade-out');
+  setTimeout(function() {
+    main.innerHTML = renderCollab();
+    main.classList.remove('fade-out');
+    var navCollections = document.getElementById('navCollections');
+    var navOgbe = document.getElementById('navOgbe');
+    var navCollab = document.getElementById('navCollab');
+    var navContact = document.getElementById('navContact');
+    if (navCollections) navCollections.classList.remove('active');
+    if (navOgbe) navOgbe.classList.remove('active');
+    if (navCollab) navCollab.classList.add('active');
     if (navContact) navContact.classList.remove('active');
     window.scrollTo(0, 0);
   }, 250);
