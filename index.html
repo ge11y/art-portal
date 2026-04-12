@@ -479,9 +479,8 @@
         <a href="#" class="site-logo" onclick="showHome(); return false;">OG BE</a>
         <nav class="site-nav" id="siteNav">
           <a href="#" class="active" id="navCollections" onclick="showHome(); return false;">Collections</a>
-          <a href="#" id="navOgbe" onclick="showOgbe(); return false;">OG BE</a>
+          <a href="#" id="navOgbe" onclick="showOgbe(); return false;">About</a>
           <a href="#" id="navCollab" onclick="showCollab(); return false;">Collab</a>
-          <a href="#" id="navDegen" onclick="showDegen(); return false;">Degen</a>
           <a href="#" id="navContact" onclick="showContact(); return false;">Contact</a>
         </nav>
         <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
@@ -1148,32 +1147,101 @@ function showContact() {
 }
 
 function renderCollab() {
-  var collabIds = ['lettucegoatgenesis'];
-  var collabCols = COLLECTIONS.filter(function(col) { return collabIds.indexOf(col.id) !== -1; });
-  var collectionsHtml = collabCols.map(function(col) {
-    var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
-    return ''
-      + '<a href="#" class="collection-card' + (col.type ? ' collection-card-' + col.type : '') + '" onclick="showCollection(\'' + col.id + '\'); return false;">'
-      + '<div class="collection-card-art">' + renderArtThumbs(col) + '</div>'
-      + '<div class="collection-card-info">'
-      + '<div class="collection-card-name">' + col.name + '</div>'
-      + '<div class="collection-card-meta"><span>' + col.count + ' pieces</span></div>'
-      + '<div class="collection-card-desc">' + col.descShort + '</div>'
-      + '</div>'
-      + '<div class="collection-card-arrow">&#x2192;</div>'
-      + '</a>';
-  }).join('');
+  var projects = [
+    {
+      name: 'ge11yz.com',
+      tagline: 'Bitcoin Ordinals Portfolio',
+      url: 'https://ge11yz.com',
+      accent: '#a8c8e8',
+      desc: 'A curated portfolio showcasing Ordinal inscriptions across multiple collections. Uses a WebGL fluid simulation background with a minimalist card layout.',
+      notes: [
+        'Link fonts enlarged — collection names at 18px',
+        'White text default + gold glow on hover',
+        'Contrast improvements across all project links',
+      ],
+    },
+    {
+      name: 'rea1yze.com',
+      tagline: 'AI Thought Mapping',
+      url: 'https://rea1yze.com',
+      accent: '#a8e8c8',
+      desc: 'A 3D thought-mapping app where users type realizations and watch them form a neural network. AI surfaces patterns, values, and turning points over time.',
+      notes: [
+        'WebGL fallback added — graceful 2D fallback on failure',
+        'Demo content labeled &quot;&#8212; Sample content &#8212;&quot; with dashed border',
+        'Save button shows &quot;Saved &#10003;&quot; for 3s after account creation',
+        'Clear canvas button added to header with confirm dialog',
+        '&quot;Skip&quot; &amp; &quot;Sign in&quot; button contrast fixed',
+        '&quot;How it works&quot; card text overlap fixed',
+      ],
+    },
+    {
+      name: 'aisess.xyz',
+      tagline: 'URL Valuation Tool',
+      url: 'https://aisess.xyz',
+      accent: '#e8c8a8',
+      desc: 'A URL analysis and valuation tool that extracts domain age, traffic signals, and keyword data to generate an estimated domain value.',
+      notes: [
+        'Assess button confirmed working (client-side mock)',
+        'Pricing section added: &quot;Free during early access&quot;',
+        'Email waitlist / invite auth flow added',
+        'Low-contrast placeholder text fixed',
+      ],
+    },
+  ];
+
+  var html = '<div class="flip-grid">';
+  projects.forEach(function(p, i) {
+    html += ''
+      + '<div class="flip-card" id="flipCard' + i + '" onclick="flipCard(' + i + ')">'
+      + '  <div class="flip-card-inner">'
+      // Front
+      + '    <div class="flip-card-front">'
+      + '      <div class="flip-glow" style="background:radial-gradient(ellipse at 30% 20%, ' + p.accent + ' 0%, transparent 60%)"></div>'
+      + '      <div class="flip-front-content">'
+      + '        <div class="flip-site-name">' + p.name + '</div>'
+      + '        <div class="flip-tagline">' + p.tagline + '</div>'
+      + '        <div class="flip-front-desc">' + p.desc + '</div>'
+      + '        <div class="flip-front-hint">tap to see details &#8594;</div>'
+      + '      </div>'
+      + '    </div>'
+      // Back
+      + '    <div class="flip-card-back" style="border-color:' + p.accent + '44">'
+      + '      <div class="flip-back-content">'
+      + '        <div class="flip-back-header">'
+      + '          <div class="flip-back-title" style="color:' + p.accent + '">Summary</div>'
+      + '          <button class="flip-back-btn" onclick="event.stopPropagation(); flipCard(' + i + ')">&#8592; Back</button>'
+      + '        </div>'
+      + '        <div class="flip-notes">';
+    p.notes.forEach(function(note) {
+      html += '          <div class="flip-note"><span class="flip-note-dot" style="color:' + p.accent + '">&#8226;</span><span>' + note + '</span></div>';
+    });
+    html += '        </div>'
+      + '        <div class="flip-back-footer">'
+      + '          <div class="flip-card-label">ge11yz ecosystem</div>'
+      + '          <a href="' + p.url + '" class="flip-visit-btn" style="background:' + p.accent + '" onclick="event.stopPropagation()">Visit &#8594;</a>'
+      + '        </div>'
+      + '      </div>'
+      + '    </div>'
+      + '  </div>'
+      + '</div>';
+  });
+  html += '</div>';
 
   return ''
     + '<div class="section"><div class="container">'
     + '<div class="section-header">'
-    + '<h2 class="section-title">Collab</h2>'
-    + '<p class="section-desc">OG BE x other artists. Joint projects, co-created visions.</p>'
+    + '<h2 class="section-title">Projects</h2>'
+    + '<p class="section-desc">What we\'re building. Click any card to see what\'s under the hood.</p>'
     + '</div>'
-    + '<div class="collections-grid">'
-    + collectionsHtml
-    + '</div>'
+    + html
     + '</div></div>';
+}
+
+function flipCard(i) {
+  var card = document.getElementById('flipCard' + i);
+  if (!card) return;
+  card.classList.toggle('flipped');
 }
 
 function showCollab() {
@@ -1369,10 +1437,28 @@ function pvNav(dir) {
   if (counterEl) counterEl.textContent = (newIdx + 1) + ' / ' + col.pieces.length;
   var prevBtn = document.querySelector('.modal-arrow-prev');
   var nextBtn = document.querySelector('.modal-arrow-next');
-  if (prevBtn) prevBtn.style.opacity = newIdx > 0 ? '1' : '0';
-  if (prevBtn) prevBtn.style.pointerEvents = newIdx > 0 ? 'auto' : 'none';
-  if (nextBtn) nextBtn.style.opacity = newIdx < col.pieces.length - 1 ? '1' : '0';
-  if (nextBtn) nextBtn.style.pointerEvents = newIdx < col.pieces.length - 1 ? 'auto' : 'none';
+  if (prevBtn) {
+    prevBtn.style.opacity = newIdx > 0 ? '1' : '0';
+    prevBtn.style.pointerEvents = newIdx > 0 ? 'auto' : 'none';
+    if (newIdx > 0) {
+      prevBtn.removeAttribute('disabled');
+      prevBtn.setAttribute('onclick', 'event.stopPropagation();pvNav(-1)');
+    } else {
+      prevBtn.setAttribute('disabled', 'true');
+      prevBtn.removeAttribute('onclick');
+    }
+  }
+  if (nextBtn) {
+    nextBtn.style.opacity = newIdx < col.pieces.length - 1 ? '1' : '0';
+    nextBtn.style.pointerEvents = newIdx < col.pieces.length - 1 ? 'auto' : 'none';
+    if (newIdx < col.pieces.length - 1) {
+      nextBtn.removeAttribute('disabled');
+      nextBtn.setAttribute('onclick', 'event.stopPropagation();pvNav(1)');
+    } else {
+      nextBtn.setAttribute('disabled', 'true');
+      nextBtn.removeAttribute('onclick');
+    }
+  }
   pvApplyTransform();
 }
 
