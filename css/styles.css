@@ -1311,6 +1311,7 @@ body {
   gap: 8px;
 }
 .collab-meta-sep { color: #444; }
+.collection-meta .tag + .tag::before { content: " \00B7  "; }
 .collab-tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .collab-tag {
   font-family: 'DM Sans', sans-serif;

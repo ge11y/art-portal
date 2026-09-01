@@ -506,6 +506,16 @@
 <script>
 var COLLECTIONS = [
   {
+    id: "emi",
+    name: "EMI",
+    count: 222,
+    desc: "Emi by OgBe — a 222 piece collection dropping on Robinhood, September 3rd. Every piece of art is a 1/1 hand drawn by OgBe. Mint price .00333. @_0gbe",
+    descShort: "222 hand-drawn 1/1s — dropping Sept 3 on Robinhood",
+    tags: ["1/1", "Robinhood", "Sept 3"],
+    art: ["assets/emi.jpg"],
+    pieces: [],
+  },
+  {
     id: "eegun",
     name: "EEGUN",
     count: 111,
@@ -913,6 +923,11 @@ function renderArtThumbs(col) {
     return '<div class="art-thumb art-thumb-banner"><img src="' + col.art[0] + '" alt="" loading="lazy" /></div>';
   }
 
+  // Upcoming collections: cover image, no inscribed pieces yet
+  if ((!col.pieces || col.pieces.length === 0) && col.art && col.art.length > 0) {
+    return '<div class="art-thumb" style="grid-column:1/-1"><img src="' + col.art[0] + '" alt="" loading="lazy" /></div>';
+  }
+
   // Non-banner collections: show first 4 pieces in a 2x2 grid
   if (col.pieces && col.pieces.length > 0) {
     var displayPieces = col.pieces.slice(0, 4);
@@ -959,7 +974,10 @@ function renderCollection(colId) {
 
   var tags = col.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
   var artHtml = '';
-  if (col.art && col.art.length > 0) {
+  if (col.art && col.art.length > 0 && (!col.pieces || col.pieces.length === 0)) {
+    // Upcoming collection: show the cover art, capped width, nothing to click through to yet
+    artHtml = '<div class="collection-art"><div style="max-width:520px;margin:0 auto;"><img src="' + col.art[0] + '" alt="' + col.name + '" loading="lazy" style="width:100%;height:auto;display:block;" /></div></div>';
+  } else if (col.art && col.art.length > 0) {
     artHtml = '<div class="collection-art">' + col.art.map(function(url) {
       return '<div class="art-piece-banner" onclick="openBannerViewer(\'' + col.id + '\')"><img src="' + url + '" alt="" loading="lazy" style="width:100%;height:auto;display:block;cursor:pointer;" /></div>';
     }).join('') + '</div>';
@@ -1261,6 +1279,7 @@ function toggleNav() {
 function openBannerViewer(colId) {
   var col = COLLECTIONS.find(function(c) { return c.id === colId; });
   if (!col || !col.art || col.art.length === 0) return;
+  if (!col.pieces || col.pieces.length === 0) return;
   // Reuse openPieceViewer — it handles banner collections via col.art
   openPieceViewer(colId, col.pieces[0].id);
 }
