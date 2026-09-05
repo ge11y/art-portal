@@ -25,6 +25,7 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
   <link rel="stylesheet" href="css/emi.css" />
+  <script src="js/theme.js"></script>
 </head>
 <body>
   <a class="skip" href="#studio">Skip to content</a>
@@ -49,6 +50,9 @@
       <a href="#the-222">The 222</a>
       <a href="#mint">Mint</a>
       <a class="nav-ext" href="https://ogbe.art">ogbe.art&nbsp;&#x2197;&#xFE0E;</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch between the green and black grounds">
+        <span>Night</span><span>Day</span>
+      </button>
     </nav>
   </header>
 
@@ -58,10 +62,9 @@
       <div class="hero-copy">
         <p class="eyebrow">A 222-piece collection &middot; 2026</p>
         <h1 id="hero-title" class="hero-title">
-          <picture>
-            <source media="(prefers-reduced-motion: reduce)" srcset="assets/word-still.png" />
-            <img src="assets/word.webp" alt="EMI by OgBe" width="491" height="605" fetchpriority="high" />
-          </picture>
+          <img src="assets/word.webp" alt="EMI by OgBe" width="491" height="605" fetchpriority="high"
+               data-day="assets/word.webp" data-night="assets/word-night.webp"
+               data-day-still="assets/word-still.png" data-night-still="assets/word-night-still.png" />
         </h1>
         <p class="hero-lead">Every piece a 1/1, hand drawn by OgBe. Minted on Robinhood. Sold out on September&nbsp;3,&nbsp;2026.</p>
         <div class="hero-actions">
@@ -77,10 +80,9 @@
         </p>
       </div>
       <figure class="hero-art">
-        <picture>
-          <source media="(prefers-reduced-motion: reduce)" srcset="assets/char-still.png" />
-          <img src="assets/char.webp" alt="The EMI character, hand drawn by OgBe" width="800" height="800" />
-        </picture>
+        <img src="assets/char.webp" alt="The EMI character, hand drawn by OgBe" width="800" height="800"
+             data-day="assets/char.webp" data-night="assets/char-night.webp"
+             data-day-still="assets/char-still.png" data-night-still="assets/char-night-still.png" />
         <figcaption>OgBe &rsquo;26</figcaption>
       </figure>
     </section>

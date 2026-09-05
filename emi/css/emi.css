@@ -27,6 +27,13 @@
 :root {
   --lime: #ccff01;
   --lime-dim: rgba(204, 255, 1, 0.7);
+  --lime-soft: rgba(204, 255, 1, 0.86);   /* running text on the dark ground */
+  --lime-faint: rgba(204, 255, 1, 0.35);  /* hairlines on the dark ground */
+  --lime-0: rgba(204, 255, 1, 0);         /* the same colour, gone */
+  --ink-0: rgba(0, 0, 0, 0);
+  --ink-faint: rgba(0, 0, 0, 0.35);
+  --header-bg: rgba(204, 255, 1, 0.92);
+  --panel-wash: rgba(255, 255, 255, 0.35);
   --ink: #000000;
   --ink-soft: #151515;
   --paper: #ffffff;
@@ -68,12 +75,48 @@ a { color: inherit; }
   font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 16px;
 }
 
+/* ---------- NIGHT ----------
+   The collection is drawn on two grounds, so the site has both. This is the
+   same swap the studio performs on a piece: the ground and its marks trade
+   places, and every section keeps the contrast it had, inverted. */
+[data-theme="night"] {
+  --lime: #060303;
+  --lime-dim: rgba(6, 3, 3, 0.72);
+  --lime-soft: rgba(6, 3, 3, 0.88);
+  --lime-faint: rgba(6, 3, 3, 0.32);
+  --lime-0: rgba(6, 3, 3, 0);
+  --ink: #ccff01;
+  --ink-soft: #dcff4d;
+  --ink-0: rgba(204, 255, 1, 0);
+  --ink-faint: rgba(204, 255, 1, 0.3);
+  --paper: #0e0e0e;
+  --header-bg: rgba(6, 3, 3, 0.94);
+  --panel-wash: rgba(0, 0, 0, 0.3);
+}
+/* the shine on the check reads as a dark sweep once the disc is lime */
+[data-theme="night"] .tick::after {
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.55), transparent);
+}
+
+.theme-toggle {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; color: var(--ink);
+  border: 2px solid var(--ink); border-radius: var(--sketch);
+  padding: 7px 10px; flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--ink); color: var(--lime); }
+.theme-toggle span:last-child { display: none; }
+[data-theme="night"] .theme-toggle span:first-child { display: none; }
+[data-theme="night"] .theme-toggle span:last-child { display: inline; }
+
 /* ---------- HEADER ---------- */
 .top {
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
   padding: 14px 24px;
-  background: rgba(204, 255, 1, 0.92);
+  background: var(--header-bg);
   backdrop-filter: blur(8px);
   border-bottom: 3px solid var(--ink);
 }
@@ -247,7 +290,7 @@ a { color: inherit; }
   .story-art img:nth-child(3) { transform: rotate(-2.5deg); }
   .story-art img:nth-child(4) { transform: rotate(1.5deg); }
 }
-.essay p { font-size: 16px; line-height: 1.8; color: rgba(204, 255, 1, 0.86); margin-bottom: 26px; }
+.essay p { font-size: 16px; line-height: 1.8; color: var(--lime-soft); margin-bottom: 26px; }
 .essay .lede { font-size: 20px; line-height: 1.65; color: var(--lime); margin-bottom: 34px; }
 .essay a { color: var(--lime); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
 .essay a:hover { opacity: 0.7; }
@@ -270,7 +313,7 @@ a { color: inherit; }
 }
 .essay .essay-note {
   font-size: 13px; line-height: 1.7; color: var(--lime-dim);
-  margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(204, 255, 1, 0.28);
+  margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--lime-faint);
 }
 
 @media (max-width: 600px) {
@@ -288,12 +331,12 @@ a { color: inherit; }
   font-family: var(--display); font-size: 13px; letter-spacing: 0.24em;
   text-transform: uppercase; color: var(--lime); margin-bottom: 20px;
 }
-.notes-intro { font-size: 16px; line-height: 1.7; color: rgba(204, 255, 1, 0.86); margin-bottom: 26px; }
+.notes-intro { font-size: 16px; line-height: 1.7; color: var(--lime-soft); margin-bottom: 26px; }
 
 .pairing { display: grid; gap: 14px; margin-bottom: 36px; }
 .pairing p {
   font-size: 17px; line-height: 1.55; color: var(--lime);
-  padding-left: 18px; border-left: 3px solid rgba(204, 255, 1, 0.4);
+  padding-left: 18px; border-left: 3px solid var(--lime-faint);
 }
 .pairing span {
   display: block; font-family: var(--display); font-size: 13px;
@@ -310,7 +353,7 @@ a { color: inherit; }
   font-family: var(--mono); font-style: normal; font-size: 13px;
   letter-spacing: 0.06em; color: var(--lime-dim);
 }
-.glossary dd { font-size: 15px; line-height: 1.75; color: rgba(204, 255, 1, 0.86); max-width: 62ch; }
+.glossary dd { font-size: 15px; line-height: 1.75; color: var(--lime-soft); max-width: 62ch; }
 .glossary a { color: var(--lime); text-decoration: underline; text-underline-offset: 3px; }
 
 @media (min-width: 720px) {
@@ -499,12 +542,12 @@ a { color: inherit; }
 .perk-claim p { font-size: 14px; line-height: 1.6; }
 .perk-locked {
   margin-top: 6px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
-  opacity: 0.6; border-top: 1px dashed rgba(204,255,1,0.35); padding-top: 10px;
+  opacity: 0.6; border-top: 1px dashed var(--lime-faint); padding-top: 10px;
 }
 
 .perks-empty {
   border: 3px dashed var(--ink); border-radius: var(--sketch);
-  padding: 34px 30px; max-width: 60ch; background: rgba(255,255,255,0.35);
+  padding: 34px 30px; max-width: 60ch; background: var(--panel-wash);
 }
 .perks-empty-title { font-family: var(--display); font-size: 22px; margin-bottom: 8px; }
 .perks-empty p { font-size: 15px; line-height: 1.65; }
@@ -560,7 +603,7 @@ a { color: inherit; }
 .story-more.collapsed { max-height: 320px; overflow: hidden; }
 .story-fade {
   display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 200px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--ink));
+  background: linear-gradient(to bottom, var(--ink-0), var(--ink));
 }
 .story-more.collapsed .story-fade { display: block; }
 .story-toggle-wrap { margin-bottom: 52px; }
@@ -580,7 +623,7 @@ a { color: inherit; }
 .grid-wrap.collapsed { max-height: 640px; overflow: hidden; }
 .grid-fade {
   display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 180px;
-  background: linear-gradient(to bottom, rgba(204, 255, 1, 0), var(--lime));
+  background: linear-gradient(to bottom, var(--lime-0), var(--lime));
 }
 .grid-wrap.collapsed .grid-fade { display: block; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
@@ -622,7 +665,7 @@ a { color: inherit; }
 .timeline li {
   display: grid; grid-template-columns: 150px 1fr 1fr; gap: 16px; align-items: baseline;
   padding: 18px 0 18px 28px; position: relative;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.35);
+  border-bottom: 1px dashed var(--ink-faint);
 }
 .timeline li::before {
   content: ""; position: absolute; left: -10px; top: 26px;
@@ -754,7 +797,7 @@ body.is-unlocked .holders { opacity: 0.35; }
   border: 3px solid var(--ink); border-radius: var(--sketch);
   background: var(--lime); color: var(--ink); padding: 11px 13px; width: 100%;
 }
-.door input::placeholder { color: rgba(0,0,0,0.45); letter-spacing: 0.04em; }
+.door input::placeholder { color: var(--ink-faint); letter-spacing: 0.04em; }
 .door-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .door-actions .btn { padding: 11px 18px; }
 .door-error { font-size: 12px; letter-spacing: 0.04em; min-height: 1.2em; }
@@ -794,7 +837,7 @@ body.is-unlocked .holders { opacity: 0.35; }
     padding: 6px 16px 16px; font-size: 13px;
   }
   .nav.open { display: flex; }
-  .nav a { padding: 14px 2px; border-bottom: 1px solid rgba(0, 0, 0, 0.18); }
+  .nav a { padding: 14px 2px; border-bottom: 1px solid var(--ink-faint); }
   .nav a:last-child { border-bottom: 0; }
   .nav .nav-ext { margin-top: 12px; text-align: center; padding: 13px 12px; }
   .hero { padding: 32px 16px 40px; }
