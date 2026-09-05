@@ -103,7 +103,7 @@
         detail = unlocked
           ? '<div class="perk-claim">' +
               (p.claim ? '<p>' + esc(p.claim) + '</p>' : '') +
-              (p.url ? '<a class="btn btn-ink" href="' + esc(p.url) + '" target="_blank" rel="noopener">Go &#x2197;</a>' : '') +
+              (p.url ? '<a class="btn btn-ink" href="' + esc(p.url) + '" target="_blank" rel="noopener">Go &#x2197;&#xFE0E;</a>' : '') +
             '</div>'
           : '<p class="perk-locked">Claim details locked</p>';
       }
@@ -117,7 +117,7 @@
           (p.by ? '<p class="perk-by">by ' + esc(p.by) + '</p>' : '') +
           '<p class="perk-what">' + esc(p.perk) + '</p>' +
           (p.note ? '<p class="perk-note">' + esc(p.note) + '</p>' : '') +
-          (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;</a></p>' : '') +
+          (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;&#xFE0E;</a></p>' : '') +
           '<p class="perk-meta">' +
             chainTags(p.chain) +
             (p.date ? '<span>' + prettyDate(p.date) + '</span>' : '') +

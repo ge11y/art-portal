@@ -47,7 +47,7 @@
       <a href="#story">Story</a>
       <a href="#the-222">The 222</a>
       <a href="#mint">Mint</a>
-      <a class="nav-ext" href="https://ogbe.art">ogbe.art&nbsp;&#x2197;</a>
+      <a class="nav-ext" href="https://ogbe.art">ogbe.art&nbsp;&#x2197;&#xFE0E;</a>
     </nav>
   </header>
 
@@ -64,8 +64,8 @@
         </h1>
         <p class="hero-lead">Every piece a 1/1, hand drawn by OgBe. Minted on Robinhood. Sold out on September&nbsp;3,&nbsp;2026.</p>
         <div class="hero-actions">
-          <a class="btn btn-ink" href="#studio">Open the studio &#x2193;</a>
-          <a class="btn btn-ghost" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">View on OpenSea &#x2197;</a>
+          <a class="btn btn-ink" href="#studio">Open the studio &#x2193;&#xFE0E;</a>
+          <a class="btn btn-ghost" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">View on OpenSea &#x2197;&#xFE0E;</a>
         </div>
         <p class="status">
           <span class="dot" aria-hidden="true"></span>
@@ -122,9 +122,9 @@
             <div class="field">
               <label class="field-label" for="emi-number">Emi number</label>
               <div class="numrow">
-                <button id="emi-prev" class="step" type="button" aria-label="Previous Emi">&#x2190;</button>
+                <button id="emi-prev" class="step" type="button" aria-label="Previous Emi">&#x2190;&#xFE0E;</button>
                 <input id="emi-number" type="number" min="1" max="222" step="1" value="1" inputmode="numeric" />
-                <button id="emi-next" class="step" type="button" aria-label="Next Emi">&#x2192;</button>
+                <button id="emi-next" class="step" type="button" aria-label="Next Emi">&#x2192;&#xFE0E;</button>
               </div>
               <button id="emi-random" class="linky" type="button">Surprise me</button>
             </div>
@@ -151,7 +151,7 @@
             <div class="field">
               <button id="emi-download" class="btn btn-ink full" type="button">Download PNG</button>
               <p id="emi-owner" class="owner"></p>
-              <a id="emi-opensea" class="linky" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">See this one on OpenSea &#x2197;</a>
+              <a id="emi-opensea" class="linky" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">See this one on OpenSea &#x2197;&#xFE0E;</a>
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@
         </div>
 
         <div class="story-toggle-wrap">
-          <button id="story-toggle" class="btn btn-on-dark" type="button" aria-expanded="false" aria-controls="story-more">Read the full story &#x2193;</button>
+          <button id="story-toggle" class="btn btn-on-dark" type="button" aria-expanded="false" aria-controls="story-more">Read the full story &#x2193;&#xFE0E;</button>
         </div>
 
         <dl class="facts">
@@ -273,7 +273,7 @@
           <div class="grid-fade" aria-hidden="true"></div>
         </div>
         <div class="grid-more">
-          <button id="grid-toggle" class="btn btn-ink" type="button" aria-expanded="false" aria-controls="grid">Show all 222 &#x2193;</button>
+          <button id="grid-toggle" class="btn btn-ink" type="button" aria-expanded="false" aria-controls="grid">Show all 222 &#x2193;&#xFE0E;</button>
         </div>
       </div>
     </section>
@@ -292,7 +292,7 @@
         </ol>
         <div class="mint-cta">
           <p>Missed it? EMI trades on the secondary market.</p>
-          <a class="btn btn-ink" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">Browse listings on OpenSea &#x2197;</a>
+          <a class="btn btn-ink" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">Browse listings on OpenSea &#x2197;&#xFE0E;</a>
         </div>
       </div>
     </section>
@@ -363,7 +363,7 @@
     function setStory(open) {
       storyMore.classList.toggle('collapsed', !open);
       storyToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      storyToggle.innerHTML = open ? 'Show less &#x2191;' : 'Read the full story &#x2193;';
+      storyToggle.innerHTML = open ? 'Show less &#x2191;&#xFE0E;' : 'Read the full story &#x2193;&#xFE0E;';
     }
     storyToggle.addEventListener('click', function () {
       var opening = storyMore.classList.contains('collapsed');
@@ -381,7 +381,7 @@
     toggle.addEventListener('click', function () {
       var open = wrap.classList.toggle('collapsed') === false;
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.innerHTML = open ? 'Show fewer &#x2191;' : 'Show all 222 &#x2193;';
+      toggle.innerHTML = open ? 'Show fewer &#x2191;&#xFE0E;' : 'Show all 222 &#x2193;&#xFE0E;';
       if (!open) document.getElementById('the-222').scrollIntoView({ block: 'start' });
     });
 
