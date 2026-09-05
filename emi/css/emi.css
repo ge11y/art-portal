@@ -296,6 +296,35 @@ a { color: inherit; }
 /* the grid tiles are buttons now, so reset the browser's own styling */
 .tile { font: inherit; color: inherit; cursor: pointer; padding: 0; }
 
+/* ---------- the holders' door ---------- */
+.holders {
+  font-style: normal; font-size: 10px; letter-spacing: 0.16em;
+  border: 2px solid var(--ink); padding: 2px 7px; margin-left: 8px;
+  border-radius: var(--sketch); white-space: nowrap;
+}
+body.is-unlocked .holders { opacity: 0.35; }
+
+.mode.locked::after {
+  content: "\00B7 locked";
+  font-size: 10px; letter-spacing: 0.1em; opacity: 0.55; margin-left: 8px;
+}
+.mode.locked { border-style: dashed; }
+
+.door {
+  display: flex; flex-direction: column; gap: 10px;
+  border: 3px solid var(--ink); border-radius: var(--sketch-2);
+  padding: 16px; margin-top: 4px; background: var(--paper);
+}
+.door input {
+  font-family: var(--mono); font-size: 15px; letter-spacing: 0.08em;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--lime); color: var(--ink); padding: 11px 13px; width: 100%;
+}
+.door input::placeholder { color: rgba(0,0,0,0.45); letter-spacing: 0.04em; }
+.door-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.door-actions .btn { padding: 11px 18px; }
+.door-error { font-size: 12px; letter-spacing: 0.04em; min-height: 1.2em; }
+
 @media (max-width: 880px) {
   .studio-grid { grid-template-columns: 1fr; gap: 26px; }
   .studio-stage { box-shadow: 8px 8px 0 var(--ink); }

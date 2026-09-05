@@ -169,7 +169,80 @@
     });
   }
 
+  /* ---------- the holders' door ----------
+     Swapping grounds is for holders. The password is checked on the server so
+     it never ships in this file; getting it is a matter of being in the chat. */
+
+  var UNLOCK_KEY = 'emi-studio-unlocked';
+  var unlocked = false;
+
+  function readUnlocked() {
+    try { return localStorage.getItem(UNLOCK_KEY) === 'yes'; } catch (e) { return false; }
+  }
+  function rememberUnlocked() {
+    try { localStorage.setItem(UNLOCK_KEY, 'yes'); } catch (e) { /* private window */ }
+  }
+
+  function applyLockState() {
+    document.body.classList.toggle('is-unlocked', unlocked);
+    modeBtns.forEach(function (b) {
+      if (b.dataset.mode === 'native') return;
+      b.classList.toggle('locked', !unlocked);
+    });
+  }
+
+  function openDoor(pendingMode) {
+    var door = $('studio-door');
+    door.hidden = false;
+    door.dataset.pending = pendingMode || '';
+    $('door-error').textContent = '';
+    $('door-password').focus();
+  }
+
+  function closeDoor() {
+    var door = $('studio-door');
+    door.hidden = true;
+    $('door-password').value = '';
+    $('door-error').textContent = '';
+  }
+
+  function tryUnlock() {
+    var input = $('door-password');
+    var err = $('door-error');
+    var btn = $('door-submit');
+    var pass = input.value.trim();
+    if (!pass) { err.textContent = 'Enter the password.'; return; }
+
+    btn.disabled = true;
+    err.textContent = 'Checking…';
+    fetch('api/unlock', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        btn.disabled = false;
+        if (res.ok && res.j && res.j.ok) {
+          unlocked = true;
+          rememberUnlocked();
+          applyLockState();
+          var pending = $('studio-door').dataset.pending;
+          closeDoor();
+          if (pending) setMode(pending);
+          return;
+        }
+        err.textContent = (res.j && res.j.error) || "That's not it. Ask in the chat.";
+        input.select();
+      })
+      .catch(function () {
+        btn.disabled = false;
+        err.textContent = 'Could not reach the door. Try again.';
+      });
+  }
+
   function setMode(m) {
+    if (m !== 'native' && !unlocked) { openDoor(m); return; }
     mode = m;
     updateModeButtons();
     draw(current);
@@ -227,6 +300,15 @@
 
     modeBtns.forEach(function (b) {
       b.addEventListener('click', function () { setMode(b.dataset.mode); });
+    });
+
+    unlocked = readUnlocked();
+    applyLockState();
+    $('door-submit').addEventListener('click', tryUnlock);
+    $('door-cancel').addEventListener('click', closeDoor);
+    $('door-password').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
+      if (e.key === 'Escape') closeDoor();
     });
     dlBtn.addEventListener('click', download);
     $('emi-prev').addEventListener('click', function () { show(current === 1 ? TOTAL : current - 1); });

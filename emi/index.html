@@ -111,11 +111,21 @@
             </div>
 
             <div class="field">
-              <span class="field-label" id="bg-label">Background</span>
+              <span class="field-label" id="bg-label">Background <em class="holders">Holders only</em></span>
               <div class="modes" role="group" aria-labelledby="bg-label">
                 <button class="mode" type="button" data-mode="native" aria-pressed="true">As minted</button>
                 <button class="mode" type="button" data-mode="green" aria-pressed="false">Green</button>
                 <button class="mode" type="button" data-mode="black" aria-pressed="false">Black</button>
+              </div>
+
+              <div id="studio-door" class="door" hidden>
+                <label class="field-label" for="door-password">Password</label>
+                <input id="door-password" type="password" autocomplete="off" spellcheck="false" placeholder="Ask in the chat" />
+                <div class="door-actions">
+                  <button id="door-submit" class="btn btn-ink" type="button">Unlock</button>
+                  <button id="door-cancel" class="linky" type="button">Cancel</button>
+                </div>
+                <p id="door-error" class="door-error" role="alert"></p>
               </div>
             </div>
 
