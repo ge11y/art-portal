@@ -134,12 +134,30 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
   font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
 }
-.dot {
-  width: 10px; height: 10px; border-radius: 50%; background: var(--ink);
-  box-shadow: 0 0 0 3px var(--lime), 0 0 0 5px var(--ink);
-  animation: pulse 2s ease-in-out infinite;
+/* a struck check rather than a blinking dot: the collection is finished, so
+   it should read as done, not as something still happening */
+.tick {
+  position: relative; overflow: hidden; flex-shrink: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); display: grid; place-items: center;
 }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.65); } }
+.tick svg { width: 14px; height: 14px; display: block; }
+.tick path {
+  fill: none; stroke: var(--lime); stroke-width: 2.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* the shine: a narrow highlight crossing the face, mostly at rest */
+.tick::after {
+  content: ""; position: absolute; top: -60%; left: -120%;
+  width: 60%; height: 220%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+  transform: rotate(18deg);
+  animation: tick-shine 4.5s ease-in-out infinite;
+}
+@keyframes tick-shine {
+  0%, 62%  { left: -120%; }
+  84%, 100% { left: 190%; }
+}
 
 .hero-art { justify-self: center; width: min(100%, 520px); }
 .hero-art img { width: 100%; height: auto; }
@@ -365,6 +383,24 @@ a { color: inherit; }
   .tempo input { width: 150px; }
   .steps { gap: 6px; }
 }
+
+.saves {
+  display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 26px; margin-top: 26px; padding-top: 24px; border-top: 3px solid var(--ink);
+}
+.saves-add input { flex: 1 1 150px; min-width: 0; font-family: var(--mono); font-size: 15px;
+  border: 3px solid var(--ink); border-radius: var(--sketch); background: var(--paper);
+  color: var(--ink); padding: 11px 13px; }
+.saved { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.saved-row {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--paper); padding: 10px 14px;
+}
+.saved-name { font-family: var(--display); font-size: 15px; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.saved-meta { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.6; }
+.saved-row .linky { font-size: 10px; }
+@media (max-width: 900px) { .saves { grid-template-columns: 1fr; } }
 
 /* ---------- PERKS ---------- */
 .perks-page { background: var(--lime); padding: 64px 0 96px; min-height: 70vh; }
@@ -728,6 +764,6 @@ body.is-unlocked .holders { opacity: 0.35; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .dot { animation: none; }
+  .tick::after { animation: none; opacity: 0; }
   .btn, .tile { transition: none; }
 }

@@ -273,6 +273,84 @@
     $('beat-play').setAttribute('aria-pressed', 'false');
   }
 
+
+  /* ---------- saved beats ----------
+     Kept in this browser only. Nothing is uploaded, so a saved beat is private
+     until its owner copies the link and posts it. */
+
+  var SAVE_KEY = 'emi-beats-saved';
+
+  function readSaves() {
+    try { return JSON.parse(localStorage.getItem(SAVE_KEY)) || []; }
+    catch (e) { return []; }
+  }
+
+  function writeSaves(list) {
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(list)); return true; }
+    catch (e) { return false; }   // private window, or the box is full
+  }
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+
+  function renderSaves() {
+    var list = readSaves();
+    var box = $('beat-saved');
+    var empty = $('beat-saved-empty');
+    if (!box) return;
+    empty.hidden = list.length > 0;
+    box.innerHTML = list.map(function (b, i) {
+      return '<li class="saved-row">' +
+        '<span class="saved-name">' + esc(b.name) + '</span>' +
+        '<span class="saved-meta">' + b.tempo + ' bpm</span>' +
+        '<button class="linky" type="button" data-load="' + i + '">Load</button>' +
+        '<button class="linky" type="button" data-del="' + i + '">Delete</button>' +
+        '</li>';
+    }).join('');
+  }
+
+  function saveCurrent() {
+    var input = $('beat-name');
+    var out = $('beat-save-out');
+    var name = (input.value || '').trim().slice(0, 40);
+    if (!name) name = 'Untitled ' + (readSaves().length + 1);
+    if (!pattern.some(function (r) { return r.some(Boolean); })) {
+      out.textContent = 'Nothing to save yet.';
+      return;
+    }
+    var list = readSaves();
+    var existing = list.findIndex(function (b) { return b.name === name; });
+    var entry = { name: name, p: encode(), tempo: tempo, at: Date.now() };
+    if (existing >= 0) list[existing] = entry; else list.unshift(entry);
+    if (list.length > 24) list.length = 24;
+    if (!writeSaves(list)) { out.textContent = 'This browser will not let the page save.'; return; }
+    input.value = '';
+    out.textContent = existing >= 0 ? 'Replaced "' + name + '".' : 'Saved as "' + name + '".';
+    renderSaves();
+  }
+
+  function loadSave(i) {
+    var b = readSaves()[i];
+    if (!b) return;
+    decode(b.p);
+    tempo = b.tempo || tempo;
+    $('beat-tempo').value = tempo;
+    $('beat-tempo-val').textContent = tempo;
+    renderSteps(); markPads();
+    $('beat-save-out').textContent = 'Loaded "' + b.name + '".';
+  }
+
+  function deleteSave(i) {
+    var list = readSaves();
+    var gone = list.splice(i, 1)[0];
+    writeSaves(list);
+    renderSaves();
+    $('beat-save-out').textContent = gone ? 'Deleted "' + gone.name + '".' : '';
+  }
+
   /* ---------- ui ---------- */
 
   function renderPads() {
@@ -344,6 +422,17 @@
     $('beat-clear').addEventListener('click', clearAll);
     $('beat-random').addEventListener('click', randomize);
     $('beat-clear-track').addEventListener('click', clearTrack);
+
+    $('beat-save').addEventListener('click', saveCurrent);
+    $('beat-name').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); saveCurrent(); }
+    });
+    $('beat-saved').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.load != null) loadSave(+b.dataset.load);
+      if (b.dataset.del != null) deleteSave(+b.dataset.del);
+    });
+    renderSaves();
     $('beat-share').addEventListener('click', share);
     $('beat-tempo').addEventListener('input', function () {
       tempo = +this.value;
