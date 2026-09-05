@@ -97,6 +97,18 @@
               <button id="beat-save" class="btn btn-ink" type="button">Save</button>
             </div>
             <p id="beat-save-out" class="door-error" role="status"></p>
+
+            <label class="field-label" for="beat-bars">Download as audio</label>
+            <div class="perks-door-row">
+              <select id="beat-bars" aria-label="How many bars to render">
+                <option value="2">2 bars</option>
+                <option value="4" selected>4 bars</option>
+                <option value="8">8 bars</option>
+                <option value="16">16 bars</option>
+              </select>
+              <button id="beat-download" class="btn btn-ghost" type="button">Download WAV</button>
+            </div>
+            <p id="beat-dl-out" class="door-error" role="status"></p>
           </div>
           <div class="saves-list">
             <p class="field-label">Your saved bars</p>
@@ -106,7 +118,7 @@
         </div>
       </div>
 
-      <p class="beats-note">The sounds here are stand-ins, made in the browser. They get replaced the moment OgBe sends his own.</p>
+      <p class="beats-note">The sounds here are stand-ins, made in the browser. They get replaced the moment OgBe sends his own hits, and the machine grows with the kit.</p>
       <p class="perks-back"><a href="/">&#x2190;&#xFE0E; Back to the collection</a></p>
     </div>
   </main>

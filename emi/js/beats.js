@@ -35,27 +35,46 @@
     { name: 'Zap',      type: 'zap' }
   ];
 
-  var ctx = null, master = null, buffers = {};
+  var ctx = null, master = null;
+  var noiseCache = new WeakMap();
 
   function ensureCtx() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
     ctx = new AC();
-    master = ctx.createGain();
-    master.gain.value = 0.8;
-    master.connect(ctx.destination);
+    master = buildOut(ctx);
     return ctx;
   }
 
-  function noiseBuffer() {
-    if (buffers.noise) return buffers.noise;
-    var n = ctx.sampleRate * 1.2;
-    var b = ctx.createBuffer(1, n, ctx.sampleRate);
-    var d = b.getChannelData(0);
+  /* Sixteen voices landing together overshoot full scale easily, so the mix
+     runs into a limiter before it reaches the output. The offline render uses
+     the same chain, which is why the file sounds like the machine. */
+  function buildOut(ac) {
+    var g = ac.createGain();
+    g.gain.value = 0.7;
+    var comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -8;
+    comp.knee.value = 6;
+    comp.ratio.value = 12;
+    comp.attack.value = 0.003;
+    comp.release.value = 0.12;
+    g.connect(comp); comp.connect(ac.destination);
+    return g;
+  }
+
+  /* Every voice takes the context it should build in, so the same code drives
+     the live machine and the offline render that becomes the WAV. */
+
+  function noiseBuffer(ac) {
+    var cached = noiseCache.get(ac);
+    if (cached) return cached;
+    var n = Math.floor(ac.sampleRate * 1.2);
+    var buf = ac.createBuffer(1, n, ac.sampleRate);
+    var d = buf.getChannelData(0);
     for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
-    buffers.noise = b;
-    return b;
+    noiseCache.set(ac, buf);
+    return buf;
   }
 
   function env(node, t, peak, decay, hold) {
@@ -65,54 +84,58 @@
     g.exponentialRampToValueAtTime(0.0001, t + (hold || 0) + decay);
   }
 
-  function noise(t, decay, hp, lp, peak) {
-    var s = ctx.createBufferSource(); s.buffer = noiseBuffer();
-    var f = ctx.createBiquadFilter();
+  function noise(ac, dest, t, decay, hp, lp, peak) {
+    var s = ac.createBufferSource(); s.buffer = noiseBuffer(ac);
+    var f = ac.createBiquadFilter();
     f.type = hp ? 'highpass' : 'lowpass';
     f.frequency.value = hp || lp || 8000;
-    var g = ctx.createGain();
+    var g = ac.createGain();
     env(g, t, peak == null ? 0.6 : peak, decay);
-    s.connect(f); f.connect(g); g.connect(master);
+    s.connect(f); f.connect(g); g.connect(dest);
     s.start(t); s.stop(t + decay + 0.1);
   }
 
-  function tone(t, type, from, to, decay, peak) {
-    var o = ctx.createOscillator(); o.type = type;
+  function tone(ac, dest, t, type, from, to, decay, peak) {
+    var o = ac.createOscillator(); o.type = type;
     o.frequency.setValueAtTime(from, t);
     if (to != null) o.frequency.exponentialRampToValueAtTime(Math.max(1, to), t + decay);
-    var g = ctx.createGain();
+    var g = ac.createGain();
     env(g, t, peak == null ? 0.8 : peak, decay);
-    o.connect(g); g.connect(master);
+    o.connect(g); g.connect(dest);
     o.start(t); o.stop(t + decay + 0.05);
+  }
+
+  function voice(ac, dest, i, t) {
+    var v = KIT[i];
+    if (!v) return;
+    if (v.buffer) {                       // OgBe's hits, once they exist
+      var s = ac.createBufferSource(); s.buffer = v.buffer;
+      var g = ac.createGain(); g.gain.value = 0.9;
+      s.connect(g); g.connect(dest); s.start(t);
+      return;
+    }
+    switch (v.type) {
+      case 'kick':   tone(ac, dest, t, 'sine', v.f * 2.6, v.f * 0.5, v.long ? 0.55 : 0.34, 0.95); break;
+      case 'snare':  tone(ac, dest, t, 'triangle', v.f, v.f * 0.6, 0.13, 0.35); noise(ac, dest, t, 0.17, 1400, 0, 0.5); break;
+      case 'rim':    tone(ac, dest, t, 'square', v.f, v.f * 0.7, 0.045, 0.32); noise(ac, dest, t, 0.03, 2500, 0, 0.25); break;
+      case 'clap':
+        [0, 0.012, 0.024].forEach(function (o) { noise(ac, dest, t + o, 0.05, 1100, 0, 0.32); });
+        noise(ac, dest, t + 0.036, 0.16, 900, 0, 0.28);
+        break;
+      case 'hat':    noise(ac, dest, t, v.d, 7200, 0, 0.28); break;
+      case 'shaker': noise(ac, dest, t, 0.09, 5200, 0, 0.2); break;
+      case 'tom':    tone(ac, dest, t, 'sine', v.f * 1.6, v.f * 0.7, 0.28, 0.6); break;
+      case 'bell':   tone(ac, dest, t, 'square', 800, 795, 0.28, 0.14); tone(ac, dest, t, 'square', 1200, 1195, 0.28, 0.12); break;
+      case 'bass':   tone(ac, dest, t, 'sawtooth', v.f, v.f, 0.30, 0.32); break;
+      case 'blip':   tone(ac, dest, t, 'square', v.f, v.f * 2, 0.07, 0.22); break;
+      case 'sweep':  noise(ac, dest, t, 0.4, 300, 0, 0.22); tone(ac, dest, t, 'sine', 200, 2000, 0.4, 0.12); break;
+      case 'zap':    tone(ac, dest, t, 'sawtooth', 1400, 90, 0.16, 0.3); break;
+    }
   }
 
   function play(i, t) {
     if (!ctx) return;
-    var v = KIT[i];
-    if (!v) return;
-    if (v.sample && buffers[v.sample]) {          // OgBe's hits, once they exist
-      var s = ctx.createBufferSource(); s.buffer = buffers[v.sample];
-      var g = ctx.createGain(); g.gain.value = 0.9;
-      s.connect(g); g.connect(master); s.start(t);
-      return;
-    }
-    switch (v.type) {
-      case 'kick':   tone(t, 'sine', v.f * 2.6, v.f * 0.5, v.long ? 0.55 : 0.34, 0.95); break;
-      case 'snare':  tone(t, 'triangle', v.f, v.f * 0.6, 0.13, 0.35); noise(t, 0.17, 1400, 0, 0.5); break;
-      case 'rim':    tone(t, 'square', v.f, v.f * 0.7, 0.045, 0.32); noise(t, 0.03, 2500, 0, 0.25); break;
-      case 'clap':
-        [0, 0.012, 0.024].forEach(function (o) { noise(t + o, 0.05, 1100, 0, 0.32); });
-        noise(t + 0.036, 0.16, 900, 0, 0.28);
-        break;
-      case 'hat':    noise(t, v.d, 7200, 0, 0.28); break;
-      case 'shaker': noise(t, 0.09, 5200, 0, 0.2); break;
-      case 'tom':    tone(t, 'sine', v.f * 1.6, v.f * 0.7, 0.28, 0.6); break;
-      case 'bell':   tone(t, 'square', 800, 795, 0.28, 0.14); tone(t, 'square', 1200, 1195, 0.28, 0.12); break;
-      case 'bass':   tone(t, 'sawtooth', v.f, v.f, 0.30, 0.32); break;
-      case 'blip':   tone(t, 'square', v.f, v.f * 2, 0.07, 0.22); break;
-      case 'sweep':  noise(t, 0.4, 300, 0, 0.22); tone(t, 'sine', 200, 2000, 0.4, 0.12); break;
-      case 'zap':    tone(t, 'sawtooth', 1400, 90, 0.16, 0.3); break;
-    }
+    voice(ctx, master, i, t);
   }
 
   /* ---------- pattern ---------- */
@@ -351,6 +374,89 @@
     $('beat-save-out').textContent = gone ? 'Deleted "' + gone.name + '".' : '';
   }
 
+
+  /* ---------- render to WAV ----------
+     The bar is played once more into an OfflineAudioContext, which runs as
+     fast as it can rather than in real time, then the samples are wrapped in
+     a WAV header. Nothing leaves the browser. */
+
+  function encodeWav(buf, rate) {
+    var n = buf.length;
+    var out = new ArrayBuffer(44 + n * 2);
+    var v = new DataView(out);
+    function str(off, s) { for (var i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); }
+    str(0, 'RIFF');  v.setUint32(4, 36 + n * 2, true);
+    str(8, 'WAVE');  str(12, 'fmt ');
+    v.setUint32(16, 16, true);          // PCM chunk size
+    v.setUint16(20, 1, true);           // PCM
+    v.setUint16(22, 1, true);           // mono
+    v.setUint32(24, rate, true);
+    v.setUint32(28, rate * 2, true);    // byte rate
+    v.setUint16(32, 2, true);           // block align
+    v.setUint16(34, 16, true);          // bits
+    str(36, 'data'); v.setUint32(40, n * 2, true);
+    var o = 44;
+    for (var i = 0; i < n; i++, o += 2) {
+      var x = buf[i];
+      x = x < -1 ? -1 : x > 1 ? 1 : x;
+      v.setInt16(o, x < 0 ? x * 0x8000 : x * 0x7FFF, true);
+    }
+    return new Blob([out], { type: 'audio/wav' });
+  }
+
+  function renderWav(bars) {
+    var RATE = 44100;
+    var dur = stepDur() * STEPS * bars;
+    var tail = 0.6;                       // let the last hit ring out
+    var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if (!OAC) return Promise.reject(new Error('no offline audio'));
+    var oac = new OAC(1, Math.ceil((dur + tail) * RATE), RATE);
+    var out = buildOut(oac);
+
+    for (var bar = 0; bar < bars; bar++) {
+      for (var s = 0; s < STEPS; s++) {
+        var t = (bar * STEPS + s) * stepDur() + ((s % 2) ? stepDur() * swing : 0);
+        for (var r = 0; r < KIT.length; r++) if (pattern[r][s]) voice(oac, out, r, t);
+      }
+    }
+    return oac.startRendering().then(function (rendered) {
+      var data = rendered.getChannelData(0);
+      // leave a decibel of headroom rather than shipping a file that clips
+      var peak = 0;
+      for (var i = 0; i < data.length; i++) { var a = Math.abs(data[i]); if (a > peak) peak = a; }
+      if (peak > 0.891) {
+        var k = 0.891 / peak;
+        for (var j = 0; j < data.length; j++) data[j] *= k;
+      }
+      return encodeWav(data, RATE);
+    });
+  }
+
+  function download() {
+    if (!pattern.some(function (r) { return r.some(Boolean); })) {
+      $('beat-dl-out').textContent = 'Nothing to render yet.';
+      return;
+    }
+    var btn = $('beat-download');
+    var bars = parseInt($('beat-bars').value, 10) || 4;
+    btn.disabled = true;
+    $('beat-dl-out').textContent = 'Rendering ' + bars + ' bars…';
+    renderWav(bars).then(function (blob) {
+      var name = ($('beat-name').value || '').trim().replace(/[^a-z0-9\-_ ]/gi, '').slice(0, 40) || 'emi-beat';
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = name.replace(/\s+/g, '-').toLowerCase() + '.wav';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      btn.disabled = false;
+      $('beat-dl-out').textContent = 'Saved ' + name.replace(/\s+/g, '-').toLowerCase() + '.wav (' +
+        Math.round(blob.size / 1024) + ' KB).';
+    }).catch(function () {
+      btn.disabled = false;
+      $('beat-dl-out').textContent = 'This browser could not render the audio.';
+    });
+  }
+
   /* ---------- ui ---------- */
 
   function renderPads() {
@@ -423,6 +529,7 @@
     $('beat-random').addEventListener('click', randomize);
     $('beat-clear-track').addEventListener('click', clearTrack);
 
+    $('beat-download').addEventListener('click', download);
     $('beat-save').addEventListener('click', saveCurrent);
     $('beat-name').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); saveCurrent(); }
