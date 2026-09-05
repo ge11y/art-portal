@@ -284,22 +284,21 @@ a { color: inherit; }
 .perks-back a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .perks-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .perk {
-  position: relative; isolation: isolate; overflow: hidden;
-  display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
   border: 3px solid var(--ink); border-radius: var(--sketch);
-  padding: 20px 22px; min-height: 260px;
   background: var(--ink); color: var(--lime);
 }
-/* the project's own image sits behind, under a scrim, because these range
-   from a near-white pixel skull to an almost black one */
-.perk-bg {
-  position: absolute; inset: 0; z-index: -2;
+/* the banners are the projects' own wordmarks, so they run full width across
+   the top rather than sitting washed out behind the text */
+.perk-banner {
+  display: block; width: 100%; aspect-ratio: 3 / 1;
   background-size: cover; background-position: center;
-  opacity: 0.7;
+  border-bottom: 3px solid var(--ink);
 }
-.perk.has-image::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.74) 52%, rgba(0,0,0,0.88) 100%);
+.perk-body {
+  display: flex; flex-direction: column; gap: 8px; flex: 1;
+  padding: 18px 22px 20px;
 }
 .perk-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .perk-top h3 { font-family: var(--display); font-size: 21px; line-height: 1.1; }

@@ -101,21 +101,23 @@
             '</div>'
           : '<p class="perk-locked">Claim details locked</p>';
       }
-      return '<article class="perk perk-' + st + (p.image ? ' has-image' : '') + '">' +
-        (p.image ? '<span class="perk-bg" style="background-image:url(&quot;' + esc(p.image) + '&quot;)" aria-hidden="true"></span>' : '') +
-        '<div class="perk-top">' +
-          '<h3>' + esc(p.collection) + '</h3>' +
-          '<span class="perk-status">' + st + '</span>' +
+      return '<article class="perk perk-' + st + (p.banner ? ' has-banner' : '') + '">' +
+        (p.banner ? '<span class="perk-banner" style="background-image:url(&quot;' + esc(p.banner) + '&quot;)" role="img" aria-label="' + esc(p.collection) + '"></span>' : '') +
+        '<div class="perk-body">' +
+          '<div class="perk-top">' +
+            '<h3>' + esc(p.collection) + '</h3>' +
+            '<span class="perk-status">' + st + '</span>' +
+          '</div>' +
+          (p.by ? '<p class="perk-by">by ' + esc(p.by) + '</p>' : '') +
+          '<p class="perk-what">' + esc(p.perk) + '</p>' +
+          (p.note ? '<p class="perk-note">' + esc(p.note) + '</p>' : '') +
+          (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;</a></p>' : '') +
+          '<p class="perk-meta">' +
+            (p.chain ? '<span>' + esc(p.chain) + '</span>' : '') +
+            (p.date ? '<span>' + prettyDate(p.date) + '</span>' : '') +
+          '</p>' +
+          detail +
         '</div>' +
-        (p.by ? '<p class="perk-by">by ' + esc(p.by) + '</p>' : '') +
-        '<p class="perk-what">' + esc(p.perk) + '</p>' +
-        (p.note ? '<p class="perk-note">' + esc(p.note) + '</p>' : '') +
-        (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;</a></p>' : '') +
-        '<p class="perk-meta">' +
-          (p.chain ? '<span>' + esc(p.chain) + '</span>' : '') +
-          (p.date ? '<span>' + prettyDate(p.date) + '</span>' : '') +
-        '</p>' +
-        detail +
       '</article>';
     }).join('');
 

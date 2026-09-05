@@ -11,7 +11,7 @@
     "claim": "optional, how to claim. Holders only.",
     "url": "optional, where to go to claim. Holders only.",
     "chain": "optional, and only when the project states it",
-    "image": "optional, a project image shown behind the card"
+    "banner": "optional, a wide project banner shown across the top of the card (3:1 works best)"
   },
   "perks": [
     {
@@ -21,7 +21,7 @@
       "status": "upcoming",
       "note": "Hood Junkies and a JunkiERC-6551 companion drop, both still loading.",
       "link": "https://x.com/Hood_Junkies",
-      "image": "perks/hood-junkies.jpg"
+      "banner": "perks/hood-junkies-banner.jpg"
     },
     {
       "collection": "Boogers",
@@ -30,7 +30,7 @@
       "status": "upcoming",
       "note": "3,333 hand-drawn generative pieces. Art for art's sake.",
       "link": "https://x.com/Boogers_eth",
-      "image": "perks/boogers.jpg"
+      "banner": "perks/boogers-banner.jpg"
     },
     {
       "collection": "PIXSKELLS 10×10",
@@ -40,7 +40,7 @@
       "note": "A 10 by 10 pixel skull collection.",
       "chain": "Bitcoin",
       "link": "https://x.com/pixskells",
-      "image": "perks/pixskells.jpg"
+      "banner": "perks/pixskells-banner.jpg"
     },
     {
       "collection": "PIXSKELLS 12×12",
@@ -50,7 +50,7 @@
       "note": "A separate 12 by 12 collection, with traits that will not appear on the Bitcoin one.",
       "chain": "Robinhood",
       "link": "https://x.com/pixskells/status/2095305562980266357",
-      "image": "perks/pixskells.jpg"
+      "banner": "perks/pixskells-banner.jpg"
     }
   ]
 }
