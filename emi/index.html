@@ -308,55 +308,6 @@
       studioSection.classList.add('in-view');
     }
 
-    // The title starts vertical at the bottom-left of the picture, rides up
-    // its left edge as you scroll, then turns the corner and lies down on top
-    // by the time you are actually looking at the artwork.
-    var titleBlock = document.querySelector('.studio-title-block');
-    var stage = document.querySelector('.studio-stage');
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (titleBlock && stage && !reduceMotion) {
-      var TURN = 0.62;          // where it takes the corner
-      var ticking = false;
-
-      function paintTitle() {
-        ticking = false;
-        var vh = window.innerHeight || 800;
-        var r = stage.getBoundingClientRect();
-
-        // the pivot starts level with the bottom of the picture, so the text
-        // stands on the bottom-left corner and runs upward
-        var rise = (stage.offsetTop + stage.offsetHeight) - titleBlock.offsetTop;
-        if (rise < 0) rise = 0;
-
-        // 0 as the picture reaches the bottom of the screen, 1 once it has
-        // risen far enough that you are looking straight at it
-        var p = (vh - r.top) / (vh * 0.75);
-        p = p < 0 ? 0 : p > 1 ? 1 : p;
-
-        var angle, y;
-        if (p < TURN) {
-          var q = p / TURN;
-          angle = -90;
-          y = rise * (1 - q * q);
-        } else {
-          var t = (p - TURN) / (1 - TURN);
-          var e = 1 - Math.pow(1 - t, 3);
-          angle = -90 * (1 - e);
-          y = 0;
-        }
-        titleBlock.style.transform = 'translateY(' + y.toFixed(1) + 'px) rotate(' + angle.toFixed(2) + 'deg)';
-        titleBlock.classList.toggle('travelling', angle < -1);
-      }
-
-      function onScroll() {
-        if (!ticking) { ticking = true; requestAnimationFrame(paintTitle); }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      window.addEventListener('load', paintTitle);
-      paintTitle();
-    }
-
     // mobile menu
     var navToggle = document.getElementById('nav-toggle');
     var siteNav = document.getElementById('site-nav');
