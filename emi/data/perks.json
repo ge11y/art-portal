@@ -1,0 +1,15 @@
+{
+  "note": "Holder perks for EMI. Add an entry per collection that gives EMI holders access. Nothing here is shown until it is real.",
+  "fields": {
+    "collection": "required, the project's name",
+    "by": "optional, the artist or team",
+    "perk": "required, short: 'Guaranteed whitelist', 'Free mint', 'Early access'",
+    "status": "open | upcoming | closed. A date in the past forces closed.",
+    "date": "optional ISO date, e.g. 2026-10-04. Used to sort and to auto-close.",
+    "note": "optional, one line on what it is",
+    "claim": "optional, how to claim. Holders only.",
+    "url": "optional, where to go. Holders only.",
+    "chain": "optional, e.g. Bitcoin Ordinals, Robinhood, Base"
+  },
+  "perks": []
+}

@@ -191,6 +191,16 @@
     });
   }
 
+  function checkPassword(pass) {
+    return fetch('api/unlock', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    }).then(function (r) {
+      return r.json().then(function (j) { return { ok: r.ok && j && j.ok, error: j && j.error }; });
+    });
+  }
+
   function openDoor(pendingMode) {
     var door = $('studio-door');
     door.hidden = false;
@@ -215,15 +225,10 @@
 
     btn.disabled = true;
     err.textContent = 'Checking…';
-    fetch('api/unlock', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ password: pass })
-    })
-      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+    checkPassword(pass)
       .then(function (res) {
         btn.disabled = false;
-        if (res.ok && res.j && res.j.ok) {
+        if (res.ok) {
           unlocked = true;
           rememberUnlocked();
           applyLockState();
@@ -232,7 +237,7 @@
           if (pending) setMode(pending);
           return;
         }
-        err.textContent = (res.j && res.j.error) || "That's not it. Ask in the chat.";
+        err.textContent = res.error || "That's not it. Ask in the chat.";
         input.select();
       })
       .catch(function () {
@@ -342,6 +347,7 @@
     var note = $('grid-count');
     if (note) note.textContent = shown === TOTAL ? '' : 'Showing ' + shown + ' of ' + TOTAL;
   }
+
 
   /* ---------- boot ---------- */
 

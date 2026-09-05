@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Holder perks — EMI by OgBe</title>
+  <meta name="description" content="Collections and drops that open a door for EMI holders. What you get is public; how to claim it is for holders." />
+  <link rel="canonical" href="https://emi.ogbe.art/perks" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="EMI by OgBe" />
+  <meta property="og:title" content="Holder perks — EMI by OgBe" />
+  <meta property="og:description" content="Where an Emi gets you in. Collections and drops that open a door for EMI holders." />
+  <meta property="og:url" content="https://emi.ogbe.art/perks" />
+  <meta property="og:image" content="https://emi.ogbe.art/assets/emi.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@_0GBE" />
+  <meta name="twitter:title" content="Holder perks — EMI by OgBe" />
+  <meta name="twitter:description" content="Where an Emi gets you in. Collections and drops that open a door for EMI holders." />
+  <meta name="twitter:image" content="https://emi.ogbe.art/assets/emi.jpg" />
+  <meta name="theme-color" content="#ccff01" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ccff01'/%3E%3Ctext x='32' y='47' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='42' text-anchor='middle' fill='%23000'%3EE%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/emi.css" />
+</head>
+<body class="page-perks">
+  <a class="skip" href="#perks-main">Skip to content</a>
+
+  <header class="top">
+    <a class="brand" href="/" aria-label="EMI by OgBe — home">
+      <span class="brand-emi">EMI</span>
+      <span class="brand-by">by OgBe</span>
+    </a>
+    <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Site">
+      <a href="/#studio">Studio</a>
+      <a href="perks" aria-current="page">Perks</a>
+      <a href="/#story">Story</a>
+      <a href="/#the-222">The 222</a>
+      <a href="/#mint">Mint</a>
+      <a class="nav-ext" href="https://ogbe.art">ogbe.art&nbsp;&#x2197;</a>
+    </nav>
+  </header>
+
+  <main id="perks-main" class="perks-page">
+    <div class="wrap">
+      <p class="eyebrow">Holder perks</p>
+      <h1 class="perks-title">Where an Emi gets you in</h1>
+      <p class="perks-lead">Collections and drops that open a door for EMI holders. What you get is public, because it is part of why an Emi is worth holding. How to claim it is for holders.</p>
+      <p id="perks-count" class="perks-count" role="status"></p>
+
+      <div id="perks-list" class="perks-list"></div>
+
+      <div id="perks-empty" class="perks-empty" hidden>
+        <p class="perks-empty-title">Nothing open right now.</p>
+        <p>Perks land here as they are agreed. If you are building something and want EMI holders on the list, <a href="mailto:Ogbe@pr1m0s.com">reach out</a>.</p>
+      </div>
+
+      <div id="perks-door" class="perks-door" hidden>
+        <p>Claim details are for holders</p>
+        <div class="perks-door-row">
+          <input id="perks-password" type="password" autocomplete="off" spellcheck="false" placeholder="Password" />
+          <button id="perks-unlock" class="btn btn-ink" type="button">Unlock</button>
+        </div>
+        <p id="perks-door-error" class="door-error" role="alert"></p>
+      </div>
+
+      <p class="perks-back"><a href="/">&#x2190; Back to the collection</a></p>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div>
+        <p class="foot-brand">EMI <span>by OgBe</span></p>
+        <p class="foot-small">&copy; <span id="year">2026</span> OgBe. Every drawing by the artist.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://ogbe.art">ogbe.art</a></li>
+        <li><a href="https://x.com/_0GBE" target="_blank" rel="noopener">@_0GBE on X</a></li>
+        <li><a href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">OpenSea</a></li>
+        <li><a href="mailto:Ogbe@pr1m0s.com">Ogbe@pr1m0s.com</a></li>
+      </ul>
+      <p class="foot-contract"><span>Contract &middot; Robinhood</span><code>0x9a08c037e631e901ed205a26e7632148f48e3d9c</code></p>
+    </div>
+  </footer>
+
+  <script src="js/perks.js"></script>
+  <script>
+    var navToggle = document.getElementById('nav-toggle');
+    var siteNav = document.getElementById('site-nav');
+    function setNav(open) {
+      siteNav.classList.toggle('open', open);
+      navToggle.classList.toggle('open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    navToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setNav(!siteNav.classList.contains('open'));
+    });
+    siteNav.addEventListener('click', function (e) { if (e.target.closest('a')) setNav(false); });
+    document.addEventListener('click', function (e) {
+      if (siteNav.classList.contains('open') && !siteNav.contains(e.target) && e.target !== navToggle) setNav(false);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setNav(false); });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
