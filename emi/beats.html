@@ -67,11 +67,12 @@
       <div id="beat-machine" class="machine" hidden>
         <div class="machine-transport">
           <button id="beat-play" class="btn btn-ink" type="button" aria-pressed="false">Play</button>
+          <button id="beat-random" class="btn btn-ghost" type="button">Randomize</button>
+          <button id="beat-clear" class="btn btn-ghost" type="button">Clear</button>
           <label class="tempo">
             <span>Tempo <b id="beat-tempo-val">92</b></span>
             <input id="beat-tempo" type="range" min="50" max="200" step="1" value="92" />
           </label>
-          <button id="beat-clear" class="linky" type="button">Clear</button>
           <button id="beat-share" class="btn btn-ghost" type="button">Copy link</button>
         </div>
         <p id="beat-share-out" class="machine-share" role="status"></p>
@@ -79,9 +80,12 @@
         <div class="machine-grid">
           <div id="beat-pads" class="pads" role="group" aria-label="Pads"></div>
           <div class="seq">
-            <p class="seq-head">Steps for <b id="beat-track">Kick</b></p>
+            <p class="seq-head">
+              <span>Steps for <b id="beat-track">Kick</b></span>
+              <button id="beat-clear-track" class="linky" type="button">Clear this track</button>
+            </p>
             <div id="beat-steps" class="steps" role="group" aria-label="Steps"></div>
-            <p class="seq-hint">Space bar plays and stops.</p>
+            <p class="seq-hint">Space plays and stops. R randomizes, C clears.</p>
           </div>
         </div>
       </div>

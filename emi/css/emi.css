@@ -316,7 +316,7 @@ a { color: inherit; }
 
 .machine { display: flex; flex-direction: column; gap: 16px; }
 .machine-transport { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.machine-transport .btn { min-width: 108px; text-align: center; }
+.machine-transport .btn { min-width: 104px; text-align: center; }
 .tempo { display: flex; flex-direction: column; gap: 4px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; }
 .tempo input { width: 190px; accent-color: var(--ink); }
 .machine-share { font-size: 13px; min-height: 1.2em; word-break: break-all; }
@@ -338,7 +338,11 @@ a { color: inherit; }
 .pad.hit { transform: scale(0.93); background: var(--lime); color: var(--ink); }
 
 .seq { display: flex; flex-direction: column; gap: 10px; }
-.seq-head { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+.seq-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;
+}
+.seq-head .linky { font-size: 10px; }
 .seq-hint { font-size: 12px; opacity: 0.6; }
 .steps { display: grid; grid-template-columns: repeat(8, 1fr); gap: 7px; }
 .step {

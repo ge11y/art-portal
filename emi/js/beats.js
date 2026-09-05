@@ -153,6 +153,68 @@
     return m ? decode(m[1]) : false;
   }
 
+
+  /* ---------- randomise ----------
+     Straight coin-flips across sixteen voices give a wall of noise. Each voice
+     instead has the steps it usually lands on and a small chance elsewhere, and
+     only a handful of voices are picked per roll, so a bar has room in it. */
+
+  var PROFILE = [
+    { anchor: [0, 8],                        p: 0.08, core: true  },  // Kick
+    { anchor: [0],                           p: 0.05 },               // Sub
+    { anchor: [4, 12],                       p: 0.04, core: true  },  // Snare
+    { anchor: [7],                           p: 0.07 },               // Rim
+    { anchor: [12],                          p: 0.04 },               // Clap
+    { anchor: [0, 2, 4, 6, 8, 10, 12, 14],   p: 0.16, core: true  },  // Hat
+    { anchor: [14],                          p: 0.05 },               // Open hat
+    { anchor: [],                            p: 0.18 },               // Shaker
+    { anchor: [],                            p: 0.05 },               // Tom lo
+    { anchor: [],                            p: 0.05 },               // Tom mid
+    { anchor: [],                            p: 0.05 },               // Tom hi
+    { anchor: [],                            p: 0.06 },               // Bell
+    { anchor: [0, 6],                        p: 0.07 },               // Bass
+    { anchor: [],                            p: 0.08 },               // Blip
+    { anchor: [],                            p: 0.03 },               // Sweep
+    { anchor: [],                            p: 0.04 }                // Zap
+  ];
+
+  function randomize() {
+    var density = 0.7 + Math.random() * 0.8;
+    var extras = [];
+    for (var i = 0; i < KIT.length; i++) if (!PROFILE[i].core) extras.push(i);
+    // shuffle, then keep two to four of the non-core voices
+    for (var k = extras.length - 1; k > 0; k--) {
+      var j = Math.floor(Math.random() * (k + 1));
+      var tmp = extras[k]; extras[k] = extras[j]; extras[j] = tmp;
+    }
+    var keep = {};
+    extras.slice(0, 2 + Math.floor(Math.random() * 3)).forEach(function (i) { keep[i] = true; });
+
+    for (var r = 0; r < KIT.length; r++) {
+      var prof = PROFILE[r];
+      var playing = prof.core || keep[r];
+      for (var s = 0; s < STEPS; s++) {
+        if (!playing) { pattern[r][s] = false; continue; }
+        var onAnchor = prof.anchor.indexOf(s) !== -1;
+        var chance = onAnchor ? 0.88 : prof.p * density;
+        pattern[r][s] = Math.random() < chance;
+      }
+    }
+    renderSteps(); markPads();
+    $('beat-share-out').textContent = '';
+  }
+
+  function clearAll() {
+    pattern = KIT.map(function () { return new Array(STEPS).fill(false); });
+    renderSteps(); markPads();
+    $('beat-share-out').textContent = '';
+  }
+
+  function clearTrack() {
+    pattern[selected] = new Array(STEPS).fill(false);
+    renderSteps(); markPads();
+  }
+
   /* ---------- transport ---------- */
 
   var nextTime = 0, nextStep = 0, timer = null;
@@ -279,11 +341,9 @@
     });
 
     $('beat-play').addEventListener('click', function () { playing ? stop() : start(); });
-    $('beat-clear').addEventListener('click', function () {
-      pattern = KIT.map(function () { return new Array(STEPS).fill(false); });
-      renderSteps(); markPads();
-      $('beat-share-out').textContent = '';
-    });
+    $('beat-clear').addEventListener('click', clearAll);
+    $('beat-random').addEventListener('click', randomize);
+    $('beat-clear-track').addEventListener('click', clearTrack);
     $('beat-share').addEventListener('click', share);
     $('beat-tempo').addEventListener('input', function () {
       tempo = +this.value;
@@ -293,6 +353,8 @@
     document.addEventListener('keydown', function (e) {
       if (e.target.matches('input,textarea')) return;
       if (e.code === 'Space') { e.preventDefault(); playing ? stop() : start(); }
+      if (e.key === 'r' || e.key === 'R') randomize();
+      if (e.key === 'c' || e.key === 'C') clearAll();
     });
   }
 
