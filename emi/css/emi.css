@@ -78,7 +78,9 @@ a { color: inherit; }
   border-bottom: 3px solid var(--ink);
 }
 .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
-.brand-emi { font-family: var(--display); font-size: 26px; letter-spacing: -0.02em; line-height: 1; }
+/* the wordmark is OgBe's own animation, transparent so it reads on the green
+   header and the black footer alike */
+.brand-mark { display: block; height: 30px; width: auto; }
 .brand-by { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
 .nav { display: flex; gap: 22px; align-items: center; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
 .nav a { text-decoration: none; border-bottom: 2px solid transparent; padding: 2px 0; }
@@ -459,8 +461,9 @@ a { color: inherit; }
 /* ---------- FOOTER ---------- */
 .foot { background: var(--ink); color: var(--lime); padding: 56px 0 40px; }
 .foot-grid { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
-.foot-brand { font-family: var(--display); font-size: 28px; line-height: 1; }
-.foot-brand span { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; margin-left: 8px; }
+.foot-brand .brand-mark { height: 34px; }
+.foot-brand { display: flex; align-items: baseline; gap: 10px; line-height: 1; }
+.foot-brand span { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
 .foot-small { font-size: 13px; margin-top: 10px; color: var(--lime-dim); }
 .foot-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
 .foot-links a { text-decoration: none; border-bottom: 2px solid transparent; }
