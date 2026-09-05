@@ -10,7 +10,7 @@
     "link": "optional, public. Where to follow the project.",
     "claim": "optional, how to claim. Holders only.",
     "url": "optional, where to go to claim. Holders only.",
-    "chain": "optional, and only when the project states it",
+    "chain": "optional, and only when the project states it. A string, or a list when it is dropping on more than one.",
     "banner": "optional, a wide project banner shown across the top of the card (3:1 works best)"
   },
   "perks": [
@@ -33,23 +33,16 @@
       "banner": "perks/boogers-banner.jpg"
     },
     {
-      "collection": "PIXSKELLS 10×10",
+      "collection": "PIXSKELLS",
       "by": "@BrickRoss_NFT",
       "perk": "Whitelist",
       "status": "upcoming",
-      "note": "A 10 by 10 pixel skull collection.",
-      "chain": "Bitcoin",
+      "note": "A 10 by 10 pixel skull collection on Bitcoin, and a separate 12 by 12 on Robinhood whose traits will not overlap with it.",
+      "chain": [
+        "Bitcoin",
+        "Robinhood"
+      ],
       "link": "https://x.com/pixskells",
-      "banner": "perks/pixskells-banner.jpg"
-    },
-    {
-      "collection": "PIXSKELLS 12×12",
-      "by": "@BrickRoss_NFT",
-      "perk": "Whitelist",
-      "status": "upcoming",
-      "note": "A separate 12 by 12 collection, with traits that will not appear on the Bitcoin one.",
-      "chain": "Robinhood",
-      "link": "https://x.com/pixskells/status/2095305562980266357",
       "banner": "perks/pixskells-banner.jpg"
     }
   ]

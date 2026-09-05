@@ -48,6 +48,12 @@
     });
   }
 
+  function chainTags(chain) {
+    if (!chain) return '';
+    var list = Array.isArray(chain) ? chain : [chain];
+    return list.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('');
+  }
+
   function prettyDate(iso) {
     var d = new Date(iso + 'T12:00:00');
     if (isNaN(d)) return esc(iso);
@@ -113,7 +119,7 @@
           (p.note ? '<p class="perk-note">' + esc(p.note) + '</p>' : '') +
           (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;</a></p>' : '') +
           '<p class="perk-meta">' +
-            (p.chain ? '<span>' + esc(p.chain) + '</span>' : '') +
+            chainTags(p.chain) +
             (p.date ? '<span>' + prettyDate(p.date) + '</span>' : '') +
           '</p>' +
           detail +
