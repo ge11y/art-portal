@@ -384,6 +384,45 @@ a { color: inherit; }
   .steps { gap: 6px; }
 }
 
+.patternbar { border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); padding: 14px 0; }
+.patternbar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.pats { display: flex; gap: 6px; flex-wrap: wrap; }
+.pat {
+  width: 38px; height: 38px; cursor: pointer;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--paper); color: var(--ink);
+  font-family: var(--display); font-size: 15px; line-height: 1;
+  transition: background 0.1s, color 0.1s;
+}
+.pat.filled { background: var(--ink); color: var(--lime); }
+.pat.sel { outline: 3px solid var(--ink); outline-offset: 3px; }
+.pat.sounding { background: var(--lime); color: var(--ink); }
+
+.song { border-top: 3px solid var(--ink); padding-top: 16px; }
+.song-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+.song-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.mode-btn {
+  cursor: pointer; font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: transparent; color: var(--ink); padding: 8px 11px;
+}
+.mode-btn[aria-pressed="true"] { background: var(--ink); color: var(--lime); }
+.chain { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-height: 42px; }
+.chain-empty { font-size: 13px; opacity: 0.6; }
+.link {
+  position: relative; display: inline-flex; align-items: center; gap: 5px;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--paper); padding: 6px 6px 6px 11px;
+  font-family: var(--display); font-size: 15px; line-height: 1;
+}
+.link.now { background: var(--ink); color: var(--lime); }
+.link-x {
+  cursor: pointer; border: 0; background: transparent; color: inherit;
+  font-family: var(--mono); font-size: 15px; line-height: 1; padding: 0 4px; opacity: 0.55;
+}
+.link-x:hover { opacity: 1; }
+
 .saves {
   display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
   gap: 26px; margin-top: 26px; padding-top: 24px; border-top: 3px solid var(--ink);

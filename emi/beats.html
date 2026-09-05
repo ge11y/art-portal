@@ -52,7 +52,7 @@
     <div class="wrap">
       <p class="eyebrow">Holders only</p>
       <h1 class="beats-title">Make a bar</h1>
-      <p class="beats-lead">Sixteen pads, sixteen steps. Tap a pad to hear it and to pick the track you are writing, then fill in the steps. Share what you make as a link.</p>
+      <p class="beats-lead">Sixteen pads, sixteen steps to a bar. Write up to eight patterns, chain them into a song, then take it away as a link or a WAV.</p>
 
       <div id="beat-locked" class="beats-door">
         <p class="beats-door-title">The machine is for holders.</p>
@@ -77,21 +77,44 @@
         </div>
         <p id="beat-share-out" class="machine-share" role="status"></p>
 
+        <div class="patternbar">
+          <div class="patternbar-row">
+            <span class="field-label">Pattern</span>
+            <div id="beat-patterns" class="pats" role="group" aria-label="Patterns"></div>
+            <button id="beat-dup" class="linky" type="button">Copy to a free slot</button>
+          </div>
+        </div>
+
         <div class="machine-grid">
           <div id="beat-pads" class="pads" role="group" aria-label="Pads"></div>
           <div class="seq">
             <p class="seq-head">
-              <span>Steps for <b id="beat-track">Kick</b></span>
+              <span>Pattern <b id="beat-which">A</b> &middot; steps for <b id="beat-track">Kick</b></span>
               <button id="beat-clear-track" class="linky" type="button">Clear this track</button>
             </p>
             <div id="beat-steps" class="steps" role="group" aria-label="Steps"></div>
-            <p class="seq-hint">Space plays and stops. R randomizes, C clears.</p>
+            <p class="seq-hint">Space plays and stops. R randomizes, C clears the pattern. A to H switch pattern.</p>
           </div>
+        </div>
+
+        <div class="song">
+          <div class="song-head">
+            <span class="field-label">Song <b id="beat-song-len"></b></span>
+            <div class="song-actions">
+              <button id="beat-add" class="linky" type="button">Add this pattern</button>
+              <button id="beat-song-clear" class="linky" type="button">Clear song</button>
+              <span class="modes" role="group" aria-label="Playback">
+                <button class="mode-btn" type="button" data-mode="pattern" aria-pressed="true">Loop pattern</button>
+                <button class="mode-btn" type="button" data-mode="song" aria-pressed="false">Play song</button>
+              </span>
+            </div>
+          </div>
+          <div id="beat-chain" class="chain"></div>
         </div>
 
         <div class="saves">
           <div class="saves-add">
-            <label class="field-label" for="beat-name">Save this bar</label>
+            <label class="field-label" for="beat-name">Save this song</label>
             <div class="perks-door-row">
               <input id="beat-name" type="text" maxlength="40" placeholder="Name it" autocomplete="off" />
               <button id="beat-save" class="btn btn-ink" type="button">Save</button>
@@ -111,7 +134,7 @@
             <p id="beat-dl-out" class="door-error" role="status"></p>
           </div>
           <div class="saves-list">
-            <p class="field-label">Your saved bars</p>
+            <p class="field-label">Your saved songs</p>
             <p id="beat-saved-empty" class="seq-hint">Nothing saved yet. Saves stay in this browser.</p>
             <ul id="beat-saved" class="saved"></ul>
           </div>
