@@ -265,6 +265,15 @@
 
   /* ---------- grid ---------- */
 
+  function motifsOf(n) {
+    if (!manifest || !manifest.motifs) return '';
+    var out = [];
+    Object.keys(manifest.motifs).forEach(function (name) {
+      if (manifest.motifs[name].indexOf(n) !== -1) out.push(name);
+    });
+    return out.join(' ');
+  }
+
   function renderGrid() {
     var grid = $('grid');
     if (!grid) return;
@@ -272,7 +281,9 @@
     for (var i = 1; i <= TOTAL; i++) {
       var pad = i < 10 ? '00' + i : i < 100 ? '0' + i : '' + i;
       html += '<button class="tile has-art" type="button" data-n="' + i +
-        '" aria-label="Open EMI #' + i + ' in the studio">' +
+        '" data-ground="' + (isGreen(i) ? 'green' : 'black') + '"' +
+        ' data-motifs="' + motifsOf(i) + '"' +
+        ' aria-label="Open EMI #' + i + ' in the studio">' +
         '<img src="' + ART + i + '.png" alt="" loading="lazy" width="400" height="400" />' +
         '<span class="tile-num">' + pad + '</span></button>';
     }
@@ -283,6 +294,53 @@
       show(parseInt(t.dataset.n, 10));
       document.getElementById('studio').scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
+  }
+
+
+  /* ---------- filters ----------
+     Ground is measured from the artwork itself. Anything else comes from
+     manifest.motifs, so new groupings are a data edit, never a code change. */
+
+  function renderFilters() {
+    var bar = $('grid-filters');
+    if (!bar || !manifest) return;
+    var groups = [{ kind: 'all', value: '', label: 'All', n: TOTAL }];
+    groups.push({ kind: 'ground', value: 'green', label: 'Green ground', n: manifest.green.length });
+    groups.push({ kind: 'ground', value: 'black', label: 'Black ground', n: manifest.black.length });
+    var m = manifest.motifs || {};
+    Object.keys(m).forEach(function (name) {
+      groups.push({ kind: 'motif', value: name, label: name, n: m[name].length });
+    });
+
+    bar.innerHTML = groups.map(function (g, i) {
+      return '<button class="chip" type="button" data-kind="' + g.kind + '" data-value="' + g.value +
+        '" aria-pressed="' + (i === 0 ? 'true' : 'false') + '">' + g.label +
+        ' <em>' + g.n + '</em></button>';
+    }).join('');
+
+    bar.addEventListener('click', function (e) {
+      var chip = e.target.closest('.chip');
+      if (!chip) return;
+      Array.prototype.forEach.call(bar.querySelectorAll('.chip'), function (c) {
+        c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+      });
+      applyFilter(chip.dataset.kind, chip.dataset.value);
+    });
+  }
+
+  function applyFilter(kind, value) {
+    var grid = $('grid');
+    if (!grid) return;
+    var shown = 0;
+    Array.prototype.forEach.call(grid.querySelectorAll('.tile'), function (t) {
+      var ok = kind === 'all'
+        || (kind === 'ground' && t.dataset.ground === value)
+        || (kind === 'motif' && (' ' + t.dataset.motifs + ' ').indexOf(' ' + value + ' ') !== -1);
+      t.hidden = !ok;
+      if (ok) shown++;
+    });
+    var note = $('grid-count');
+    if (note) note.textContent = shown === TOTAL ? '' : 'Showing ' + shown + ' of ' + TOTAL;
   }
 
   /* ---------- boot ---------- */
@@ -328,6 +386,7 @@
       .catch(function () {})
       .then(function () {
         renderGrid();
+        renderFilters();
         var hash = (location.hash.match(/^#emi-(\d+)$/) || [])[1];
         show(hash ? parseInt(hash, 10) : Math.floor(Math.random() * TOTAL) + 1);
       });

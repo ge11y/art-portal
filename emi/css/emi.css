@@ -194,6 +194,41 @@ a { color: inherit; }
   .essay .close { margin: 38px 0 28px; padding-top: 30px; }
 }
 
+/* ---------- NOTES ----------
+   Reference, not more narrative. The essay says all of this in his voice;
+   this is here for anyone who wants the terms themselves. */
+.notes { max-width: 78ch; margin: 0 0 56px; padding-top: 40px; border-top: 3px solid var(--lime); }
+.notes-title {
+  font-family: var(--display); font-size: 13px; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--lime); margin-bottom: 20px;
+}
+.notes-intro { font-size: 16px; line-height: 1.7; color: rgba(204, 255, 1, 0.86); margin-bottom: 26px; }
+
+.pairing { display: grid; gap: 14px; margin-bottom: 36px; }
+.pairing p {
+  font-size: 17px; line-height: 1.55; color: var(--lime);
+  padding-left: 18px; border-left: 3px solid rgba(204, 255, 1, 0.4);
+}
+.pairing span {
+  display: block; font-family: var(--display); font-size: 13px;
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;
+}
+
+.glossary { display: grid; gap: 22px; }
+.glossary dt {
+  font-family: var(--display); font-size: 17px; color: var(--lime); margin-bottom: 6px;
+}
+.glossary dt em {
+  font-family: var(--mono); font-style: normal; font-size: 13px;
+  letter-spacing: 0.06em; color: var(--lime-dim);
+}
+.glossary dd { font-size: 15px; line-height: 1.75; color: rgba(204, 255, 1, 0.86); max-width: 62ch; }
+.glossary a { color: var(--lime); text-decoration: underline; text-underline-offset: 3px; }
+
+@media (min-width: 720px) {
+  .pairing { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
 /* ---------- THE 222 ---------- */
 .gallery { padding: 96px 0; }
 .gallery-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
@@ -223,6 +258,22 @@ a { color: inherit; }
 }
 .tile.has-art:hover img { opacity: 0.85; }
 .grid-more { text-align: center; margin-top: 28px; }
+
+/* ---------- FILTERS ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+  padding: 9px 14px; border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: transparent; color: var(--ink);
+  transition: background 0.15s, color 0.15s;
+}
+.chip em { font-style: normal; opacity: 0.55; margin-left: 4px; }
+.chip:hover { background: var(--paper); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--lime); }
+.chip[aria-pressed="true"] em { opacity: 0.75; }
+.grid-count { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px; min-height: 1.2em; }
+.tile[hidden] { display: none; }
 
 /* ---------- MINT ---------- */
 .mint { background: var(--paper); padding: 96px 0; border-top: 3px solid var(--ink); }
