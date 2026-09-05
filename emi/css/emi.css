@@ -299,6 +299,69 @@ a { color: inherit; }
   .pairing { grid-template-columns: 1fr 1fr; gap: 24px; }
 }
 
+/* ---------- BEATS ---------- */
+.beats-page { background: var(--lime); padding: 56px 0 88px; min-height: 70vh; }
+.beats-title {
+  font-family: var(--display); font-size: clamp(34px, 5.4vw, 62px);
+  line-height: 1; letter-spacing: -0.03em; margin-bottom: 18px;
+}
+.beats-lead { font-size: 16px; line-height: 1.7; max-width: 56ch; margin-bottom: 30px; }
+.beats-note { margin-top: 30px; font-size: 13px; line-height: 1.6; max-width: 56ch; opacity: 0.7; }
+
+.beats-door {
+  border: 3px dashed var(--ink); border-radius: var(--sketch);
+  padding: 28px 26px; max-width: 460px; display: flex; flex-direction: column; gap: 10px;
+}
+.beats-door-title { font-family: var(--display); font-size: 21px; }
+
+.machine { display: flex; flex-direction: column; gap: 16px; }
+.machine-transport { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.machine-transport .btn { min-width: 108px; text-align: center; }
+.tempo { display: flex; flex-direction: column; gap: 4px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; }
+.tempo input { width: 190px; accent-color: var(--ink); }
+.machine-share { font-size: 13px; min-height: 1.2em; word-break: break-all; }
+
+.machine-grid { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 22px; align-items: start; }
+
+.pads { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pad {
+  aspect-ratio: 1; display: grid; place-items: center; cursor: pointer;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--paper); color: var(--ink);
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; text-align: center; padding: 4px;
+  transition: background 0.08s, color 0.08s, transform 0.08s;
+}
+.pad:nth-child(3n) { border-radius: var(--sketch-2); }
+.pad.has-steps { background: var(--ink); color: var(--lime); }
+.pad.sel { outline: 3px solid var(--ink); outline-offset: 3px; }
+.pad.hit { transform: scale(0.93); background: var(--lime); color: var(--ink); }
+
+.seq { display: flex; flex-direction: column; gap: 10px; }
+.seq-head { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
+.seq-hint { font-size: 12px; opacity: 0.6; }
+.steps { display: grid; grid-template-columns: repeat(8, 1fr); gap: 7px; }
+.step {
+  aspect-ratio: 1; cursor: pointer; position: relative;
+  border: 3px solid var(--ink); border-radius: var(--sketch);
+  background: var(--paper);
+  transition: background 0.08s, transform 0.08s;
+}
+.step.downbeat { border-width: 4px; }
+.step.on { background: var(--ink); }
+.step.now { transform: scale(0.9); }
+.step.on.now { background: var(--lime); }
+
+@media (max-width: 900px) {
+  .machine-grid { grid-template-columns: 1fr; }
+  .pads { max-width: 340px; }
+}
+@media (max-width: 600px) {
+  .beats-page { padding: 40px 0 64px; }
+  .tempo input { width: 150px; }
+  .steps { gap: 6px; }
+}
+
 /* ---------- PERKS ---------- */
 .perks-page { background: var(--lime); padding: 64px 0 96px; min-height: 70vh; }
 .perks-title {
@@ -376,23 +439,25 @@ a { color: inherit; }
    scroll, then turns the corner into horizontal. Driven by scroll position,
    so it tracks the reader rather than playing on a timer. The panel surfaces
    out of the white behind it. */
-.studio-title-block { position: relative; }
-.studio-title-block::after {
+.studio-title-block, .studio-panel { position: relative; }
+.studio-title-block::after, .studio-panel::after {
   content: ""; position: absolute; inset: -10px; z-index: 2;
-  background: var(--paper); pointer-events: none; opacity: 0;
+  background: var(--paper); pointer-events: none;
+  /* transparent by default, so with no JS the content simply shows */
+  opacity: 0;
 }
-.studio.in-view .studio-title-block::after { animation: phase-from-white 0.9s ease-out both; }
+/* JS covers them at load, well before the section scrolls into view. Without
+   this they were transparent until the reveal fired, which meant the content
+   flashed, got hidden, then faded back — the blip. */
+.studio.armed .studio-title-block::after,
+.studio.armed .studio-panel::after { opacity: 1; }
 
-.studio-panel { position: relative; }
-.studio-panel::after {
-  content: ""; position: absolute; inset: -10px; z-index: 2;
-  background: var(--paper); pointer-events: none; opacity: 0;
-}
-.studio.in-view .studio-panel::after { animation: phase-from-white 1s ease-out 0.25s both; }
+.studio.armed.in-view .studio-title-block::after { animation: phase-from-white 0.9s ease-out forwards; }
+.studio.armed.in-view .studio-panel::after { animation: phase-from-white 1s ease-out 0.25s forwards; }
 
 @keyframes phase-from-white {
-  0%   { opacity: 1; }
-  100% { opacity: 0; }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 

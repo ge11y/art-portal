@@ -42,6 +42,7 @@
     </button>
     <nav id="site-nav" class="nav" aria-label="Site">
       <a href="#studio">Studio</a>
+      <a href="beats">Beats</a>
       <a href="#tracker">Market</a>
       <a href="perks">Perks</a>
       <a href="#story">Story</a>
@@ -325,6 +326,8 @@
   <script>
     // the studio panel surfaces out of the white once, on arrival
     var studioSection = document.getElementById('studio');
+    // cover the panels straight away, so the reveal is a fade and not a flash
+    if (studioSection) studioSection.classList.add('armed');
     if (studioSection && 'IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
