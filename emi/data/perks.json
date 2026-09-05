@@ -3,13 +3,54 @@
   "fields": {
     "collection": "required, the project's name",
     "by": "optional, the artist or team",
-    "perk": "required, short: 'Guaranteed whitelist', 'Free mint', 'Early access'",
+    "perk": "required, short: 'Whitelist', 'Free mint', 'Early access'",
     "status": "open | upcoming | closed. A date in the past forces closed.",
     "date": "optional ISO date, e.g. 2026-10-04. Used to sort and to auto-close.",
     "note": "optional, one line on what it is",
+    "link": "optional, public. Where to follow the project.",
     "claim": "optional, how to claim. Holders only.",
-    "url": "optional, where to go. Holders only.",
-    "chain": "optional, e.g. Bitcoin Ordinals, Robinhood, Base"
+    "url": "optional, where to go to claim. Holders only.",
+    "chain": "optional, and only when the project states it",
+    "image": "optional, a project image shown behind the card"
   },
-  "perks": []
+  "perks": [
+    {
+      "collection": "Hood Junkies",
+      "by": "@glyf82",
+      "perk": "Whitelist",
+      "status": "upcoming",
+      "note": "Hood Junkies and a JunkiERC-6551 companion drop, both still loading.",
+      "link": "https://x.com/Hood_Junkies",
+      "image": "perks/hood-junkies.jpg"
+    },
+    {
+      "collection": "Boogers",
+      "by": "@tophdotart",
+      "perk": "Whitelist",
+      "status": "upcoming",
+      "note": "3,333 hand-drawn generative pieces. Art for art's sake.",
+      "link": "https://x.com/Boogers_eth",
+      "image": "perks/boogers.jpg"
+    },
+    {
+      "collection": "PIXSKELLS 10×10",
+      "by": "@BrickRoss_NFT",
+      "perk": "Whitelist",
+      "status": "upcoming",
+      "note": "A 10 by 10 pixel skull collection.",
+      "chain": "Bitcoin",
+      "link": "https://x.com/pixskells",
+      "image": "perks/pixskells.jpg"
+    },
+    {
+      "collection": "PIXSKELLS 12×12",
+      "by": "@BrickRoss_NFT",
+      "perk": "Whitelist",
+      "status": "upcoming",
+      "note": "A separate 12 by 12 collection, with traits that will not appear on the Bitcoin one.",
+      "chain": "Robinhood",
+      "link": "https://x.com/pixskells/status/2095305562980266357",
+      "image": "perks/pixskells.jpg"
+    }
+  ]
 }

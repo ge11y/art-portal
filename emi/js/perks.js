@@ -81,10 +81,12 @@
     });
 
     var open = sorted.filter(function (p) { return perkStatus(p) === 'open'; }).length;
+    var soon = sorted.filter(function (p) { return perkStatus(p) === 'upcoming'; }).length;
     if (count) {
-      count.textContent = open
-        ? open + (open === 1 ? ' perk open now' : ' perks open now')
-        : 'Nothing open at the moment';
+      var bits = [];
+      if (open) bits.push(open + (open === 1 ? ' open now' : ' open now'));
+      if (soon) bits.push(soon + ' lined up');
+      count.textContent = bits.length ? bits.join(' \u00B7 ') : 'Nothing open at the moment';
     }
 
     list.innerHTML = sorted.map(function (p) {
@@ -99,7 +101,8 @@
             '</div>'
           : '<p class="perk-locked">Claim details locked</p>';
       }
-      return '<article class="perk perk-' + st + '">' +
+      return '<article class="perk perk-' + st + (p.image ? ' has-image' : '') + '">' +
+        (p.image ? '<span class="perk-bg" style="background-image:url(&quot;' + esc(p.image) + '&quot;)" aria-hidden="true"></span>' : '') +
         '<div class="perk-top">' +
           '<h3>' + esc(p.collection) + '</h3>' +
           '<span class="perk-status">' + st + '</span>' +
@@ -107,6 +110,7 @@
         (p.by ? '<p class="perk-by">by ' + esc(p.by) + '</p>' : '') +
         '<p class="perk-what">' + esc(p.perk) + '</p>' +
         (p.note ? '<p class="perk-note">' + esc(p.note) + '</p>' : '') +
+        (p.link ? '<p class="perk-link"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">Follow the project &#x2197;</a></p>' : '') +
         '<p class="perk-meta">' +
           (p.chain ? '<span>' + esc(p.chain) + '</span>' : '') +
           (p.date ? '<span>' + prettyDate(p.date) + '</span>' : '') +
