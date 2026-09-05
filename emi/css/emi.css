@@ -1,4 +1,25 @@
 /* ============================================
+   TYPE — self-hosted, subset to Latin plus the Yoruba diacritics the site
+   uses. Rakkas carries the display voice; Exo does the reading.
+   Both are SIL Open Font License; see fonts/OFL-*.txt.
+   ============================================ */
+@font-face {
+  font-family: 'Rakkas';
+  src: url('../fonts/Rakkas-Regular.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Exo';
+  src: url('../fonts/Exo-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Exo';
+  src: url('../fonts/Exo-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ============================================
    EMI by OgBe — emi.ogbe.art
    Acid green, black ink, white fill — the cover's palette.
    ============================================ */
@@ -9,8 +30,8 @@
   --ink: #000000;
   --ink-soft: #151515;
   --paper: #ffffff;
-  --display: 'Archivo Black', Impact, 'Arial Black', sans-serif;
-  --mono: 'Space Mono', 'Courier New', Courier, monospace;
+  --display: 'Rakkas', Georgia, serif;
+  --mono: 'Exo', 'Helvetica Neue', Arial, sans-serif;
   /* hand-drawn border shapes */
   --sketch: 255px 15px 225px 15px / 15px 225px 15px 255px;
   --sketch-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
@@ -232,6 +253,8 @@ a { color: inherit; }
 .glossary dt {
   font-family: var(--display); font-size: 17px; color: var(--lime); margin-bottom: 6px;
 }
+/* Rakkas has no ẹ (U+1EB9); set the Yoruba term in the face that does */
+.glossary dt[lang="yo"] { font-family: var(--mono); font-weight: 700; font-size: 19px; }
 .glossary dt em {
   font-family: var(--mono); font-style: normal; font-size: 13px;
   letter-spacing: 0.06em; color: var(--lime-dim);
