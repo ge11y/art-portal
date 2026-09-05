@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="css/emi.css" />
 </head>
 <body>
-  <a class="skip" href="#story">Skip to content</a>
+  <a class="skip" href="#studio">Skip to content</a>
 
   <header class="top">
     <a class="brand" href="/" aria-label="EMI by OgBe — home">
@@ -145,6 +145,7 @@
         <p class="eyebrow">The story</p>
         <h2 id="story-title">Emi means spirit.</h2>
 
+        <div id="story-more" class="story-more collapsed">
         <div class="story-body">
           <div class="essay">
           <p class="lede">In Yoruba thought it is also breath, the self, the spark Olódùmarè places in a body so clay can live. When the body is finished, emi does not end. It goes home. Sometimes it comes back.</p>
@@ -216,6 +217,12 @@
             </div>
           </dl>
         </div>
+          <div class="story-fade" aria-hidden="true"></div>
+        </div>
+
+        <div class="story-toggle-wrap">
+          <button id="story-toggle" class="btn btn-on-dark" type="button" aria-expanded="false" aria-controls="story-more">Read the full story &#x2193;</button>
+        </div>
 
         <dl class="facts">
           <div><dt>Pieces</dt><dd>222</dd></div>
@@ -286,6 +293,24 @@
 
   <script src="js/studio.js"></script>
   <script>
+    var storyMore = document.getElementById('story-more');
+    var storyToggle = document.getElementById('story-toggle');
+    function setStory(open) {
+      storyMore.classList.toggle('collapsed', !open);
+      storyToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      storyToggle.innerHTML = open ? 'Show less &#x2191;' : 'Read the full story &#x2193;';
+    }
+    storyToggle.addEventListener('click', function () {
+      var opening = storyMore.classList.contains('collapsed');
+      setStory(opening);
+      if (!opening) document.getElementById('story').scrollIntoView({ block: 'start' });
+    });
+    // anyone who asked for the story should land on it open
+    if (location.hash === '#story') setStory(true);
+    Array.prototype.forEach.call(document.querySelectorAll('a[href="#story"]'), function (a) {
+      a.addEventListener('click', function () { setStory(true); });
+    });
+
     var wrap = document.querySelector('.grid-wrap');
     var toggle = document.getElementById('grid-toggle');
     toggle.addEventListener('click', function () {

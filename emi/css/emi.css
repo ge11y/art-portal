@@ -229,6 +229,24 @@ a { color: inherit; }
   .pairing { grid-template-columns: 1fr 1fr; gap: 24px; }
 }
 
+/* ---------- STORY, FOLDED ----------
+   Five hundred words is a lot to scroll past on the way to the art, so the
+   opening stands and the rest waits to be asked for. */
+.story-more { position: relative; }
+.story-more.collapsed { max-height: 320px; overflow: hidden; }
+.story-fade {
+  display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 200px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--ink));
+}
+.story-more.collapsed .story-fade { display: block; }
+.story-toggle-wrap { margin-bottom: 52px; }
+
+/* the default button is black on black once it sits in the story */
+.btn-on-dark { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.btn-on-dark:hover { background: var(--paper); border-color: var(--paper); box-shadow: 4px 4px 0 var(--lime); }
+
+@media (max-width: 600px) { .story-more.collapsed { max-height: 260px; } }
+
 /* ---------- THE 222 ---------- */
 .gallery { padding: 96px 0; }
 .gallery-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
