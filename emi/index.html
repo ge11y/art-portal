@@ -20,8 +20,8 @@
   <meta name="twitter:title" content="EMI by OgBe" />
   <meta name="twitter:description" content="222 hand-drawn 1/1s by OgBe. Minted out on Robinhood, September 3, 2026." />
   <meta name="twitter:image" content="https://emi.ogbe.art/assets/emi.jpg" />
-  <meta name="theme-color" content="#ccff02" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ccff02'/%3E%3Ctext x='32' y='47' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='42' text-anchor='middle' fill='%23000'%3EE%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#ccff01" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ccff01'/%3E%3Ctext x='32' y='47' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='42' text-anchor='middle' fill='%23000'%3EE%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,7 @@
       <span class="brand-by">by OgBe</span>
     </a>
     <nav class="nav" aria-label="Site">
+      <a href="#studio">Studio</a>
       <a href="#story">Story</a>
       <a href="#the-222">The 222</a>
       <a href="#mint">Mint</a>
@@ -52,13 +53,13 @@
         <h1 id="hero-title" class="hero-title">EMI</h1>
         <p class="hero-lead">Every piece a 1/1, hand drawn by OgBe. Minted on Robinhood. Sold out on September&nbsp;3,&nbsp;2026.</p>
         <div class="hero-actions">
-          <a class="btn btn-ink" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">View on OpenSea &#x2197;</a>
-          <a class="btn btn-ghost" href="https://x.com/_0gbe/status/2094408719245209965" target="_blank" rel="noopener">The drop post &#x2197;</a>
+          <a class="btn btn-ink" href="#studio">Open the studio &#x2193;</a>
+          <a class="btn btn-ghost" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">View on OpenSea &#x2197;</a>
         </div>
         <p class="status">
           <span class="dot" aria-hidden="true"></span>
           Minted out &middot; 222 / 222
-          <span class="status-reveal" data-when="pending">&middot; Reveal tonight</span>
+          <span class="status-reveal">&middot; Revealed</span>
         </p>
       </div>
       <figure class="hero-art">
@@ -81,6 +82,53 @@
       </div>
     </div>
 
+    <!-- STUDIO -->
+    <section id="studio" class="studio" aria-labelledby="studio-title">
+      <div class="wrap">
+        <div class="studio-head">
+          <div>
+            <p class="eyebrow">Studio</p>
+            <h2 id="studio-title">Put your Emi on either ground</h2>
+          </div>
+          <p class="studio-note">Type a number from 1 to 222. No wallet, nothing to connect. Every piece is public, so any number works.</p>
+        </div>
+
+        <div class="studio-grid">
+          <figure class="studio-stage">
+            <canvas id="studio-canvas" width="1400" height="1400" role="img" aria-label="EMI artwork"></canvas>
+            <p id="studio-status" class="studio-status" role="status" hidden></p>
+          </figure>
+
+          <div class="studio-panel">
+            <div class="field">
+              <label class="field-label" for="emi-number">Emi number</label>
+              <div class="numrow">
+                <button id="emi-prev" class="step" type="button" aria-label="Previous Emi">&#x2190;</button>
+                <input id="emi-number" type="number" min="1" max="222" step="1" value="1" inputmode="numeric" />
+                <button id="emi-next" class="step" type="button" aria-label="Next Emi">&#x2192;</button>
+              </div>
+              <button id="emi-random" class="linky" type="button">Surprise me</button>
+            </div>
+
+            <div class="field">
+              <span class="field-label" id="bg-label">Background</span>
+              <div class="modes" role="group" aria-labelledby="bg-label">
+                <button class="mode" type="button" data-mode="native" aria-pressed="true">As minted</button>
+                <button class="mode" type="button" data-mode="green" aria-pressed="false">Green</button>
+                <button class="mode" type="button" data-mode="black" aria-pressed="false">Black</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <button id="emi-download" class="btn btn-ink full" type="button">Download PNG</button>
+              <p id="emi-owner" class="owner"></p>
+              <a id="emi-opensea" class="linky" href="https://opensea.io/collection/emi-by-ogbe" target="_blank" rel="noopener">See this one on OpenSea &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- STORY -->
     <section id="story" class="story" aria-labelledby="story-title">
       <div class="wrap">
@@ -94,8 +142,7 @@
           <p>OgBe Meji is a multidisciplinary artist and musician working out of San Juan, Puerto Rico. After two decades as a professional musician and a run of hand-drawn collections inscribed on Bitcoin, EMI brings his line to Robinhood: 222 individual drawings, no two alike, every one made by hand.</p>
           <p>
             The collection minted on September 3, 2026 and sold out the same afternoon.
-            <span data-when="pending">The art reveals tonight.</span>
-            <span data-when="revealed" hidden>All 222 pieces are revealed below.</span>
+            All 222 pieces are revealed, and you can put any of them on either ground in the studio above.
           </p>
         </div>
         <p class="etym"><span lang="yo">ẹ̀mí</span> Yoruba for breath, spirit, life.</p>
@@ -116,11 +163,10 @@
             <p class="eyebrow">The collection</p>
             <h2 id="gallery-title">The 222</h2>
           </div>
-          <p class="gallery-note" data-when="pending">Tiles fill in as the art is revealed. Tap any number to see that piece on OpenSea.</p>
-          <p class="gallery-note" data-when="revealed" hidden>Tap any piece to see it on OpenSea.</p>
+          <p class="gallery-note">Every piece, revealed. Tap any one to open it in the studio.</p>
         </div>
         <div class="grid-wrap collapsed">
-          <div id="grid" class="grid" role="list"></div>
+          <div id="grid" class="grid"></div>
           <div class="grid-fade" aria-hidden="true"></div>
         </div>
         <div class="grid-more">
@@ -165,37 +211,8 @@
     </div>
   </footer>
 
+  <script src="js/studio.js"></script>
   <script>
-    // Flip to true once the art is revealed; copy across the page follows.
-    var REVEALED = false;
-
-    var TOTAL = 222;
-    var OPENSEA_ITEM = 'https://opensea.io/item/robinhood/0x9a08c037e631e901ed205a26e7632148f48e3d9c/';
-
-    document.querySelectorAll('[data-when]').forEach(function (el) {
-      el.hidden = (el.getAttribute('data-when') === 'revealed') !== REVEALED;
-    });
-
-    var grid = document.getElementById('grid');
-    function pad(n) { return (n < 10 ? '00' : n < 100 ? '0' : '') + n; }
-    function renderGrid(pieces) {
-      var html = '';
-      for (var i = 1; i <= TOTAL; i++) {
-        var img = pieces && pieces[i];
-        html += '<a class="tile' + (img ? ' has-art' : '') + '" role="listitem" href="' + OPENSEA_ITEM + i + '" target="_blank" rel="noopener" aria-label="EMI #' + i + ' on OpenSea">'
-          + (img ? '<img src="' + img + '" alt="EMI #' + i + '" loading="lazy" width="400" height="400" />' : '')
-          + '<span class="tile-num">' + pad(i) + '</span></a>';
-      }
-      grid.innerHTML = html;
-    }
-    renderGrid(null);
-
-    // data/pieces.json: { "1": "https://…/1.png", "2": "…" } — fill after the reveal.
-    fetch('data/pieces.json', { cache: 'no-cache' })
-      .then(function (r) { return r.ok ? r.json() : {}; })
-      .then(function (p) { if (p && Object.keys(p).length) renderGrid(p); })
-      .catch(function () {});
-
     var wrap = document.querySelector('.grid-wrap');
     var toggle = document.getElementById('grid-toggle');
     toggle.addEventListener('click', function () {
