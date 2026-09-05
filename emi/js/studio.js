@@ -37,28 +37,30 @@
 
      Marks on black are white. Marks on green are black. */
 
-  function markWeight(px, py, pz, ground, hasInk) {
-    // How much of this pixel is figure rather than ground, anti-aliasing included.
-    var ur = WHITE[0] - ground[0], ug = WHITE[1] - ground[1], ub = WHITE[2] - ground[2];
-    var a = ur * ur + ug * ug + ub * ub;
+  /* How much of this pixel is figure rather than ground, anti-aliasing
+     included. A mark is anything that is not the ground, and OgBe uses all
+     three colours both ways round: green pieces carry black ink, and 39 of
+     the black pieces carry green. Taking the strongest direction of the two
+     possible marks keeps those details instead of flattening them. */
+  function markWeight(px, py, pz, ground, marks) {
+    var best = 0;
     var dr = px - ground[0], dg = py - ground[1], db = pz - ground[2];
-    var t = (dr * ur + dg * ug + db * ub) / a;
-    if (t < 0) t = 0; else if (t > 1) t = 1;
-    if (!hasInk) return t;
-
-    // Green pieces also carry black ink, which is a mark too. Take whichever
-    // direction claims the pixel more strongly.
-    var vr = BLACK[0] - ground[0], vg = BLACK[1] - ground[1], vb = BLACK[2] - ground[2];
-    var c = vr * vr + vg * vg + vb * vb;
-    var s = (dr * vr + dg * vg + db * vb) / c;
-    if (s < 0) s = 0; else if (s > 1) s = 1;
-    return t > s ? t : s;
+    for (var i = 0; i < marks.length; i++) {
+      var m = marks[i];
+      var ur = m[0] - ground[0], ug = m[1] - ground[1], ub = m[2] - ground[2];
+      var len = ur * ur + ug * ug + ub * ub;
+      if (len < 1) continue;
+      var t = (dr * ur + dg * ug + db * ub) / len;
+      if (t < 0) t = 0; else if (t > 1) t = 1;
+      if (t > best) best = t;
+    }
+    return best;
   }
 
-  function recolor(imgData, ground, targetGround, targetMark, hasInk) {
+  function recolor(imgData, ground, targetGround, targetMark, marks) {
     var d = imgData.data;
     for (var i = 0; i < d.length; i += 4) {
-      var w = markWeight(d[i], d[i + 1], d[i + 2], ground, hasInk);
+      var w = markWeight(d[i], d[i + 1], d[i + 2], ground, marks);
       d[i]     = targetGround[0] + (targetMark[0] - targetGround[0]) * w;
       d[i + 1] = targetGround[1] + (targetMark[1] - targetGround[1]) * w;
       d[i + 2] = targetGround[2] + (targetMark[2] - targetGround[2]) * w;
@@ -103,7 +105,7 @@
         recolor(data, ground,
           want === 'green' ? GREEN : BLACK,
           want === 'green' ? BLACK : WHITE,
-          green);
+          green ? [WHITE, BLACK] : [WHITE, GREEN]);
         ctx.putImageData(data, 0, 0);
       }
       canvas.setAttribute('aria-label', 'EMI #' + n);
