@@ -42,6 +42,7 @@
     </button>
     <nav id="site-nav" class="nav" aria-label="Site">
       <a href="#studio">Studio</a>
+      <a href="#tracker">Market</a>
       <a href="perks">Perks</a>
       <a href="#story">Story</a>
       <a href="#the-222">The 222</a>
@@ -81,17 +82,24 @@
       </figure>
     </section>
 
-    <!-- MARQUEE -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
-        <span>Minted out &middot; 222 / 222 &middot; Sold out September 3, 2026 &middot; 1/1 hand drawn &middot; On Robinhood &middot;</span>
+    <!-- TRACKER -->
+    <section id="tracker" class="tracker" aria-labelledby="tracker-title">
+      <div class="wrap">
+        <div class="tracker-head">
+          <h2 id="tracker-title">The market</h2>
+          <p id="tracker-when" class="tracker-when"></p>
+        </div>
+        <dl id="tracker-stats" class="tracker-stats">
+          <div><dt>Floor</dt><dd data-k="floor">&mdash;</dd></div>
+          <div><dt>24h volume</dt><dd data-k="day">&mdash;</dd></div>
+          <div><dt>Total volume</dt><dd data-k="volume">&mdash;</dd></div>
+          <div><dt>Sales</dt><dd data-k="sales">&mdash;</dd></div>
+          <div><dt>Owners</dt><dd data-k="owners">&mdash;</dd></div>
+          <div><dt>Market cap <em>floor &times; 222</em></dt><dd data-k="cap">&mdash;</dd></div>
+        </dl>
+        <p id="tracker-note" class="tracker-note"></p>
       </div>
-    </div>
+    </section>
 
     <!-- STUDIO -->
     <section id="studio" class="studio" aria-labelledby="studio-title">
@@ -155,7 +163,10 @@
     <section id="story" class="story" aria-labelledby="story-title">
       <div class="wrap">
         <p class="eyebrow">The story</p>
-        <h2 id="story-title">Emi means spirit.</h2>
+        <h2 id="story-title"><picture>
+            <source media="(prefers-reduced-motion: reduce)" srcset="assets/mark-alpha-still.png" />
+            <img class="inline-mark" src="assets/mark-alpha.webp" alt="Emi" width="320" height="218" />
+          </picture> means spirit.</h2>
 
         <div id="story-more" class="story-more collapsed">
         <div class="story-body">
@@ -310,6 +321,7 @@
   </footer>
 
   <script src="js/studio.js"></script>
+  <script src="js/tracker.js"></script>
   <script>
     // the studio panel surfaces out of the white once, on arrival
     var studioSection = document.getElementById('studio');

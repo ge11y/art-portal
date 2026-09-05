@@ -147,17 +147,47 @@ a { color: inherit; }
 .sketch { border-radius: var(--sketch); }
 .hero-art figcaption { margin-top: 8px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: right; }
 
-/* ---------- MARQUEE ---------- */
-.marquee {
-  overflow: hidden; background: var(--ink); color: var(--lime);
+/* ---------- TRACKER ---------- */
+.tracker {
+  background: var(--ink); color: var(--lime);
   border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink);
-  padding: 12px 0;
-  font-family: var(--display); font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase;
-  white-space: nowrap;
+  padding: 40px 0 44px;
 }
-.marquee-track { display: inline-flex; animation: scroll 40s linear infinite; }
-.marquee-track span { padding-right: 48px; }
-@keyframes scroll { to { transform: translateX(-50%); } }
+.tracker-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+}
+.tracker h2 {
+  font-family: var(--display); font-size: clamp(24px, 3vw, 34px);
+  line-height: 1; letter-spacing: -0.02em;
+}
+.tracker-when { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime-dim); }
+.tracker-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  border: 3px solid var(--lime); border-radius: var(--sketch-2); overflow: hidden;
+}
+.tracker-stats > div { min-width: 0; padding: 18px 20px; border-right: 3px solid var(--lime); }
+.tracker-stats > div:last-child { border-right: 0; }
+.tracker-stats dt {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--lime-dim); margin-bottom: 7px;
+}
+.tracker-stats dt em {
+  display: block; font-style: normal; letter-spacing: 0.1em;
+  text-transform: none; opacity: 0.65; margin-top: 2px;
+}
+.tracker-stats dd {
+  font-family: var(--display); font-size: clamp(19px, 2.1vw, 26px);
+  line-height: 1.05; letter-spacing: -0.02em; overflow-wrap: anywhere;
+}
+.tracker-stats.is-down { opacity: 0.45; }
+.tracker-note { margin-top: 14px; font-size: 13px; color: var(--lime-dim); }
+
+/* the drawn EMI standing in for the word inside a heading */
+.inline-mark {
+  display: inline-block; height: 0.78em; width: auto;
+  vertical-align: baseline; transform: translateY(0.1em);
+}
 
 /* ---------- SECTION TITLES ---------- */
 .story h2, .gallery h2, .mint h2 {
@@ -598,6 +628,11 @@ body.is-unlocked .holders { opacity: 0.35; }
   .timeline li { grid-template-columns: 1fr; gap: 4px; }
   .foot-grid { grid-template-columns: 1fr; }
 }
+@media (max-width: 720px) {
+  .tracker-stats { grid-template-columns: 1fr 1fr; }
+  .tracker-stats > div:nth-child(2n) { border-right: 0; }
+  .tracker-stats > div:nth-last-child(n+3) { border-bottom: 3px solid var(--lime); }
+}
 @media (max-width: 600px) {
   .top { padding: 12px 16px; }
   .nav-toggle { display: flex; }
@@ -621,11 +656,9 @@ body.is-unlocked .holders { opacity: 0.35; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 8px; }
   .grid-wrap.collapsed { max-height: 520px; }
   .story, .gallery, .mint { padding: 72px 0; }
-  .marquee { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .marquee-track { animation: none; }
   .dot { animation: none; }
   .btn, .tile { transition: none; }
 }
