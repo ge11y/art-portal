@@ -36,7 +36,10 @@
       <span class="brand-emi">EMI</span>
       <span class="brand-by">by OgBe</span>
     </a>
-    <nav class="nav" aria-label="Site">
+    <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Site">
       <a href="#studio">Studio</a>
       <a href="#story">Story</a>
       <a href="#the-222">The 222</a>
@@ -293,6 +296,28 @@
 
   <script src="js/studio.js"></script>
   <script>
+    // mobile menu
+    var navToggle = document.getElementById('nav-toggle');
+    var siteNav = document.getElementById('site-nav');
+    function setNav(open) {
+      siteNav.classList.toggle('open', open);
+      navToggle.classList.toggle('open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    navToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setNav(!siteNav.classList.contains('open'));
+    });
+    siteNav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setNav(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (siteNav.classList.contains('open') && !siteNav.contains(e.target) && e.target !== navToggle) setNav(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setNav(false);
+    });
+
     var storyMore = document.getElementById('story-more');
     var storyToggle = document.getElementById('story-toggle');
     function setStory(open) {
